@@ -1245,6 +1245,7 @@ body { background: radial-gradient(ellipse 75% 70% at 46% 60%, rgba(0,0,0,0) 30%
 .in-card p { margin: 0; font: 400 clamp(17px, 1.75rem, 34px)/1.42 var(--f-type); letter-spacing: .01em; }
 .in-n { display: block; margin-top: .7rem; text-align: right; font: 400 .9rem/1 var(--f-type); color: var(--paper-pencil); }
 .gl-links.gl-right { left: auto; right: 1.1rem; }
+.gl-lang button.on { color: #D6D1C2; border-bottom-color: transparent; cursor: default; }   /* выбранный язык на двери: светлее, без подчёркивания */
 /* первый отдел: стол под лампой, бланк, подпись, штамп, папка */
 .sg-desk { position: absolute; left: 0; top: 0; display: block; }
 .sg-pen { position: absolute; left: calc(50% + min(22rem, 40vw)); top: 58%; width: 10.5rem; height: 1.1rem; transform-origin: 0 50%; transform: rotate(-24deg); z-index: 5; pointer-events: none; }
@@ -3097,6 +3098,9 @@ const LANG_META = {
   ru: { name: 'Русский', dec: ',', units: '%|°C|МПа|МВт|с(?![а-яё])', stencil: 'АРОБВДЯЬЪЫ',
         syl: ['ни', 'ра', 'то', 'ве', 'ло', 'ста', 'про', 'же', 'ний', 'ова', 'ния', 'ски', 'при', 'вы', 'ре', 'пол', 'ти', 'мо', 'ка', 'ен'],
         plural: n => { const m = Math.abs(n) % 100, k = m % 10; return m > 10 && m < 20 ? 2 : k === 1 ? 0 : k >= 2 && k <= 4 ? 1 : 2; } },   // 1 насос, 2 насоса, 5 насосов
+  en: { name: 'English', dec: '.', units: '%|°C|MPa|MW|s\\b', stencil: 'ABDOPQR',
+        syl: ['an', 'ter', 'ment', 'ing', 'tion', 'pro', 'con', 'ed', 're', 'al', 'ble', 'for', 'the', 'ly', 'ex', 'per', 'com', 'ness', 'de', 'ac'],
+        plural: n => (Math.abs(n) === 1 ? 0 : 1) },   // 1 pump, 2 pumps
 };
 const STRINGS = {
   ru: {
@@ -3687,6 +3691,7 @@ const STRINGS = {
     'vol.alarms': 'Тревоги и пульт',
     'vol.station': 'Станция',
     // ---------- Настройки ----------
+    'set.lang': 'Язык',
     'set.sound': 'Звук',
     'set.on': 'вкл',
     'set.off': 'выкл',
@@ -5656,10 +5661,10 @@ const SndDebug = {
 
 /* ---------- прогресс: в памяти, копия в localStorage (если доступно) ---------- */
 const Save = {
-  // sound и vol переживают миграции. Полишинг (v: 2) добавил: introSeen — вступление и подпись пройдены, hallSeen — первое
+  // sound, vol и lang переживают миграции и сброс прогресса. Полишинг (v: 2) добавил: introSeen — вступление и подпись пройдены, hallSeen — первое
   // включение ламп зала показано целиком, sign — подпись игрока (штрихи в долях строки подписи), comfort — настройки комфорта,
   // moments — сколько раз видел большие моменты (П4: повтор — короткая версия)
-  key: 'night-shift-npp-v1', data: { v: 2, stars: {}, sound: true, vol: Object.assign({}, SOUND.volume), introSeen: false, hallSeen: false, sign: null, comfort: null, moments: {}, expert: false },
+  key: 'night-shift-npp-v1', data: { v: 2, stars: {}, sound: true, vol: Object.assign({}, SOUND.volume), introSeen: false, hallSeen: false, sign: null, comfort: null, moments: {}, expert: false, lang: 'en' },
   load() { try { const j = localStorage.getItem(this.key); if (j) Object.assign(this.data, JSON.parse(j)); } catch (e) { /* без сохранения */ } this.migrate(); },
   save() { try { localStorage.setItem(this.key, JSON.stringify(this.data)); } catch (e) { /* без сохранения */ } },
   // миграция: старое сохранение получает новые поля; кто уже проходил смены, вступление повторно не видит
@@ -5672,6 +5677,7 @@ const Save = {
     if (!Array.isArray(d.sign && d.sign.strokes)) d.sign = null;
     if (!d.moments || typeof d.moments !== 'object') d.moments = {};   // П4: какие большие моменты уже видел (повтор — короче)
     if (typeof d.expert !== 'boolean') d.expert = false;              // П6: рубильник «Я опытный» на пульте «График смен»
+    if (typeof d.lang !== 'string' || !STRINGS[d.lang]) d.lang = 'en';   // перевод: язык игры; по умолчанию английский (решение автора)
     d.v = 2;
   },
   reset() { Object.assign(this.data, { stars: {}, introSeen: false, hallSeen: false, sign: null, moments: {}, expert: false }); this.save(); },   // звук, громкость и комфорт остаются
@@ -7007,7 +7013,7 @@ const Scenes = {
     this.clearTimers(); Snd.forceMode = null;
     if (this.cur && this.cur.exit) { try { this.cur.exit(); } catch (e) { /* сцена не мешает следующей */ } }
     const root = this.fresh(); root.hidden = false; root.className = 'scene sc-' + name;
-    this.name = name; this.cur = SCENES[name];
+    this.name = name; this.opts = opts; this.cur = SCENES[name];
     hideModal(); UI.mode = name; UI.running = false; UI.paused = false;
     $('app').classList.add('menu-mode');
     this.cur.enter(root, opts);
@@ -7456,6 +7462,7 @@ const SCENES = {
       const vol = [['master', 'vol.master'], ['alarms', 'vol.alarms'], ['station', 'vol.station']];
       root.innerHTML = `<div class="st-sheet" role="dialog" aria-label="${t('gl.settings')}">
           <h2>${t('gl.settings')}</h2>
+          <div class="st-row"><span>${t('set.lang')}</span><div class="st-seg" role="radiogroup" data-k="lang">${langChoice('radio')}</div></div>
           <h3>${t('set.sound')}</h3>
           <div class="st-row"><span>${t('set.sound')}</span><div class="st-seg" role="radiogroup" data-k="sound"><button role="radio" data-v="true" class="${Snd.on ? 'on' : ''}">${t('set.on')}</button><button role="radio" data-v="false" class="${Snd.on ? '' : 'on'}">${t('set.off')}</button></div></div>
           ${vol.map(([k, lbl]) => `<label class="st-row"><span>${t(lbl)}</span><input type="range" min="0" max="100" step="1" data-vol="${k}" value="${pos(v[k])}"><output>${pos(v[k])}%</output></label>`).join('')}
@@ -7471,6 +7478,7 @@ const SCENES = {
       root.querySelectorAll('.st-seg').forEach(sg => sg.addEventListener('click', e => {
         const b = e.target.closest('button'); if (!b) return; Snd.init();
         const k = sg.dataset.k, raw = b.dataset.v, val = raw === 'true' ? true : raw === 'false' ? false : raw;
+        if (k === 'lang') { Snd.cue('ui'); switchLang(raw); return; }   // настройки строятся заново на новом языке
         if (k === 'sound') { Snd.setOn(val); if (typeof updateSoundUI === 'function') updateSoundUI(); }
         else { Save.data.comfort[k] = val; Save.save(); }
         sg.querySelectorAll('button').forEach(x => { const on = x === b; x.classList.toggle('on', on); x.setAttribute('aria-checked', on); });
@@ -7514,7 +7522,8 @@ const SCENES = {
         <div class="door-flood"></div>
         <nav class="gl-links" aria-label="${t('door.nav')}">
           <button data-a="settings">${t('gl.settings')}</button><button data-a="intro">${t('door.intro')}</button><button data-a="reset">${t('gl.reset')}</button>
-        </nav>`;
+        </nav>
+        <nav class="gl-links gl-right gl-lang" aria-label="${t('set.lang')}">${langChoice('button')}</nav>`;
       this.root = root; this.world = root.querySelector('.door-world'); this.stage = root.querySelector('.door-stage');
       this.resize();
       const bell = root.querySelector('.door-bell');
@@ -7522,6 +7531,7 @@ const SCENES = {
       ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(ev => bell.addEventListener(ev, () => this.release()));
       bell.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && !e.repeat) { e.preventDefault(); e.stopPropagation(); this.press(); } });
       bell.addEventListener('keyup', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); this.release(); } });
+      root.querySelector('.gl-lang').addEventListener('click', e => { const b = e.target.closest('[data-lang]'); if (!b) return; Snd.init(); Snd.cue('ui'); switchLang(b.dataset.lang); });
       root.querySelector('.gl-links').addEventListener('click', e => {
         const b = e.target.closest('button'); if (!b) return; Snd.init(); Snd.cue('ui');
         if (b.dataset.a === 'settings') Scenes.go('settings', { back: 'door' });
@@ -8529,6 +8539,7 @@ const Moments = {
 // где вместо заглушки — пустое гнездо (монтажная ниша со жгутом); смешиваем по месту
 const NICHE_GROUPS = new Set(['xenon', 'dg']);
 const DUTY_EL = { power: 'b-power', powerMax: 'b-power', mwe: 'b-grid', cool: 'b-temp' };   // прибор цели по величине задания
+const levelName = lv => (lv.hidden ? t(lv.title) : t('top.level', { n: lv.num, title: t(lv.title) }));   // «1. Пробуждение» в верхней полосе
 // o.hall — вошли в зал из графика смен или после подписи: сначала свет рядами, потом задание
 function startLevel(idx, quick, o = {}) {
   hideTip(); Guide.stop(true); Reveal.finish(); KeysOv.close();
@@ -8545,7 +8556,7 @@ function startLevel(idx, quick, o = {}) {
   const duty = DUTY_EL[g.goalCfg.v]; if (duty) $(duty).classList.add('duty');
   buildCharts(g.level.charts);
   $('c-sched').classList.toggle('off', !g.goalCfg.points);   // бланк графика диспетчера — только в сменах с графиком
-  $('t-level').textContent = g.level.hidden ? t(g.level.title) : t('top.level', { n: g.level.num, title: t(g.level.title) });
+  $('t-level').textContent = levelName(g.level);
   Tex.schedule($('topbar'));   // название и задание другой длины — тени деталей полосы перепекаются
   const mt = $('m-text'); mt.textContent = ''; mt.className = 'm-text';
   renderAll(g, 0);
@@ -8625,8 +8636,33 @@ function applyLang() {
   document.querySelectorAll('[data-t-aria]').forEach(el => el.setAttribute('aria-label', t(el.dataset.tAria)));
 }
 
+// выбор языка: подпись каждого варианта — на его языке (кнопки на двери, сегменты в настройках)
+const langChoice = kind => Object.keys(LANG_META).map(l => kind === 'radio'
+  ? `<button role="radio" data-v="${l}" lang="${l}" aria-checked="${l === I18N.lang}" class="${l === I18N.lang ? 'on' : ''}">${LANG_META[l].name}</button>`
+  : `<button data-lang="${l}" lang="${l}" aria-pressed="${l === I18N.lang}" class="${l === I18N.lang ? 'on' : ''}">${LANG_META[l].name}</button>`).join('');
+// смена языка на лету — с двери и из настроек. Смены в это время нет, поэтому уровень не сбрасывается; всё, что построено
+// один раз (окна табло, ключи насосов, бирки заглушек, шкалы, клеймо ОТК в фактуре), переподписывается, сцена строится заново
+function switchLang(l) {
+  if (!STRINGS[l] || l === I18N.lang) return;
+  setLang(l); Save.data.lang = l; Save.save();
+  applyLang();
+  LAMPS.forEach(L => { const el = $('ann-' + L.id); if (el && !PANEL_LAMPS.has(L.id)) el.textContent = t(L.label); });
+  const ack = $('btn-ack'); if (ack) { ack.innerHTML = t('ann.ack'); ack.setAttribute('aria-label', t('ann.ack.aria')); }
+  document.querySelectorAll('#pumps .pump').forEach((p, i) => { const n = t('pump.name', { n: i + 1 }); p.querySelector('.p-name').textContent = n; p.querySelector('.tog').setAttribute('aria-label', n); });
+  document.querySelectorAll('.blk[data-g] > .cover .tag-plate').forEach(tp => { tp.outerHTML = coverTag(tp.closest('.blk').dataset.g); });
+  Object.values(SC).forEach(sc => sc.relabel());
+  updateSoundUI(); UI.annFit = true; Tex.refreshAll();
+  const g = UI.game;
+  if (g) { buildCharts(g.level.charts); $('t-level').textContent = levelName(g.level); renderAll(g, 0); }
+  if (Scenes.cur) Scenes.go(Scenes.name, Scenes.opts);
+}
+
 function init() {
   Save.load(); Snd.on = Save.data.sound !== false;
+  // язык: ?lang=en|ru — для проверки и снимков, в сохранение не пишется; иначе — из сохранения (по умолчанию английский)
+  const ql = (() => { try { return new URLSearchParams(location.search).get('lang'); } catch (e) { return null; } })();
+  setLang(STRINGS[ql] ? ql : Save.data.lang);
+  I18N.debug = !!ql || debugWanted();   // отладка: нет перевода — предупреждение в консоль
   applyLang();
   const remPx = () => parseFloat(getComputedStyle(document.documentElement).fontSize) || 14;
   UI.remPx = remPx();
