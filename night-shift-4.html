@@ -1762,11 +1762,11 @@ body { -webkit-touch-callout: none; }
 .pc-card.nudge .pc-face { animation: pcNudge .32s ease-out; }
 @keyframes pcNudge { 0% { transform: none; } 30% { transform: translateY(-.35rem) rotate(-2deg); } 60% { transform: translateY(.05rem); } 100% { transform: none; } }
 .pc-ch { display: flex; flex-direction: column; gap: .06rem; padding-bottom: .16rem; border-bottom: 1px solid rgba(35,32,27,.7); }
-.pc-ch b { font: 700 .56rem/1 var(--f-serif); letter-spacing: .06em; text-transform: uppercase; }
-.pc-ch span { font: 400 .48rem/1 var(--f-type); }
+.pc-ch b { font: 700 .62rem/1 var(--f-serif); letter-spacing: .05em; text-transform: uppercase; }
+.pc-ch span { font: 400 .52rem/1 var(--f-type); }
 .pc-sig { display: block; width: 4.6rem; height: 1.15rem; margin: .1rem 0 .06rem; }
-.pc-t { width: 100%; border-collapse: collapse; font: 400 .44rem/1.05 var(--f-type); }
-.pc-t th { font: 700 .4rem/1 var(--f-serif); text-align: left; padding: .06rem .08rem; border-bottom: 1px solid rgba(35,32,27,.7); }
+.pc-t { width: 100%; border-collapse: collapse; font: 400 .52rem/1.05 var(--f-type); }
+.pc-t th { font: 700 .44rem/1 var(--f-serif); text-align: left; padding: .06rem .08rem; border-bottom: 1px solid rgba(35,32,27,.7); }
 .pc-t td { height: .74rem; padding: 0 .08rem; border-bottom: 1px solid rgba(35,32,27,.28); white-space: nowrap; }
 .pc-t tr.cur td { background: rgba(255,236,170,.35); }
 .pc-t td.out small { margin-left: .14rem; font-size: .38rem; color: var(--paper-stamp); }
@@ -1782,10 +1782,10 @@ body { -webkit-touch-callout: none; }
 .pc-clock.near .pc-slot i { box-shadow: inset 0 .22rem .25rem rgba(0,0,0,.95), 0 .14rem 0 rgba(255,250,236,.55), 0 -.12rem 0 #39402F, 0 0 0 .2rem rgba(255,228,180,.35); }
 .overlay.over-punch { z-index: 45; background: rgba(13,15,13,.45); }
 #m-result.wait-card .mr-actions { visibility: hidden; }
-.pl-card { position: absolute; z-index: 4; left: -6.6rem; top: 9rem; width: 7.2rem; height: 10.4rem; pointer-events: none; visibility: hidden; transform: rotate(-4deg) scale(1.2); }
+.pl-card { position: absolute; z-index: 4; left: -6.2rem; top: 3.5rem; width: 7.2rem; height: 10.4rem; pointer-events: none; visibility: hidden; transform-origin: 100% 0; transform: rotate(-3deg) scale(1.9); }   /* крупно, чтобы читалась (автор) */
 .pl-card.on { visibility: visible; }
 .pl-card .pc-face { box-shadow: 0 .4rem .7rem rgba(0,0,0,.55); }
-.pl-card::after { content: ""; position: absolute; z-index: 1; right: -.5rem; top: 1.2rem; width: 1.6rem; height: .7rem; border-radius: .35rem;   /* скрепка держит карточку на доске */
+.pl-card::after { content: ""; position: absolute; z-index: 1; right: -.5rem; top: -.2rem; width: 1.6rem; height: .7rem; border-radius: .35rem;   /* скрепка держит карточку на доске */
   border: .16rem solid #A9ADA5; border-left-color: transparent; box-shadow: 0 1px 1px rgba(0,0,0,.5); }
 /* пробитые строки: часы пробивают карточку насквозь — по отверстию у каждого края строки */
 .pc-t tr.holed td:first-child, .pc-t tr.holed td:last-child { position: relative; }
