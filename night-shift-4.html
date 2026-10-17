@@ -1679,6 +1679,130 @@ body { -webkit-touch-callout: none; }
   background: #A3271D; box-shadow: 0 0 .35rem .12rem rgba(163,39,29,.45); animation: winRed 3.2s linear infinite; }
 @keyframes winRed { 0%, 38% { opacity: 1; } 50%, 88% { opacity: .12; } 100% { opacity: 1; } }
 
+/* ===== ТАБЕЛЬНЫЕ ЧАСЫ (П7, 6.3; состояние punch): стена у выхода из зала выезжает поверх щита. Одна лампа над часами,
+   карточка игрока — в пятне фокус-света. Карточку тянут в щель; клик — вынуть, клик по щели — пробить; Enter */
+.pc { position: fixed; inset: 0; z-index: 44; overflow: hidden; transform: translateX(100%); transition: transform var(--t-pc, 520ms) var(--ease-paper); }
+.pc.on { transform: none; }
+.pc:not(.first) { --t-pc: 300ms; }
+.pc.out { transform: translateX(-100%); --t-pc: 380ms; }
+.pc-wall { position: absolute; inset: 0; display: block; }
+.pc-stage { position: absolute; left: 50%; top: 50%; width: 44rem; height: 30rem; margin: -15rem 0 0 -11rem; }   /* часы — под кабель-каналом посреди стены */
+.pc-stage::before { content: ""; position: absolute; left: -12rem; right: -8rem; top: -14rem; height: 50rem; pointer-events: none;   /* лампа над часами — пятно на стене */
+  background: radial-gradient(50% 48% at 46% 42%, rgba(255,228,180,.24), rgba(255,228,180,.07) 56%, rgba(0,0,0,0) 76%); }
+.pc-clock { position: absolute; left: 4rem; top: 3.4rem; width: 14rem; height: 21rem; z-index: 2; border-radius: .7rem .7rem .4rem .4rem;
+  background: linear-gradient(180deg, rgba(255,250,236,.12), rgba(0,0,0,.2)), var(--tex-enamel), #6C7660;
+  box-shadow: inset 0 .14rem 0 rgba(255,250,236,.25), inset 0 -.3rem .4rem rgba(0,0,0,.35), 0 0 0 1px #141611, 0 1rem 1.6rem rgba(0,0,0,.6); transition: transform 60ms ease-out; }
+.pc-clock.hit { transform: translateY(.1rem); }
+.pc-slot { position: absolute; left: 2.4rem; right: 2.4rem; top: 1.3rem; height: 1.6rem; cursor: pointer; }
+.pc-slot i { position: absolute; left: 0; right: 0; top: .5rem; height: .6rem; border-radius: .12rem; background: #0A0A08;
+  box-shadow: inset 0 .22rem .25rem rgba(0,0,0,.95), 0 .14rem 0 rgba(255,250,236,.3), 0 -.12rem 0 #39402F, 0 0 0 .2rem rgba(0,0,0,.25); }
+.pc-dial { position: absolute; left: 2rem; top: 4.4rem; width: 10rem; height: 10rem; border-radius: 50%;
+  box-shadow: 0 0 0 .45rem #2B2E27, 0 0 0 .58rem #8E9488, 0 .5rem .7rem .55rem rgba(0,0,0,.45); }
+.pc-dial text { font: 700 9px/1 var(--f-plate); fill: #2A2722; text-anchor: middle; }
+.pc-dial .pc-h, .pc-dial .pc-m { transform-origin: 0 0; transform-box: view-box; }
+.pc-plate { position: absolute; left: 2.4rem; right: 2.4rem; bottom: 2.4rem; padding: .32rem 0; text-align: center; border-radius: 1px;
+  font: 700 .74rem/1 var(--f-engrave); letter-spacing: .1em; text-transform: uppercase; color: #1C1A15; background: var(--tex-ivory), var(--iron-ivory); box-shadow: 0 0 0 1px rgba(0,0,0,.6); }
+/* кармашки с карточками: стальная доска, шесть кармашков; чужие карточки — в тени, своя — на свету */
+.pc-rack, .pc-fronts { position: absolute; left: 22rem; top: 4rem; width: 18rem; height: 22rem; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(3, 1fr); gap: 0 .9rem; padding: 0 .8rem .6rem; }
+.pc-rack { z-index: 1; border-radius: .3rem; background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.22)), var(--tex-enamel), #4C584D;
+  box-shadow: 0 0 0 1px #121410, 0 .8rem 1.2rem rgba(0,0,0,.55); }
+.pc-fronts { z-index: 4; pointer-events: none; }
+.pc-pk { position: relative; }
+.pc-pk b { position: absolute; left: .5rem; right: .5rem; bottom: .3rem; height: 8.6rem; border-radius: 1px; background: linear-gradient(180deg, rgba(0,0,0,0) .9rem, rgba(40,34,26,.5) .9rem 1rem, rgba(0,0,0,0) 1rem), var(--tex-card), #B9AC8A; box-shadow: 0 1px 2px rgba(0,0,0,.45);
+  opacity: .72; }
+.pc-pk.me b { display: none; }
+.pc-pf { position: relative; }
+.pc-pf b { position: absolute; left: 0; right: 0; bottom: 0; height: 3rem; border-radius: 0 0 .2rem .2rem;
+  background: linear-gradient(180deg, #9BA196 0, #6A7066 22%, #4A5048 100%); box-shadow: inset 0 1px 0 rgba(255,255,255,.4), 0 .2rem .3rem rgba(0,0,0,.5); }
+/* карточка игрока: картон, типографская сетка, подпись с бланка поступления; строка смены пробивается часами */
+.pc-card { position: absolute; left: 31.5rem; top: -.4rem; width: 7.2rem; height: 10.4rem; z-index: 3; cursor: grab; touch-action: none; transform-origin: 50% 50%; outline: none; }
+.pc-card::before { content: ""; position: absolute; inset: -3rem; z-index: -1; pointer-events: none; border-radius: 50%;   /* фокус-свет: пятно на карточке */
+  background: radial-gradient(closest-side, rgba(255,232,190,.28), rgba(255,232,190,0)); }
+.pc-card.lift { z-index: 6; } .pc-card.drag { cursor: grabbing; } .pc-card.show::before { opacity: 0; }
+.pc-face { width: 100%; height: 100%; padding: .42rem .36rem; border-radius: 1px; color: #23201B; background: var(--tex-card), #E4D9B8;
+  box-shadow: 0 .15rem .25rem rgba(0,0,0,.45); transition: transform var(--t-hover) ease-out, box-shadow var(--t-hover) ease-out; }
+.pc-card:hover .pc-face, .pc-card:focus-visible .pc-face { transform: translateY(-.3rem) rotate(-1deg); }
+.pc-card.lift .pc-face { transform: rotate(-2deg); box-shadow: 0 .9rem 1.2rem rgba(0,0,0,.5); }
+.pc-card.nudge .pc-face { animation: pcNudge .32s ease-out; }
+@keyframes pcNudge { 0% { transform: none; } 30% { transform: translateY(-.35rem) rotate(-2deg); } 60% { transform: translateY(.05rem); } 100% { transform: none; } }
+.pc-ch { display: flex; flex-direction: column; gap: .06rem; padding-bottom: .16rem; border-bottom: 1px solid rgba(35,32,27,.7); }
+.pc-ch b { font: 700 .56rem/1 var(--f-serif); letter-spacing: .06em; text-transform: uppercase; }
+.pc-ch span { font: 400 .48rem/1 var(--f-type); }
+.pc-sig { display: block; width: 4.6rem; height: 1.15rem; margin: .1rem 0 .06rem; }
+.pc-t { width: 100%; border-collapse: collapse; font: 400 .44rem/1.05 var(--f-type); }
+.pc-t th { font: 700 .4rem/1 var(--f-serif); text-align: left; padding: .06rem .08rem; border-bottom: 1px solid rgba(35,32,27,.7); }
+.pc-t td { height: .74rem; padding: 0 .08rem; border-bottom: 1px solid rgba(35,32,27,.28); white-space: nowrap; }
+.pc-t tr.cur td { background: rgba(255,236,170,.35); }
+.pc-t td.out small { margin-left: .14rem; font-size: .38rem; color: var(--paper-stamp); }
+.pc-t td.out.ink { color: #4B2E86; font-weight: 700; animation: pcInk .3s ease-out both; }   /* ns-ok: оттиск ленты табельных часов — фиолетовая краска (STYLE.md, бумага) */
+@keyframes pcInk { from { opacity: 0; } to { opacity: .92; } }
+.pc-keys { position: absolute; left: 50%; bottom: 1.4rem; transform: translateX(-50%); display: flex; align-items: center; gap: .4rem; padding: .32rem .6rem; border-radius: 3px;
+  background: #161A17; box-shadow: 0 0 0 1px #2F3631; font: 400 .92rem/1 var(--f-text); color: #D9D3C3; white-space: nowrap; pointer-events: none; }
+.pc .fc-note { z-index: 7; }
+@media (max-width: 760px), (max-aspect-ratio: 1/1) { .pc-stage { transform: scale(.62); } }
+@media (prefers-reduced-motion: reduce) { .pc, .pc-face, .pc-clock { transition: none; } .pc-card.nudge .pc-face { animation: none; } }
+
+/* ===== ПЛАНШЕТ СО СВОДКОЙ СМЕНЫ (П7, 6.4): твёрдая доска со стальным пружинным зажимом на заклёпках, под зажимом — печатный бланк ===== */
+#m-result.plank { width: min(64rem, 100%); padding: 0; overflow: visible; background: none; box-shadow: none; color-scheme: light; }
+.pl-board { position: relative; padding: 2.5rem 1.2rem 1.2rem; border-radius: .7rem;
+  background: radial-gradient(120% 90% at 30% 8%, rgba(255,236,200,.12), rgba(0,0,0,0) 60%), var(--tex-card), #5A4431;
+  box-shadow: inset 0 0 0 .2rem rgba(30,20,10,.55), inset 0 .12rem 0 .2rem rgba(255,226,180,.14), 0 1.2rem 2.4rem rgba(0,0,0,.7), 0 .3rem .5rem rgba(0,0,0,.5); }
+.pl-board::before { content: ""; position: absolute; top: .5rem; left: 50%; width: 1rem; height: 1rem; margin-left: -.5rem; border-radius: 50%;   /* отверстие для гвоздя */
+  background: #140F0A; box-shadow: inset 0 .12rem .2rem rgba(0,0,0,.9), 0 1px 0 rgba(255,226,180,.25); }
+.pl-clip { position: absolute; z-index: 3; top: 1.25rem; left: 50%; width: 14rem; height: 2.3rem; margin-left: -7rem; border-radius: .35rem .35rem .6rem .6rem;
+  background: linear-gradient(180deg, #E6E8E2 0, #A9ADA5 30%, #6F736C 72%, #4B4E48 100%); box-shadow: 0 .28rem .4rem rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.6); }
+.pl-clip::after { content: ""; position: absolute; left: 3rem; right: 3rem; bottom: -.5rem; height: .7rem; border-radius: 0 0 .3rem .3rem;   /* пружинный язык прижимает лист */
+  background: linear-gradient(180deg, #8E928B, #5A5E57); box-shadow: 0 .16rem .22rem rgba(0,0,0,.5); }
+.pl-clip i { position: absolute; top: .78rem; width: .72rem; height: .72rem; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #F4F5F0, #8E928A 60%, #3F423C); box-shadow: 0 1px 1px rgba(0,0,0,.6); }
+.pl-clip i:first-child { left: 1.3rem; } .pl-clip i:last-child { right: 1.3rem; }
+.pl-sheet { position: relative; padding: 1.5rem 1.6rem .9rem; color: var(--paper-ink); border-radius: 1px; background: var(--tex-paper), #F1EDE1;
+  transform: rotate(-.35deg); box-shadow: 0 .14rem .3rem rgba(0,0,0,.45); }
+.pl-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; padding-bottom: .25rem; border-bottom: .14rem solid var(--paper-ink); }
+.pl-head h2 { margin: 0; font: 700 1.65rem/1 var(--f-serif); letter-spacing: .06em; text-transform: uppercase; }
+.pl-form { font: 400 .86rem/1 var(--f-serif); color: var(--paper-pencil); white-space: nowrap; }
+.pl-meta { margin: .38rem 0 .3rem; font: 400 .92rem/1.3 var(--f-type); }
+.pl-f { display: grid; grid-template-columns: 9rem minmax(0, 1fr); column-gap: .8rem; align-items: baseline; padding: .26rem 0; border-bottom: 1px solid rgba(31,29,26,.25); }
+.pl-f > b { font: 700 .9rem/1.2 var(--f-serif); }
+.plank .ty, .plank .ty p { margin: 0; max-width: none; font: 400 .95rem/1.35 var(--f-type); }
+.pl-hand { margin: 0; max-width: none; font: 400 1.18rem/1.3 var(--f-hand); color: var(--paper-pen); }
+.pl-tab { width: 100%; border-collapse: collapse; margin: .4rem 0 .2rem; font: 400 .92rem/1.2 var(--f-type); }
+.pl-tab th { padding: .2rem .4rem; text-align: left; font: 700 .82rem/1.1 var(--f-serif); border: 1px solid rgba(31,29,26,.55); background: rgba(31,29,26,.05); }
+.pl-tab td { height: 2.15rem; padding: .16rem .4rem; border: 1px solid rgba(31,29,26,.35); }
+.pl-tab td:last-child { width: 9.5rem; text-align: center; }
+.pl-tab .jr-st { display: inline-block; }
+.pl-grid { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 1.1rem; align-items: start; margin-top: .45rem; }
+.pl-col .pl-f { grid-template-columns: 1fr; row-gap: .12rem; }
+/* вклеенная лента самописца: перфорация по краям, неровный оторванный низ, на скотче (полоски — .mr-chart::before/after) */
+#m-result .pl-tape { margin: .6rem 0 0; padding: .45rem 1.25rem .7rem;
+  background: radial-gradient(circle, rgba(31,29,26,.38) .13rem, transparent .16rem) left .32rem top .5rem / .6rem 1.1rem repeat-y,
+              radial-gradient(circle, rgba(31,29,26,.38) .13rem, transparent .16rem) right .32rem top .5rem / .6rem 1.1rem repeat-y, var(--tex-paper), #DCEAD0;
+  clip-path: polygon(0 -2rem, 100% -2rem, 100% 96%, 92% 99%, 81% 96.5%, 66% 99.5%, 52% 97%, 37% 99.5%, 22% 96.5%, 9% 99%, 0 96.5%); }
+#m-result .pl-tape canvas { height: 11rem; }
+.pl-void { position: absolute; right: 2.6rem; top: 4.6rem; padding: .22rem .7rem; border: .2rem solid var(--paper-stamp); border-radius: 2px; pointer-events: none;
+  font: 700 1.5rem/1 var(--f-engrave); letter-spacing: .08em; text-transform: uppercase; color: var(--paper-stamp); transform: rotate(-8deg); opacity: .8; }
+.plank .jr-sign { margin-top: .6rem; }
+.jr-me { position: relative; cursor: pointer; outline: none; }
+.jr-me:not(.signed) .sig { visibility: hidden; }
+.jr-me:not(.signed)::after { content: "× здесь"; position: absolute; left: 6.6rem; bottom: .35rem; font: 400 1.05rem/1 var(--f-hand); color: var(--paper-pencil); }
+.jr-me:focus-visible .sig { outline: 2px solid var(--look-dark); outline-offset: 2px; }
+.jr-sg.draw .sig path { animation-duration: var(--sig-ms, 700ms); }
+/* строки появляются по порядку; клик по листу — всё сразу */
+.plank .pl-l { transition: opacity 120ms linear; }
+.plank.filling .pl-l:not(.in) { opacity: 0; }
+/* кнопки — слой игры: под планшетом, справа; главная — крайняя правая. Плоские, не железо щита */
+.plank .mr-actions { justify-content: flex-end; margin: .9rem 0 0; padding: 0; background: none; box-shadow: none; border: 0; }
+.plank .mr-actions .btn { height: auto; min-height: 0; padding: .62rem 1.15rem; border: 0; border-radius: 4px; font: 400 1.05rem/1 var(--f-text); letter-spacing: 0; text-transform: none;
+  color: #E2DCCB; background: #1A1F1B; box-shadow: 0 0 0 1px #2F3631; transform: none; }
+.plank .mr-actions .btn::before, .plank .mr-actions .btn::after { display: none; }
+.plank .mr-actions .btn:hover { background: #232925; color: #F2EDDF; }
+.plank .mr-actions .btn.primary { color: #15130F; background: #E7DDC2; box-shadow: 0 0 0 1px #F5EEDB; font-weight: 700; }
+.plank .mr-actions .btn.primary:hover { background: #F3EAD0; }
+@media (max-width: 760px), (max-aspect-ratio: 1/1) {
+  .pl-grid { grid-template-columns: 1fr; } .pl-f { grid-template-columns: 1fr; } .pl-head h2 { font-size: 1.25rem; }
+  .pl-sheet { padding: 1.3rem .9rem .8rem; } .pl-board { padding: 2.4rem .6rem .7rem; } .pl-tab td:nth-child(2) { display: none; } .pl-tab th:nth-child(2) { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .plank .pl-l { transition: none; } }
+
 /* ===== СЛОЙ ИГРЫ: плоско, гротеск, тонкие рамки — никогда не путается с органами щита ===== */
 .tb-btns { gap: .45rem; padding: .25rem .3rem; border-radius: 6px; background: #151916; box-shadow: inset 0 0 0 1px #2B312D; }
 .tb-btns .btn { height: auto; min-width: 0; padding: .42rem .62rem; border: 0; border-radius: 4px; transform: none !important;
@@ -2126,7 +2250,7 @@ body { -webkit-touch-callout: none; }
 <div id="overlay" class="overlay">
   <div class="modal j-cover" id="m-menu"></div>
   <div class="modal form" id="m-brief"></div>
-  <div class="modal j-page" id="m-result"></div>
+  <div class="modal plank" id="m-result"></div>
 </div>
 
 <script>
@@ -3279,7 +3403,11 @@ const FEEL = {
     zoom: 1.45,            // посёлок крупнее: панорама в столько раз выше окна, лишнее небо сверху срезано
   },
   // журнал смены: запись появляется по порядку — лист, вклейка ленты, штампы по одному, подписи. Время — мс от открытия
-  journal: { paste: 260, stamps: 760, stampGap: 430, sign: 260, signGap: 520 },
+  journal: { paste: 260, stamps: 760, stampGap: 430, sign: 260, signGap: 520,
+    start: 340, line: 120, lineRep: 60, stampGapRep: 150, stampGapFirst: 300 },   // П7, планшет: строки по одной (повтор — быстрее), штампы, подпись Палыча
+  // табельные часы (П7, 6.3). Время — мс; повтор (…Rep) — короче. Время станции в сменах без часов: начало и минут на секунду смены
+  punch: { start: 20 * 60, minPerSec: 1, rows: 9, pocket: 1, depth: 0.55, noteMs: 700, slide: 400,
+    toSlot: 200, toSlotRep: 140, in: 280, inRep: 180, hold: 220, holdRep: 70, toShow: 300, toShowRep: 110, read: 600, readRep: 120, showScale: 1.7 },
   // Палыч на свету, пока говорит: лист выходит из тени на столько мс (зависит от длины реплики), потом уходит обратно
   mentor: { talkMin: 2600, talkPerChar: 45, talkMax: 11000 },
   // тряска (STYLE.md 2.11): модель «травмы» — событие добавляет травму 0…1, она убывает; сдвиг кадра ∝ травма²
@@ -3296,7 +3424,7 @@ const FEEL = {
     scram: { trauma: 0.32, end: 5200, endRepeat: 2600, quiet: 0.7, blocksOut: 2200 },   // АЗ: удар стержней внизу; журнал через (первый раз / повторно); с какой доли зал затихает; кварталы гаснут за
     blackout: { trauma: 0.38, dark: 0.94, hold: 420, rise: 520 },   // обесточивание: тряска, темнота, миг темноты, возвращение в аварийном свете
     sync: { at: 15, wave: 2600, waveRepeat: 1300, say: 2200, sayWait: 12000 },   // свет в городе: с какой выдачи, МВт; волна; пауза Палыча; сколько ждать, пока идёт показ
-    dawn: { freeze: 1200, start: 500, dur: 3200, durRepeat: 1200, journal: 3600, journalRepeat: 1700,
+    dawn: { freeze: 1200, start: 500, dur: 3200, durRepeat: 1200, journal: 2400, journalRepeat: 800,   // П7: дальше — табельные часы (≤ 10 с до готового планшета)
       wave: { step: 70, passes: 2 } },   // волна по лампам цели: шаг огня, мс; сколько проходов   // сдача смены: замирание, рассвет (начало, длина), журнал
     blast: { kick: [0.12, 0.2], kickHz: [0.7, 3.2], dust: 22,      // нарастание: толчок (база + доля повреждения), толчков в секунду, пылинок в секунду
       inhale: 400, inhaleDip: 0.5, cut: 2600, cutRepeat: 1300,      // вдох (и как приседает свет), разрез первый раз / повторно
@@ -3584,6 +3712,7 @@ const SOUND = {
       deny: 8, win: 9.5, rodStop: 8.5, pumpTrip: 16.5, stopValve: 12.5,
       diesel_start: 9, rodStep: 12.5, contactor: 17.5, valve: 14, relay: 22,
       coverClose: 16.5, mentor: 18.5, drop: 8, ui: 34.5, annRelay: 27.5,
+      typer: 22, cardOut: 22, cardIn: 18, punch: 5,   // П7: табельные часы и планшет — уровни как у бумаги и штампа (проверка — polish/tools/cues.py)
       doorBell: -5, doorBuzz: 15, bolt: 14, door: 11, paper: 24, folder: 20, pen: 25, stamp: 6, tube: 20, screw: 24, plate: 15, selftest: 18,   // вход в игру: замер polish/tools/cues.py, ориентиры — SOUND.md §6.5
       arc: 15, coastScrape: 16, syncClick: 3.5, blastRumble: 10, blastHit: 5, debris: 12, thunder: 10, rain: 4, doorStrike: -5, street: 8, steamBlow: 12, boilBurst: 14, coreSurge: 8, groan: 14, boom: 6,   // гроза (П6) — за стеной, шина station: в оффлайн-рендере молчит, громкость — на ориентир, ждёт ушей автора   // большие моменты (П4): замер cues.py, ориентиры — SOUND.md §6.8
     },
@@ -3639,6 +3768,7 @@ const SOUND = {
     cut:      { room: -30, station: -26, tonal: -120, signal: -20, lp: 700,   tc: 0.15 },  // разрез: зал далеко, слышен рокот пара (шина blast)
     deaf:     { room: -14, station: -12, tonal: -120, signal: -6,  lp: 500, ears: 650, tc: 0.05 },   // удар: всё глухо, как сквозь заложенные уши
     deafOpen: { room: -10, station: -10, tonal: -120, signal: -4,  lp: 1400, ears: 2600, tc: 1.6 },  // слух медленно возвращается
+    punch:    { room: -9,  station: -16, tonal: -120, signal: -14, lp: 1600,  tc: 1.2 },  // П7, табельные часы: станция затихает, как при сдаче смены
     calm:     { room: -9,  station: -15, tonal: -120, signal: -12, lp: 1800,  tc: 1.4 },  // конец смены: комната затихает  // зал в темноте: вентиляция и станция за стеной, лампы щёлкают  // 2.0 «Заморозка тренажёра»: как пауза, но сигнал события доигрывает
   },
 };
@@ -3691,6 +3821,12 @@ const NightShiftAudio = (function () {
     // шариковая ручка: короткий скрип, громкость и высота — от скорости росчерка (o.v: 0…1)
     pen:      { bus: 'ui', dur: 0.05, f: (A, t, o, d) => { const v = Math.max(0.15, Math.min(1, o.v || 0.5)); A.burst(t, 2600 + 2600 * v, 2.2, 0.035, 0.05 + 0.13 * v, d); } },
     // резиновый штамп по бумаге на столе: глухой удар с долгим низом
+    // табельные часы и планшет (П7): карточка из кармашка, трение в щели, удар механизма с лёгким отскоком; машинка на бланке
+    typer:    { bus: 'ui', dur: 0.08, f: (A, t, o, d) => { A.burst(t, A.vary(2600, 0.12), 3, 0.012, 0.35, d); A.thump(t, A.vary(320, 0.1), 0.025, 0.25, d); } },
+    cardOut:  { bus: 'ui', dur: 0.3, f: (A, t, o, d) => { A.hiss(t, 0.16, 0.05 * (o.v || 1), d); A.burst(t + 0.03, A.vary(3400, 0.15), 1.4, 0.04, 0.12 * (o.v || 1), d); } },
+    cardIn:   { bus: 'pult', dur: 0.45, f: (A, t, o, d) => { A.hiss(t, 0.3, 0.07, d); for (let k = 0; k < 4; k++) A.burst(t + 0.04 + k * 0.06, A.vary(1900, 0.15), 2.5, 0.02, 0.14, d); } },
+    punch:    { bus: 'event', dur: 0.5, f: (A, t, o, d) => { A.thump(t, 62, 0.18, 0.85, d); A.burst(t, 1300, 2, 0.03, 0.45, d); A.thump(t + 0.012, 180, 0.05, 0.3, d);
+      A.thump(t + 0.12, 120, 0.04, 0.18, d); A.burst(t + 0.12, A.vary(2400, 0.1), 4, 0.012, 0.12, d); } },
     stamp:    { bus: 'event', dur: 0.4, f: (A, t, o, d) => { A.thump(t, 72, 0.14, 0.75, d); A.burst(t, 850, 1, 0.03, 0.32, d); A.thump(t + 0.012, 160, 0.05, 0.25, d); } },
     // люминесцентная лампа: щелчки стартера, звон разряда и гудение дросселя (o.k — ряд, для разброса)
     tube:     { bus: 'pult', dur: 0.7, f: (A, t, o, d) => { CUES.relay.f(A, t, o, d); CUES.relay.f(A, t + A.vary(0.12, 0.3), o, d); A.ring(t + 0.2, A.vary(3800, 0.08), 0.18, 0.05, d); A.buzz(t + 0.2, 100, 0.45, 0.08, d); } },
@@ -5044,7 +5180,7 @@ const Save = {
   // sound и vol переживают миграции. Полишинг (v: 2) добавил: introSeen — вступление и подпись пройдены, hallSeen — первое
   // включение ламп зала показано целиком, sign — подпись игрока (штрихи в долях строки подписи), comfort — настройки комфорта,
   // moments — сколько раз видел большие моменты (П4: повтор — короткая версия)
-  key: 'night-shift-npp-v1', data: { v: 2, stars: {}, sound: true, vol: Object.assign({}, SOUND.volume), introSeen: false, hallSeen: false, sign: null, comfort: null, moments: {}, expert: false, keysSeen: {} },
+  key: 'night-shift-npp-v1', data: { v: 2, stars: {}, sound: true, vol: Object.assign({}, SOUND.volume), introSeen: false, hallSeen: false, sign: null, comfort: null, moments: {}, expert: false, keysSeen: {}, timecard: [], punchSeen: false, plankSeen: false },
   load() { try { const j = localStorage.getItem(this.key); if (j) Object.assign(this.data, JSON.parse(j)); } catch (e) { /* без сохранения */ } this.migrate(); },
   save() { try { localStorage.setItem(this.key, JSON.stringify(this.data)); } catch (e) { /* без сохранения */ } },
   // миграция: старое сохранение получает новые поля; кто уже проходил смены, вступление повторно не видит
@@ -5057,10 +5193,14 @@ const Save = {
     if (!Array.isArray(d.sign && d.sign.strokes)) d.sign = null;
     if (!d.moments || typeof d.moments !== 'object') d.moments = {};   // П4: какие большие моменты уже видел (повтор — короче)
     if (typeof d.expert !== 'boolean') d.expert = false;              // П6: рубильник «Я опытный» на пульте «График смен»
-    if (!d.keysSeen || typeof d.keysSeen !== 'object') d.keysSeen = {};   // П7: какие подсказки клавиш уже выучены (стержни, клапан, квитирование)
+    if (!d.keysSeen || typeof d.keysSeen !== 'object') d.keysSeen = {};
+    if (!Array.isArray(d.timecard)) d.timecard = [];                   // П7: табель — строки карточки учёта по сменам
+    if (typeof d.punchSeen !== 'boolean') d.punchSeen = false;        // П7: первый раз у табельных часов — записка Палыча
+    if (typeof d.plankSeen !== 'boolean') d.plankSeen = false;        // П7: планшет повторно заполняется быстрее
+    if (typeof d.comfort.vibrate !== 'boolean') d.comfort.vibrate = true;   // П7: вибрация на сенсорных устройствах   // П7: какие подсказки клавиш уже выучены (стержни, клапан, квитирование)
     d.v = 2;
   },
-  reset() { Object.assign(this.data, { stars: {}, introSeen: false, hallSeen: false, sign: null, moments: {}, expert: false, keysSeen: {} }); this.save(); },   // звук, громкость и комфорт остаются
+  reset() { Object.assign(this.data, { stars: {}, introSeen: false, hallSeen: false, sign: null, moments: {}, expert: false, keysSeen: {}, timecard: [], punchSeen: false, plankSeen: false }); this.save(); },   // звук, громкость и комфорт остаются
   stars(i) { return this.data.stars[LEVELS[i].id] || 0; },
   playable(i) {
     const lv = LEVELS[i]; if (i === 0) return true;
@@ -6170,52 +6310,238 @@ function showBrief(idx) {
   showModal('m-brief'); Snd.cue('paper');                   // лист кладут на столешницу
 }
 
-/* журнал смены (задание 4, 6.8): запись в оперативном журнале вместо окна итогов.
-   Вклеенная лента самописца, штампы «ЗАЧТЕНО» по одному со звуком (те же правила звёзд), сухая реплика и подпись Палыча,
-   подпись игрока в «Смену сдал». Провал — «Смена прервана» и почему. Клик по листу — всё сразу. */
+/* ---------- табельные часы (П7, раздел 6.3; состояние punch): смену закрывают руками ----------
+   Стена у выхода из зала выезжает поверх щита, над часами одна лампа. Карточку тянут в щель (или клик по карточке, потом по щели;
+   Enter, Пробел). Карточка входит с трением, механизм бьёт, в строке смены проступает время ухода, карточка выходит обратно.
+   Табель растёт от смены к смене (Save.data.timecard). Обязательный жест — один; всё остальное ускоряет клик */
+const TAB_NO = '0213';
+// вибрация — только на сенсорных устройствах и если не выключена в настройках (П7, 9: АЗ, штамп, удар табельных часов, отказ насоса)
+function haptic(ms) { try { if (navigator.vibrate && matchMedia('(pointer: coarse)').matches && Save.data.comfort && Save.data.comfort.vibrate !== false) navigator.vibrate(ms); } catch (e) { /* — */ } }
+// время станции: в сменах с часами — их время, иначе начало FEEL.punch.start и сжатое время смены (FEEL.punch.minPerSec)
+function shiftClock(g) {
+  const c = g.level.clock, start = c ? c.start : FEEL.punch.start, k = c ? c.minPerSec : FEEL.punch.minPerSec;
+  return { in: fmtClock(start), out: fmtClock(start + g.t * k), k };
+}
+// тween на часах реального времени: fn(k) каждый кадр, k — 0…1 с замедлением в конце
+function tween(ms, fn, ease = k => 1 - (1 - k) * (1 - k)) {
+  return new Promise(res => { const t0 = performance.now(), d = reducedMotion() ? Math.min(ms, 60) : ms;
+    const step = now => { const k = Math.min(1, (now - t0) / Math.max(1, d)); fn(ease(k)); if (k < 1) requestAnimationFrame(step); else res(); };
+    requestAnimationFrame(step); });
+}
+const wait = ms => new Promise(r => setTimeout(r, reducedMotion() ? Math.min(ms, 80) : ms));
+const Punch = {
+  on: false, el: null, st: '', last: null,
+  rowOf(g) {
+    const d = new Date(), c = shiftClock(g), r = g.result || {};
+    return { d: `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}`, n: g.level.hidden ? 'Б/С' : String(g.level.num),
+      in: c.in, out: g.s.damaged ? '' : c.out, flag: r.success ? '' : g.s.damaged ? '' : 'прерв.' };
+  },
+  cardHTML(rows, cur) {
+    const R = FEEL.punch.rows, list = rows.slice(-(R - 1)).concat([cur]); while (list.length < R) list.push(null);
+    const tr = list.map(r => !r ? '<tr><td></td><td></td><td></td><td></td></tr>'
+      : `<tr${r === cur ? ' class="cur"' : ''}><td>${r.d}</td><td>${r.n}</td><td>${r.in}</td><td class="out">${r === cur ? '' : r.out + (r.flag ? `<small>${r.flag}</small>` : '')}</td></tr>`).join('');
+    return `<div class="pc-face"><div class="pc-ch"><b>Карточка учёта</b><span>таб. № ${TAB_NO} · БЩУ-1</span></div>${signSVG(Save.data.sign, 120, 30, 'pc-sig')}`
+      + `<table class="pc-t"><tr><th>число</th><th>смена</th><th>приход</th><th>уход</th></tr>${tr}</table></div>`;
+  },
+  dial(time) {   // циферблат: 12 рисок, часовая и минутная стрелки — время станции
+    const [hh, mm] = time.split(':').map(Number), ha = ((hh % 12) + mm / 60) * 30, ma = mm * 6;
+    let s = '<circle r="46" fill="#EDE6CF" stroke="#2A2722" stroke-width="2.4"/>';
+    for (let i = 0; i < 60; i++) { const a = i * 6 * Math.PI / 180, r0 = i % 5 ? 41 : 36; s += `<line x1="${(Math.sin(a) * r0).toFixed(1)}" y1="${(-Math.cos(a) * r0).toFixed(1)}" x2="${(Math.sin(a) * 44).toFixed(1)}" y2="${(-Math.cos(a) * 44).toFixed(1)}" stroke="#2A2722" stroke-width="${i % 5 ? .8 : 2.2}"/>`; }   // ns-ok: координаты рисок SVG
+    for (let i = 1; i <= 12; i++) { const a = i * 30 * Math.PI / 180; s += `<text x="${(Math.sin(a) * 28).toFixed(1)}" y="${(-Math.cos(a) * 28 + 4).toFixed(1)}">${i}</text>`; }   // ns-ok: координаты цифр SVG
+    s += `<g class="pc-h" style="transform: rotate(${ha}deg)"><path d="M-2.4,6 L0,-24 L2.4,6 Z" fill="#1E1B17"/></g><g class="pc-m" style="transform: rotate(${ma}deg)"><path d="M-1.6,8 L0,-36 L1.6,8 Z" fill="#1E1B17"/></g><circle r="3" fill="#8E1F17"/>`;
+    return s;
+  },
+  start(g, done) {
+    const P = FEEL.punch, first = !Save.data.punchSeen, c = shiftClock(g);
+    this.g = g; this.done = done; this.first = first; this.cur = this.rowOf(g); this.st = 'wait'; this.on = true;
+    UI.mode = 'punch'; Snd.forceMode = null;
+    let rack = ''; for (let i = 0; i < 8; i++) rack += `<i class="pc-pk${i === P.pocket ? ' me' : ''}"><b></b></i>`;
+    const root = document.createElement('div'); root.id = 'punch'; root.className = 'pc' + (first ? ' first' : '');
+    root.innerHTML = `<canvas class="pc-wall" aria-hidden="true"></canvas><div class="pc-stage">`
+      + `<div class="pc-clock"><div class="pc-slot" id="pc-slot"><i></i></div><svg class="pc-dial" viewBox="-50 -50 100 100" aria-hidden="true">${this.dial(c.out)}</svg><div class="pc-plate">табельные часы</div></div>`
+      + `<div class="pc-rack" aria-hidden="true">${rack}</div>`
+      + `<div class="pc-card" id="pc-card" role="button" tabindex="0" aria-label="Карточка учёта — пробить в часах">${this.cardHTML(Save.data.timecard, this.cur)}</div>`
+      + `<div class="pc-fronts" aria-hidden="true">${rack.replace(/pc-pk/g, 'pc-pf')}</div></div>`
+      + `<div class="pc-keys">карточку — в щель часов <kbd class="kc">Enter</kbd></div>`;   // ns-ok: подпись клавиши — латиница только в клавишах
+    document.body.appendChild(root); this.el = root;
+    this.paint();
+    const card = $('pc-card'); this.card = card; this.home();
+    card.addEventListener('pointerdown', e => this.grab(e));
+    $('pc-slot').parentElement.addEventListener('pointerdown', e => { if (this.st === 'picked') { e.preventDefault(); this.insert(); } });
+    root.addEventListener('pointerdown', e => { if (this.st === 'wait' && !e.target.closest('.pc-card')) this.nudge(); });   // мимо карточки — карточка вздрагивает: жест подсказывает жест
+    void root.offsetWidth; root.classList.add('on');
+    Snd.cue('folder');
+    if (first) setTimeout(() => { if (this.on && this.st === 'wait') this.note('Карточку пробей. Без отметки смену не сдал — так и запишут, что ночевал тут.'); }, P.noteMs);
+  },
+  paint() {   // стена: та же побелка и масляная краска, что у «Графика смен»; кабель-канал идёт к часам
+    const cv = this.el.querySelector('.pc-wall'), { x, d } = sceneCanvas(cv, innerWidth, innerHeight); x.setTransform(d, 0, 0, d, 0, 0); paintHallWall(x, innerWidth, innerHeight);
+  },
+  // место карточки в кармашке (координаты сцены)
+  home() { const c = this.card; c.style.transform = ''; c.style.clipPath = ''; this.dx = 0; this.dy = 0; c.classList.remove('lift', 'drag', 'show'); },
+  set(dx, dy, s = 1) { this.dx = dx; this.dy = dy; this.card.style.transform = `translate(${dx.toFixed(1)}px, ${dy.toFixed(1)}px) scale(${s})`; },
+  nudge() { const c = this.card; c.classList.remove('nudge'); void c.offsetWidth; c.classList.add('nudge'); Snd.cue('cardOut', { v: .4 }); },
+  grab(e) {
+    if (this.st !== 'wait' && this.st !== 'picked') return; e.preventDefault(); e.stopPropagation();
+    const c = this.card, x0 = e.clientX, y0 = e.clientY, bx = this.dx, by = this.dy; let moved = false;
+    try { c.setPointerCapture(e.pointerId); } catch (_) { /* — */ }
+    c.classList.add('lift', 'drag'); Snd.cue('cardOut'); this.hideNote();
+    const mv = ev => { const dx = ev.clientX - x0, dy = ev.clientY - y0; if (Math.hypot(dx, dy) > 6) moved = true; if (moved) this.set(bx + dx, by + dy); };
+    const up = () => {
+      c.removeEventListener('pointermove', mv); c.removeEventListener('pointerup', up); c.removeEventListener('pointercancel', up); c.classList.remove('drag');
+      if (!moved) { this.st = 'picked'; this.set(0, -(UI.remPx || 14) * 1.2); return; }   // клик: карточка вынута, теперь — по щели
+      if (this.nearSlot()) this.insert(); else this.back();
+    };
+    c.addEventListener('pointermove', mv); c.addEventListener('pointerup', up); c.addEventListener('pointercancel', up);
+  },
+  nearSlot() { const s = $('pc-slot').getBoundingClientRect(), c = this.card.getBoundingClientRect(), cx = c.left + c.width / 2;
+    return Math.abs(cx - (s.left + s.width / 2)) < s.width * .7 && c.bottom > s.top - c.height * .6 && c.top < s.bottom; },
+  async back() { this.st = 'busy'; const x0 = this.dx, y0 = this.dy; Snd.cue('cardOut', { v: .6 }); await tween(260, k => this.set(x0 * (1 - k), y0 * (1 - k))); this.home(); this.st = 'wait'; },
+  key(e) { if (!this.on) return; if (e.key === 'Enter' || e.code === 'Space') { e.preventDefault(); if (this.st === 'wait' || this.st === 'picked') this.insert(); } },
+  async insert() {
+    if (this.st === 'busy' || this.st === 'done') return; this.st = 'busy'; this.hideNote();
+    const P = FEEL.punch, rep = !this.first, c = this.card, s = $('pc-slot').getBoundingClientRect();
+    c.classList.add('lift'); c.style.transform = ''; const r0 = c.getBoundingClientRect(); this.set(this.dx, this.dy);
+    // к щели: низ карточки над щелью, по центру
+    const tx = s.left + s.width / 2 - (r0.left + r0.width / 2), ty = s.top - r0.bottom + 2, x0 = this.dx, y0 = this.dy;
+    await tween(rep ? P.toSlotRep : P.toSlot, k => this.set(x0 + (tx - x0) * k, y0 + (ty - y0) * k));
+    // в щель — с трением: всё, что ниже щели, срезано
+    Snd.cue('cardIn'); const deep = r0.height * P.depth;
+    await tween(rep ? P.inRep : P.in, k => { this.set(tx, ty + deep * k); c.style.clipPath = `inset(0 0 ${(deep * k + 1).toFixed(1)}px 0)`; }, k => k * k);
+    // удар механизма: оттиск времени в строке смены
+    Snd.cue('punch'); haptic(30);
+    this.el.querySelector('.pc-clock').classList.add('hit'); setTimeout(() => this.el && this.el.querySelector('.pc-clock').classList.remove('hit'), 160);
+    const out = c.querySelector('tr.cur .out'); if (out) { out.innerHTML = (this.cur.out || '') + (this.cur.flag ? `<small>${this.cur.flag}</small>` : ''); out.classList.add('ink'); }
+    await wait(rep ? P.holdRep : P.hold);
+    Snd.cue('cardOut', { v: .7 });
+    await tween(rep ? P.inRep : P.in, k => { this.set(tx, ty + deep * (1 - k)); c.style.clipPath = `inset(0 0 ${(deep * (1 - k) + 1).toFixed(1)}px 0)`; });
+    c.style.clipPath = '';
+    // карточку подносят к глазам: видно время ухода
+    const st = this.el.querySelector('.pc-stage').getBoundingClientRect(), r1 = c.getBoundingClientRect(), S = P.showScale;
+    const sx = st.left + st.width * .62 - (r1.left + r1.width / 2) + tx, sy = st.top + st.height * .5 - (r1.top + r1.height / 2) + ty + deep * 0;
+    c.classList.add('show'); await tween(rep ? P.toShowRep : P.toShow, k => this.set(tx + (sx - tx) * k, ty + (sy - ty) * k, 1 + (S - 1) * k));
+    await wait(rep ? P.readRep : P.read);
+    this.finish();
+  },
+  finish() {
+    if (this.st === 'done') return; this.st = 'done';
+    const tc = Save.data.timecard; tc.push(this.cur); if (tc.length > 60) tc.splice(0, tc.length - 60);
+    Save.data.punchSeen = true; Save.save(); this.last = this.cur;
+    const el = this.el; el.classList.add('out'); Snd.cue('paper');
+    setTimeout(() => { el.remove(); }, reducedMotion() ? 0 : FEEL.punch.slide);
+    this.on = false; this.el = null; this.card = null;
+    const d = this.done; this.done = null; if (d) d();
+  },
+  // после взрыва карточку не пробивают: строка табеля остаётся пустой (приход есть, ухода нет)
+  skipBlast(g) { const r = this.rowOf(g); r.out = ''; Save.data.timecard.push(r); Save.save(); this.last = r; },
+  note(text) {
+    const n = document.createElement('div'); n.className = 'fc-note pc-note'; n.setAttribute('role', 'status');
+    n.innerHTML = `<i class="fc-pin" aria-hidden="true"></i><div class="fc-paper"><b class="fc-who">Палыч</b><p>${text}</p></div>`;
+    this.el.appendChild(n); const c = this.card.getBoundingClientRect(), w = n.offsetWidth, h = n.offsetHeight;
+    n.style.left = Math.round(clamp(c.right + 16, 8, innerWidth - w - 8)) + 'px'; n.style.top = Math.round(clamp(c.top, 8, innerHeight - h - 8)) + 'px';
+    void n.offsetWidth; n.classList.add('on'); this.noteEl = n; Snd.cue('mentor');
+  },
+  hideNote() { if (this.noteEl) { this.noteEl.classList.remove('on'); this.noteEl = null; } },
+  resize() { if (this.el) this.paint(); },
+  abort() { if (this.el) this.el.remove(); this.el = null; this.on = false; this.st = ''; this.done = null; },
+};
+// «Посёлок» на планшете (П7, 6.4): сколько выдано в сеть и сколько посёлок был без света — из истории смены, на результат не влияет
+function townLine(g) {
+  const H = g.hist, k = shiftClock(g).k, thr = FEEL.moments.sync.at; let mwh = 0, dark = 0, any = false;
+  for (let i = 1; i < H.length; i++) { const dt = H[i].t - H[i - 1].t, m = (H[i].mwe + H[i - 1].mwe) / 2; mwh += m * dt * k / 60; if (m < thr) dark += dt * k; if (m >= thr) any = true; }
+  if (!any) return g.goalCfg.v === 'mwe' ? `В сеть не выдали. Посёлок без света ${Math.round(dark)} мин.` : 'В сеть не выдавали: генератор в эту смену не работал.';
+  return `Выдано в сеть ${Math.round(mwh)} МВт·ч.` + (dark >= 1 ? ` Посёлок без света ${Math.round(dark)} мин.` : ' Посёлок всю смену со светом.');
+}
+// норма и факт по каждому показателю — те же правила звёзд, что в Game.finish (подача, не пересчёт)
+const n1 = v => (Math.round(v * 10) / 10).toString().replace('.', ',');
+function starFact(g, d) {
+  const m = g.m, gc = g.goalCfg, frac = m.inBandTime / Math.max(1, m.total), u = gc.v === 'mwe' ? 'МВт' : '%', s = v => `${Math.round(v)} с`;
+  switch (d.type) {
+    case 'exits': return [`выходов не больше ${d.max}`, `${m.exits}`];
+    case 'meanErr': { const q = gc.v === 'power' ? gc.tol * 100 : (gc.target || 0) * (gc.tolRel || 0), e = m.inBandTime > 0 ? m.errSum / m.inBandTime : null;
+      return [`отклонение до ${n1(d.max * q)} ${u}`, e == null ? '—' : `${n1(e * q)} ${u}`]; }
+    case 'warn': return [`в жёлтой зоне до ${d.max} с, без красной`, `${s(m.warnTime)}${m.redCount ? `, красная ×${m.redCount}` : ''}`];
+    case 'inBand': return [`в коридоре от ${pct(d.min)} %`, `${pct(frac)} %`];
+    case 'rodsZone': return [`в рабочей зоне от ${pct(d.min)} %`, `${pct(m.rodsZoneTime / Math.max(1, g.t))} %`];
+    case 'react': return [`не позже ${d.max} с`, m.reactTime != null ? s(m.reactTime) : '—'];
+    case 'dgFast': return [`пуск ДГ за ${d.max} с`, m.dgStartT != null && g.happened.blackout != null ? s(m.dgStartT - g.happened.blackout) : '—'];
+    case 'maxTout': return [`не горячее ${d.max} °C`, `${Math.round(m.maxToutAfter)} °C`];
+    case 'noRed': return ['без красного табло', m.redCount ? `${m.redCount} раз` : 'не было'];
+    case 'pumpsFast': return [`насосы за ${d.max} с`, m.dgOnT != null && m.pumpsOnT != null ? s(m.pumpsOnT - m.dgOnT) : '—'];
+  }
+  return ['', ''];
+}
+/* планшет со сводкой смены (П7, раздел 6.4): твёрдая доска со стальным зажимом, под зажимом — печатный бланк «Сводка за смену»,
+   заполненный машинописью и рукой Палыча. Строки появляются по порядку, каждая со своим звуком: машинка, штамп, бумага, ручка.
+   Клик по листу — всё сразу. «Смену сдал» — клик по строке: ручка выписывает подпись игрока; нажал «Следующая смена», не подписав, —
+   подпись ставится сама за 0,4 с. Кнопки — под планшетом справа, главная — крайняя правая (Enter) */
 function showResult(g) {
   UI.mode = 'result'; UI.running = false; Guide.stop(true); Moments.offSkip(); Snd.forceMode = null;
-  const r = g.result, lv = g.level, idx = g.idx;
+  const r = g.result, lv = g.level, idx = g.idx, blast = !!g.s.damaged, rep = !!Save.data.plankSeen;
   if (r.success && r.nStars > Save.stars(idx)) { Save.data.stars[lv.id] = r.nStars; Save.save(); }
   const nx = idx + 1, hasNext = r.success && nx < LEVELS.length && Save.playable(nx);
   const d = new Date(), date = `«${d.getDate()}»&nbsp;${MONTHS_GEN[d.getMonth()]}&nbsp;${d.getFullYear()}&nbsp;г.`;
-  const shown = new Set();
-  let h = `<div class="jr-top"><span>Оперативный журнал БЩУ-1</span><span>${date}</span></div>`;
-  h += `<div class="jr-h ${r.success ? 'ok' : 'bad'}"><h2>${r.success ? 'Смена сдана' : 'Смена прервана'}</h2><span class="jr-sub">${lv.hidden ? 'Без страховки' : `Смена ${lv.num}. ${lv.title}`}${lv.clock ? ` · с ${fmtClock(lv.clock.start)}` : ''}</span></div>`;
-  if (r.success) {
-    h += '<div class="jr-crit">' + r.stars.map((s, k) => { if (!s.ok && s.hint) shown.add(s.hint);
-      return `<div class="jr-row j-row"><span class="jr-k">${s.label}</span><span class="jr-v">${s.ok ? '' : s.hint}</span>${s.ok ? `<span class="stamp jr-st" data-k="${k}">Зачтено</span>` : '<span class="jr-st miss">не зачтено</span>'}</div>`; }).join('') + '</div>';
+  const row = Punch.last || Punch.rowOf(g), shown = new Set();
+  let h = '<div class="pl-board"><div class="pl-clip" aria-hidden="true"><i></i><i></i></div><div class="pl-sheet">';
+  h += `<div class="pl-head"><span class="pl-form">Форма БЩУ-7</span><h2>${blast ? 'Акт' : 'Сводка за смену'}</h2><span class="pl-form">№ ${String(Save.data.timecard.length).padStart(3, '0')}</span></div>`;
+  h += `<div class="pl-meta pl-l" data-s="typer">Энергоблок № 1, БЩУ-1 · ${date} · ${lv.hidden ? 'режим «Без страховки»' : `смена ${lv.num} «${lv.title}»`} · с ${row.in} по ${row.out || '—'}</div>`;
+  h += `<div class="pl-f pl-l" data-s="typer"><b>Задание</b><span class="ty">${lv.goal.label}</span></div>`;
+  if (!blast) {
+    h += '<table class="pl-tab pl-l" data-s="typer"><tr><th>Показатель</th><th>Норма</th><th>Факт</th><th>Отметка</th></tr>';
+    h += r.stars.map((s, k) => { const [norm, fact] = starFact(g, lv.stars[k]); if (!s.ok && s.hint) shown.add(s.hint);
+      return `<tr class="pl-l" data-s="typer"><td>${s.label}</td><td>${norm}</td><td class="ty">${r.success ? fact : '—'}</td><td>${s.ok ? `<span class="stamp jr-st" data-k="${k}">Зачтено</span>` : '<span class="jr-st miss">не зачтено</span>'}</td></tr>`; }).join('');
+    h += '</table>';
   }
-  const say = r.success ? r.lines[0] : g.s.damaged ? MOMENT_LINES.blast : null;
-  const rest = r.lines.filter((x, i) => !(r.success && i === 0) && !shown.has(x));
+  if (!r.success) h += `<span class="pl-void" aria-hidden="true">${blast ? 'Блок разрушен' : 'Смена прервана'}</span>`;
+  const say = r.success ? r.lines[0] : blast ? MOMENT_LINES.blast : null;
+  const rest = r.lines.filter((x, i) => !(r.success && i === 0) && !shown.has(x) && x);
   if (!r.success && r.title && r.title !== 'Смена прервана') rest.unshift(r.title + '.');
-  h += `<div class="jr-lines">${rest.map(x => `<p>${x}</p>`).join('')}</div>`;
-  h += '<div class="mr-chart"><div class="mrc-h">Лента самописца: что делал реактор и что делал ты</div><canvas id="mr-canvas"></canvas>';
-  h += '<div class="ch-look">Синие метки — твои нажатия. Посмотри, через сколько секунд линия на них отзывается.</div><div class="mrc-legend" id="mr-legend"></div></div>';
-  if (say) h += `<p class="jr-say">${say}</p>`;
-  h += `<div class="jr-sign"><div class="jr-sg jr-me"><span>Смену сдал</span>${signSVG(Save.data.sign, 160, 44, 'jr-me')}<i>стажёр</i></div>`
+  h += '<div class="pl-grid">';
+  h += '<div class="mr-chart pl-tape pl-l" data-s="paper"><div class="mrc-h">Ход смены — лента самописца</div><canvas id="mr-canvas"></canvas><div class="mrc-legend" id="mr-legend"></div></div>';
+  h += '<div class="pl-col">';
+  h += `<div class="pl-f pl-l" data-s="typer"><b>Замечания</b><div class="ty">${rest.length ? rest.map(x => `<p>${x}</p>`).join('') : '<p>Нет.</p>'}</div></div>`;
+  h += `<div class="pl-f pl-l" data-s="typer"><b>Посёлок</b><span class="ty">${blast ? 'Посёлок без света. Энергоблок выведен из работы.' : townLine(g)}</span></div>`;
+  if (say) h += `<div class="pl-f pl-l" data-s="pen"><b>Отзыв начальника смены</b><p class="pl-hand">${say}</p></div>`;
+  h += '</div></div>';
+  h += `<div class="jr-sign pl-l" data-s="pen"><div class="jr-sg jr-me" role="button" tabindex="0" aria-label="Смену сдал — расписаться"><span>Смену сдал</span>${signSVG(Save.data.sign, 160, 44, 'jr-me')}<i>стажёр</i></div>`
      + `<div class="jr-sg jr-boss"><span>Смену принял</span>${signSVG(PALYCH_SIGN, 160, 44)}<i>нач. смены</i></div></div>`;
-  h += '<div class="mr-actions">';
+  h += '</div></div>';
+  // кнопки — слой игры, под планшетом справа; главная — крайняя правая
+  h += `<div class="mr-actions"><button class="btn big" id="mr-menu">К сменам</button><button class="btn big${hasNext ? '' : ' primary'}" id="mr-retry">Ещё раз</button>`;
   if (hasNext) h += `<button class="btn primary big" id="mr-next">${LEVELS[nx].hidden ? 'Без страховки' : 'Следующая смена'}</button>`;
-  h += `<button class="btn big${hasNext ? '' : ' primary'}" id="mr-retry">Ещё раз</button><button class="btn big" id="mr-menu">К сменам</button></div>`;
-  const m = $('m-result'); m.innerHTML = h;
-  if (hasNext) $('mr-next').addEventListener('click', () => { Snd.ui(); startLevel(nx, false); });
-  $('mr-retry').addEventListener('click', () => { Snd.ui(); startLevel(idx, true); });
-  $('mr-menu').addEventListener('click', () => { Snd.ui(); showMenu(); });
+  h += '</div>';
+  const m = $('m-result'); m.className = 'modal plank'; m.innerHTML = h;
+  const me = m.querySelector('.jr-me'), boss = m.querySelector('.jr-boss');
   m.querySelectorAll('.sig path').forEach(p => { try { p.style.setProperty('--len', Math.ceil(p.getTotalLength() + 4)); } catch (e) { /* — */ } });
+  let signed = false;
+  const sign = fast => { if (signed) return; signed = true; me.classList.add('signed'); me.classList.remove('draw'); void me.offsetWidth; if (fast) me.style.setProperty('--sig-ms', '400ms'); me.classList.add('draw');
+    for (let i = 0; i < (fast ? 2 : 4); i++) setTimeout(() => Snd.cue('pen', { v: .6 }), i * 110); };
+  me.addEventListener('pointerdown', e => { e.stopPropagation(); sign(false); });
+  me.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); sign(false); } });
+  const go = fn => () => { Snd.ui(); if (!signed) { sign(true); setTimeout(fn, reducedMotion() ? 0 : 420); } else fn(); };   // подпись не блокирует
+  if (hasNext) $('mr-next').addEventListener('click', go(() => startLevel(nx, false)));
+  $('mr-retry').addEventListener('click', go(() => startLevel(idx, true)));
+  $('mr-menu').addEventListener('click', () => { Snd.ui(); showMenu(); });
   showModal('m-result');
   requestAnimationFrame(() => drawRun($('mr-canvas'), g));
-  // запись появляется по порядку: лист, вклейка, штампы по одному, подписи. Клик по листу — всё сразу
-  const T = FEEL.journal, timers = [], at = (ms, fn) => timers.push(setTimeout(fn, ms));
-  const stamps = [...m.querySelectorAll('.jr-st[data-k]')], me = m.querySelector('.jr-me'), boss = m.querySelector('.jr-boss'), chart = m.querySelector('.mr-chart');
-  Snd.cue('paper'); r.success ? Snd.win() : Snd.lose();
-  at(T.paste, () => { chart.classList.add('pasted'); Snd.cue('paper'); });
-  stamps.forEach((s, k) => at(T.stamps + k * T.stampGap, () => { s.classList.add('on'); Snd.cue('stamp'); }));
-  const sigAt = T.stamps + stamps.length * T.stampGap + T.sign;
-  [me, boss].forEach((el, k) => { el.style.visibility = 'hidden'; at(sigAt + k * T.signGap, () => { el.style.visibility = ''; el.classList.add('draw'); for (let i = 0; i < 4; i++) setTimeout(() => Snd.cue('pen', { v: .6 }), i * 120); }); });
-  const all = () => { timers.forEach(clearTimeout); chart.classList.remove('pasted'); stamps.forEach(s => s.classList.add('on')); [me, boss].forEach(el => { el.style.visibility = ''; el.classList.remove('draw'); }); m.removeEventListener('pointerdown', all); };
+  // заполнение по строкам: машинка, штамп, бумага, ручка. Клик по листу — всё сразу. Повтор — быстрее
+  const T = FEEL.journal, step = rep ? T.lineRep : T.line, timers = [], at = (ms, fn) => timers.push(setTimeout(fn, ms));
+  const lines = [...m.querySelectorAll('.pl-l')], stamps = [...m.querySelectorAll('.jr-st[data-k]')];
+  m.classList.add('filling'); Snd.cue('folder'); r.success ? Snd.win() : Snd.lose();
+  boss.style.visibility = 'hidden';
+  let t = T.start;
+  lines.forEach(el => { const s = el.dataset.s; at(t, () => { el.classList.add('in');
+    if (s === 'typer') for (let i = 0; i < (rep ? 2 : 3); i++) setTimeout(() => Snd.cue('typer'), i * 55);
+    else if (s === 'paper') { el.classList.add('pasted'); Snd.cue('paper'); } else if (s === 'pen') Snd.cue('pen', { v: .5 }); });
+    t += step; });
+  const sg = rep ? T.stampGapRep : T.stampGapFirst;
+  stamps.forEach((s, k) => at(t + k * sg, () => { s.classList.add('on'); Snd.cue('stamp'); haptic(18); }));
+  t += stamps.length * sg + T.sign;
+  at(t, () => { boss.style.visibility = ''; boss.classList.add('draw'); for (let i = 0; i < 4; i++) setTimeout(() => Snd.cue('pen', { v: .6 }), i * 120); });
+  at(t + 600, () => { m.classList.remove('filling'); Save.data.plankSeen = true; Save.save(); });
+  const all = e => { if (e && e.target.closest && e.target.closest('.mr-actions, .jr-me')) return; timers.forEach(clearTimeout); lines.forEach(el => el.classList.add('in'));
+    m.querySelector('.pl-tape').classList.remove('pasted'); stamps.forEach(s => s.classList.add('on')); boss.style.visibility = ''; boss.classList.remove('draw');
+    m.classList.remove('filling'); Save.data.plankSeen = true; Save.save(); m.removeEventListener('pointerdown', all); };
   m.addEventListener('pointerdown', all);
-  at(sigAt + 2 * T.signGap + 800, () => m.removeEventListener('pointerdown', all));
 }
 
 /* ---------- верхняя полоса и наставник ---------- */
@@ -6491,6 +6817,7 @@ const KEY_VALVE = { ArrowRight: 1, KeyD: 1, ArrowLeft: -1, KeyA: -1 };
 document.addEventListener('keydown', e => {
   Snd.init();
   if (Scenes.cur) { if (Scenes.cur.key) Scenes.cur.key(e); return; }   // сцена входа: свои клавиши, пульт не слушает
+  if (Punch.on) { Punch.key(e); return; }                              // табельные часы: Enter / Пробел — пробить карточку
   if ((e.code === 'Slash' || e.code === 'F1') && !UI.modal && UI.game) { e.preventDefault(); if (!e.repeat) KeysOv.toggle(); return; }   // «?» — в русской раскладке точка
   if (KeysOv.el && e.code === 'Escape') { KeysOv.toggle(false); return; }
   if (UI.modal) {
@@ -8070,12 +8397,13 @@ const Moments = {
     if (e.kind === 'blast' && !e.hit) this.blastHit(true);   // пропустили — зал сразу в итоговом виде
     Cut.stop(); Shake.reset(); Snd.forceMode = null;
     if (e.kind === 'dawn') Win.dawnTo(1);
-    if (UI.game && !UI.resultShown) { UI.resultShown = true; showResult(UI.game); }
+    if (UI.game && !UI.resultShown) { UI.resultShown = true; const g = UI.game;   // П7: сначала табельные часы, потом планшет; после взрыва карточку не пробивают
+      if (g.s.damaged) { Punch.skipBlast(g); showResult(g); } else Punch.start(g, () => showResult(g)); }
   },
   // 12.4 удачная смена: симуляция мягко замирает (endSpeed), комната затихает, в окне начинается рассвет
   dawn(first) {
     const M = FEEL.moments.dawn, dur = first ? M.dur : M.durRepeat;
-    this.begin('dawn'); Snd.forceMode = 'calm';
+    this.begin('dawn'); Snd.forceMode = 'calm'; if (UI.game) UI.game.say('Держим. Сдаём смену.', 1);   // П7: конец дня объявляет мир
     // лампы цели (референс Slots & Daggers): по ряду бежит волна — тройка огней дважды проходит слева направо, потом горят все
     const lamps = [...document.querySelectorAll('#goal-lamps .lmp')], W = M.wave, n = lamps.length, slot = $('gb-slot');
     if (n) this.add(t => { const done = t >= W.step * (n + 3) * W.passes, head = Math.floor(t / W.step) % (n + 3);
@@ -8114,7 +8442,7 @@ const NICHE_GROUPS = new Set(['xenon', 'dg']);
 const DUTY_EL = { power: 'b-power', powerMax: 'b-power', mwe: 'b-grid', cool: 'b-temp' };   // прибор цели по величине задания
 // o.hall — вошли в зал из графика смен или после подписи: сначала свет рядами, потом задание
 function startLevel(idx, quick, o = {}) {
-  hideTip(); Guide.stop(true); Reveal.finish(); KeysOv.close(); KeyHint.hideAll();
+  hideTip(); Guide.stop(true); Reveal.finish(); KeysOv.close(); KeyHint.hideAll(); Punch.abort();
   const g = UI.game = new Game(idx);
   Object.assign(UI, { mode: 'brief', running: false, paused: false, resultShown: false, endT: 0, acc: 0, chartT: 0,
     prevScram: g.s.scram, prevRed: 0, prevEv: 0, prevWarn: 0, msgId: 0, winLit: -1, guideHold: false, goalN: -1, goalOk: null, goalF: null, goalDev: null, goalFill: null });
@@ -8203,7 +8531,7 @@ function init() {
   renderAll(UI.game, 0);
   updateSoundUI(); updatePauseUI();
   if (!debugWanted()) Entry.start();
-  const onResize = () => { UI.remPx = remPx(); UI.chartsDirty = true; UI.cvEpoch = (UI.cvEpoch || 0) + 1; UI.annFit = true; Scenes.resize(); Guide.resize(); KeyHint.resize(); Win.resize(); FX.size(); Tex._pools = null; if (UI.modal === 'm-result' && UI.game && UI.game.result) drawRun($('mr-canvas'), UI.game); };
+  const onResize = () => { UI.remPx = remPx(); UI.chartsDirty = true; UI.cvEpoch = (UI.cvEpoch || 0) + 1; UI.annFit = true; Scenes.resize(); Guide.resize(); KeyHint.resize(); Punch.resize(); Win.resize(); FX.size(); Tex._pools = null; if (UI.modal === 'm-result' && UI.game && UI.game.result) drawRun($('mr-canvas'), UI.game); };
   window.addEventListener('resize', onResize);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { onResize(); Tex.refreshAll(); }).catch(() => {});
   document.addEventListener('visibilitychange', () => { if (document.hidden && UI.mode === 'play' && !UI.paused) togglePause(); });
@@ -8249,6 +8577,7 @@ function debugStart() {
   }
   const scr = q.get('screen');
   if (scr) {
+    if (scr === 'punch') { startLevel(Math.max(0, (parseInt(q.get('level'), 10) || 1) - 1), true); const g = UI.game; g.finish(q.get('fail') !== '1'); Punch.start(g, () => showResult(g)); return; }   // П7: табельные часы
     if (scr === 'result') { startLevel(Math.max(0, (parseInt(q.get('level'), 10) || 1) - 1), true); const g = UI.game; g.finish(q.get('fail') !== '1'); if (q.get('fail') === '1') { g.result.success = false; } showResult(g); }
     else if (SCENES[scr]) Scenes.go(scr, { debug: true });
     return;

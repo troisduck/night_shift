@@ -51,8 +51,11 @@ def main():
     from playwright.sync_api import sync_playwright
     from PIL import Image, ImageDraw, ImageFont
     w, h = map(int, a.size.split('x')); out = Path(a.out); out.mkdir(parents=True, exist_ok=True)
-    try: font = ImageFont.truetype('arial.ttf', 15)
-    except Exception: font = ImageFont.load_default()
+    font = None
+    for nm in ('arial.ttf', 'DejaVuSans.ttf'):   # Windows / Linux; у шрифта по умолчанию нет кириллицы
+        try: font = ImageFont.truetype(nm, 15); break
+        except Exception: pass
+    font = font or ImageFont.load_default()
     table = REPEAT if a.repeat else FRAMES
     with sync_playwright() as p:
         br = p.chromium.launch(args=['--autoplay-policy=no-user-gesture-required'])
