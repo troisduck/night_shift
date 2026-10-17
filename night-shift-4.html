@@ -195,7 +195,7 @@ body {
 button { font: inherit; color: inherit; }
 
 /* ---------- сетка пульта ---------- */
-#app { height: 100%; display: grid; grid-template-rows: 3.3rem auto minmax(0, 1fr) 13.2rem; grid-template-columns: minmax(0, 1fr) var(--win-w); gap: .5rem; padding: .5rem .7rem .6rem; counter-reset: panel; }   /* номера панелей П-01…П-12 — сквозные, в порядке разметки */
+#app { height: 100%; display: grid; grid-template-rows: 4.2rem auto minmax(0, 1fr) 13.2rem; grid-template-columns: minmax(0, 1fr) var(--win-w); gap: .5rem; padding: .5rem .7rem .6rem; counter-reset: panel; }   /* номера панелей П-01…П-12 — сквозные, в порядке разметки */
 #desk { display: grid; grid-template-columns: 21rem minmax(0, 1fr) 20rem; gap: .5rem; min-height: 0; }
 #topbar { grid-column: 1 / -1; grid-row: 1; } #annunciator { grid-column: 1; grid-row: 2; } #desk { grid-column: 1; grid-row: 3; }
 #bottom { grid-column: 1 / -1; grid-row: 4; } #window { grid-column: 2; grid-row: 2 / span 2; }
@@ -245,28 +245,79 @@ button { font: inherit; color: inherit; }
    Гравировка «ЗАДАНИЕ», бирка с заданием машинописью в металлическом кармане (бумага в полутени — тише живых приборов),
    справа — ряд из десяти ламп в рамке: загораются молочным по мере выполнения и гаснут по одной, если вышел из коридора;
    лампа «В ЦЕЛИ»: зелёная — условие выполняется, янтарная — в коридоре, но нарушено второе условие (что именно — на стекле) */
-.goal { position: relative; flex: 1 1 auto; min-width: 0; max-width: 52rem; margin: 0 auto; display: flex; align-items: center; gap: .7rem; }
+.goal { position: relative; flex: 1 1 auto; min-width: 0; max-width: 72rem; margin: 0 auto; display: flex; align-items: center; gap: .7rem; }
 .goal-h { flex: 0 0 auto; font: 700 .82rem/1 var(--f-engrave); letter-spacing: .14em; text-transform: uppercase; color: var(--engrave-dim); }
-.goal-slip { flex: 1 1 auto; min-width: 0; padding: .3rem .65rem .24rem; color: var(--paper-ink); background: var(--tex-paper), var(--paper-2);
+.goal-slip { flex: 1 1 auto; min-width: 12rem; padding: .3rem .65rem .24rem; color: var(--paper-ink); background: var(--tex-paper), var(--paper-2);
   border: .2rem solid var(--iron-alu); border-top-width: .08rem; border-radius: 1px 1px 3px 3px;
   box-shadow: inset 0 .55rem .35rem -.45rem rgba(31,29,26,.3), 0 0 0 1px var(--iron-seam), 0 2px 0 rgba(0,0,0,.4); }
-.goal-label { font: 400 .95rem/1.12 var(--f-type); overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; }
-.goal-meter { flex: 0 0 auto; display: grid; grid-template-columns: auto auto; align-items: center; column-gap: .6rem; row-gap: .14rem; }
-.goal-lamps { display: flex; gap: .32rem; padding: .28rem .42rem; border: .22rem solid; background: var(--iron-well);
+.goal-label { font: 400 .82rem/1.08 var(--f-type); overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; }
+/* ===== ТАБЛО ЗАДАНИЯ (П7, ярус 0; STYLE.md 2.4): после неквитированной тревоги — самое заметное на щите.
+   Стальная планка в бакелитовом корпусе с собственным светом: окно «сейчас → нужно», указатель отклонения «ниже — в цели — выше»,
+   шкала выполнения (два варианта на выбор автора: ряд ламп или световая щель — FEEL.goal.scale) и остаток цифрами */
+.gb { flex: 0 0 auto; display: flex; align-items: center; gap: .6rem; padding: .3rem .6rem; border-radius: 3px; background: var(--tex-bakelite), #121410;
+  box-shadow: inset 0 .16rem .3rem rgba(0,0,0,.85), inset 0 -1px 0 rgba(255,250,236,.1), 0 0 0 1px #070806,
+    0 0 0 .2rem #3E433C, 0 -.05rem 0 .2rem #90958A, 0 .06rem 0 .2rem #1E211C, 0 0 0 calc(.2rem + 1px) #040503; }
+/* окно «сейчас → нужно»: цифры величины цели и коридор задания тем же знаком, что на шкале и ленте (штриховка задания) */
+.gb-now { display: flex; flex-direction: column; align-items: flex-end; gap: .14rem; min-width: 6.6rem; padding: .16rem .5rem .18rem; border-radius: 2px;
+  background: var(--glint), var(--iron-well); box-shadow: inset 0 .1rem .3rem rgba(0,0,0,.9), 0 0 0 1px var(--iron-alu-dark), 0 0 0 2px var(--iron-seam); }
+.gb-val { font: 700 1.75rem/1 var(--f-plate); font-variant-numeric: tabular-nums; color: var(--sig-neu); white-space: nowrap; }
+.gb-val small { margin-left: .22rem; font-size: .95rem; font-weight: 700; color: var(--glass-print); }
+.gb-need { display: flex; align-items: center; gap: .32rem; font: 400 .9rem/1 var(--f-plate); color: var(--glass-live); white-space: nowrap; }
+.gb-sw { width: 1.05rem; height: .7rem; flex: 0 0 auto; background: repeating-linear-gradient(-45deg, rgba(46,158,71,.62) 0 .14rem, rgba(46,158,71,.26) .14rem .28rem), #E2D8B8;   /* ns-ok: знак задания — краска зоны на кусочке шкалы, тот же, что .sc-target */
+  box-shadow: inset .16rem 0 0 var(--ink-ok), inset -.16rem 0 0 var(--ink-ok); }   /* кусочек шкалы с зоной задания — тот же знак */
+/* указатель отклонения: сведения, а не инструкция. «В цели» — крупная лампа: зелёная — выполняется, янтарная — в коридоре, но нарушено условие */
+.gb-dev { display: flex; align-items: flex-end; gap: .38rem; }
+.gb-d { display: flex; flex-direction: column; align-items: center; gap: .2rem; font: 700 .64rem/1 var(--f-engrave); letter-spacing: .08em; text-transform: uppercase;
+  color: var(--engrave-dim); white-space: nowrap; transition: color var(--t-lamp-off) ease-in; }
+.gb-d .lmp { width: .78rem; height: .78rem; margin-bottom: .3rem; }
+.gb-d.in .lmp { width: 1.55rem; height: 1.55rem; margin-bottom: 0; }
+.gb-d.on { color: var(--engrave); transition-duration: var(--t-lamp-on); }
+.gb-d .lmp:not(.mlk):not(.ok):not(.warn) { --off: #24251F; background-color: #24251F; }   /* погашенная — тёмное стекло */
+/* шкала выполнения, вариант (а): ряд крупных ламп в рамке; доля разгорается непрерывно (--on), горящая светит на рамку */
+.gb-prog { display: flex; flex-direction: column; align-items: center; gap: .16rem; }
+.goal-lamps { display: flex; gap: .2rem; padding: .18rem .26rem; border: .2rem solid; background: var(--iron-well);
   border-image: linear-gradient(180deg, #A7ACA2 0, #646960 22%, #4A4E47 70%, #2C2F2A 100%) 1;
   box-shadow: inset 0 .2rem .3rem rgba(0,0,0,.9), 0 0 0 1px #070806, 0 .1rem .16rem rgba(0,0,0,.5); }
-.goal-lamps .lmp, .goal-ok .lmp { width: .62rem; height: .62rem; }
-.goal-lamps .lmp:not(.mlk), .goal-ok .lmp:not(.ok):not(.warn) { --off: #2B2C28; background-color: #2B2C28; }   /* погашенная — дымчатое стекло: при «0 из 30 с» ряд не выглядит горящим (плейтест П6) */
-.goal-count { grid-column: 1; font: 400 .84rem/1 var(--f-plate); color: var(--glass-live); white-space: nowrap; text-align: center; }
-.goal-ok { grid-column: 2; grid-row: 1 / span 2; display: flex; flex-direction: column; align-items: center; gap: .22rem;
-  font: 700 .66rem/1 var(--f-engrave); letter-spacing: .08em; text-transform: uppercase; color: var(--engrave-dim); white-space: nowrap; }
+.goal-lamps .lmp { --on: 0; --lit: var(--mark-lit); --hot: #FFFDF4; --halo: var(--mark-halo); width: 1.32rem; height: 1.32rem;
+  background-color: color-mix(in srgb, var(--mark-lit) calc(var(--on) * 100%), #24251F); transition: background-color .12s linear; }
+.goal-lamps .lmp::after, .goal-lamps .lmp::before { opacity: var(--on); transition: opacity .12s linear; }
+.goal-lamps .lmp.mlk { --on: 1 !important; }
+/* автор (П7): лампы задания светят ярко — широкий ореол на рамку и соседей; лампа, которая сейчас заполняется, мигает,
+   пока условие выполняется (≈ 1,1 Гц, с инерцией нити), заполнилась — горит ровно */
+.goal-lamps .lmp { --halo: rgba(255,230,180,.9); }
+.goal-lamps .lmp::before { inset: -1rem; }
+/* горящая лампа светит наружу — на рамку и стальную планку (тень не анимируется: мигает только заливка и ореол) */
+.goal-lamps .lmp.mlk { box-shadow: inset 0 -1px 2px rgba(0,0,0,.5), 0 0 0 .1rem var(--iron-alu), 0 0 0 .16rem var(--iron-seam), 0 0 .7rem .22rem rgba(255,224,168,.5), 0 0 1.6rem .3rem rgba(255,214,150,.18); }   /* ns-ok: свет горящей лампы на рамке — источник света */
+.goal-lamps { position: relative; z-index: 1; }   /* свет ламп ложится поверх соседних деталей полосы */
+.goal-lamps .lmp.fill { animation: gbFill .9s linear infinite; }
+.goal-lamps .lmp.fill::before, .goal-lamps .lmp.fill::after { animation: gbFillHot .9s linear infinite; }
+@keyframes gbFill { 0%, 40% { background-color: var(--mark-lit); } 55%, 90% { background-color: color-mix(in srgb, var(--mark-lit) calc(var(--on) * 60%), #24251F); } 100% { background-color: var(--mark-lit); } }
+@keyframes gbFillHot { 0%, 40% { opacity: 1; } 55%, 90% { opacity: calc(var(--on) * .5); } 100% { opacity: 1; } }
+.gb-slot.fill .gb-fill::after { animation: gbEdge .9s linear infinite; }
+@keyframes gbEdge { 0%, 40% { opacity: 1; } 55%, 90% { opacity: .2; } 100% { opacity: 1; } }
+/* вариант (б): световая щель в стальной планке — за ней столбик тёплого света, яркий край идёт за выполнением */
+.gb-slot { position: relative; display: none; width: 15.4rem; height: 1.25rem; border-radius: .2rem; overflow: hidden; background: #0C0D0B;
+  box-shadow: inset 0 .16rem .3rem rgba(0,0,0,.95), 0 0 0 .2rem #3E433C, 0 -.05rem 0 .2rem #8E9388, 0 .06rem 0 .2rem #1E211C, 0 0 0 calc(.2rem + 1px) #040503; }
+.gb-slot::after { content: ""; position: absolute; inset: 0; pointer-events: none;   /* риски через десятую часть — по стальной планке */
+  background: repeating-linear-gradient(90deg, rgba(0,0,0,0) 0 calc(10% - 2px), rgba(10,10,8,.85) calc(10% - 2px) 10%); }
+.gb-fill { position: absolute; left: 0; top: 0; bottom: 0; width: calc(var(--p, 0) * 100%); transition: width .2s linear;
+  background: linear-gradient(180deg, #FFF6DE 0, var(--mark-lit) 45%, #E5C688 100%); box-shadow: 0 0 .7rem .1rem var(--mark-halo); }
+.gb-fill::after { content: ""; position: absolute; right: 0; top: 0; bottom: 0; width: 1.4rem; background: linear-gradient(90deg, rgba(255,253,244,0), #FFFDF4); }   /* раскалённый край */
+.gb-glint { position: absolute; top: 0; bottom: 0; left: calc(var(--sw, -1) * 100%); width: 3.4rem; opacity: 0; pointer-events: none;
+  background: linear-gradient(90deg, rgba(255,253,244,0), rgba(255,253,244,.9), rgba(255,253,244,0)); }
+.gb-slot.wave .gb-glint { opacity: 1; }
+.gb.gb-slots .goal-lamps { display: none; } .gb.gb-slots .gb-slot { display: block; }
+/* остаток или нарушенное условие — цифрами индикатора, не мелким серым */
+.goal-count { min-width: 8rem; font: 700 .95rem/1.2 var(--f-plate); font-variant-numeric: tabular-nums; color: var(--sig-neu); white-space: nowrap; text-align: center; }
+.goal-count.cond { color: var(--sig-warn); }
+.goal-count.wait { color: var(--glass-live); font-weight: 400; }
 /* часы — нейтральные цифры в окошке */
 .clock {
   font: 700 1.35rem/1 var(--f-plate); font-variant-numeric: tabular-nums; min-width: 4.4rem; text-align: center; color: var(--sig-neu);
   padding: .34rem .5rem .3rem; background: var(--glint), var(--iron-well); border-radius: 2px;
   box-shadow: inset 0 .1rem .3rem rgba(0,0,0,.9), 0 0 0 1px var(--iron-alu-dark), 0 0 0 2px var(--iron-seam);
 }
-.tb-btns { display: flex; align-items: center; gap: .6rem; }
+.tb-btns { flex: 0 0 auto; display: flex; align-items: center; gap: .6rem; }   /* слой игры не сжимается: место отдаёт бирка задания */
 .tb-btns svg { width: 1rem; height: 1rem; vertical-align: -.15rem; fill: currentColor; }
 /* слой игры (STYLE.md 2.14): пауза, скорость, звук, «Заново», «Смены» — плоская спокойная полоса, без фасок, винтов, износа.
    Старые правила клавиш-«магнитофона» ниже перекрыты блоком «СЛОЙ ИГРЫ» в конце стилей */
@@ -280,7 +331,7 @@ button { font: inherit; color: inherit; }
 .tb-keys .btn:active::after, .tb-keys .btn.sel::after { --cap: #292B25; top: .3rem; border-width: .08rem .1rem .1rem; border-top-color: var(--cap-side);
   box-shadow: 0 0 0 1px #050504, inset 0 .14rem .24rem rgba(0,0,0,.6); }
 .tb-keys #btn-pause { padding-left: .75rem; padding-right: .75rem; }
-.tb-keys #btn-pause span { margin-left: .4rem; }
+.tb-keys #btn-pause > .pz-l { margin-left: .4rem; }
 /* служебные кнопки — отдельный маленький блок; место для регуляторов громкости (шаг 2) — рядом со звуком */
 .tb-serv { display: flex; gap: .7rem; }
 .tb-serv .btn { padding: .28rem .6rem .4rem; min-width: 2.5rem; font-size: .98rem; }
@@ -527,15 +578,28 @@ button { font: inherit; color: inherit; }
 .rate-txt { font-weight: 700; font-size: 1.32rem; white-space: nowrap; color: var(--sig-neu); padding: .06rem .5rem .02rem; }
 .rate-txt.s-ok { color: var(--sig-ok); } .rate-txt.s-warn { color: var(--sig-warn); } .rate-txt.s-bad { color: var(--sig-bad); } .rate-txt.s-info { color: var(--sig-info); }
 .rods-body { display: flex; gap: .55rem; flex: 1 1 auto; min-height: 0; }
+/* указатель положения стержней (П7, РЗ): SVG тянется по коробке (preserveAspectRatio="none" — только прямоугольники), поэтому
+   цифры линейки и указатель в HTML ложатся точно по долям высоты. 0 % — верх активной зоны, 100 % — низ */
+.rodviz > svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.rv-ruler b { position: absolute; left: .18rem; transform: translateY(-50%); font: 700 .66rem/1 var(--f-plate); color: #CFC9B5; text-shadow: 0 1px 0 rgba(0,0,0,.6); }
+.rv-ptr { position: absolute; left: calc(15 / 72 * 100%); width: 0; height: 0; transform: translateY(-50%); pointer-events: none;
+  border-top: .3rem solid transparent; border-bottom: .3rem solid transparent; border-left: .5rem solid #EDE6D0; filter: none; }
+.rv-ptr.warn { border-left-color: var(--sig-warn); }
+.rv-top { display: flex; flex-direction: column; gap: .18rem; }
+.rv-cap { display: flex; flex-direction: column; gap: .12rem; font: 700 .68rem/1.05 var(--f-engrave); letter-spacing: .05em; text-transform: uppercase; color: var(--engrave-dim); }
+.rv-zc { display: none; align-items: center; gap: .3rem; color: var(--engrave); }
+#rv-zn { white-space: nowrap; }
+#b-rods.zone .rv-zc { display: flex; }
+#rv-zone-band { display: none; } #b-rods.zone #rv-zone-band { display: inline; }
 /* разрез зоны в миниатюре — та же крашеная панель со светлыми линиями, что и мнемосхема: живые только стержни и нагрев */
 .rodviz [stroke="#1F1D1A"] { stroke: #CFC9B5; } #rv-rods rect { fill: #D6D0BC; } .rodviz rect[fill="#8A8678"] { fill: #4A5650; }
-.rodviz { flex: 0 0 3.6rem; height: 100%; min-height: 0; background: #2B3833; border-radius: 1px; box-shadow: inset 0 1px 3px rgba(31,29,26,.5), 0 0 0 .16rem var(--iron-bakelite), 0 0 0 calc(.16rem + 1px) var(--iron-seam); }
+.rodviz { position: relative; flex: 0 0 4.7rem; height: 100%; min-height: 0; background: #2B3833; border-radius: 1px; box-shadow: inset 0 1px 3px rgba(31,29,26,.5), 0 0 0 .16rem var(--iron-bakelite), 0 0 0 calc(.16rem + 1px) var(--iron-seam); }
 .rods-ctl { flex: 1; display: flex; flex-direction: column; gap: .3rem; justify-content: space-between; min-width: 0; padding: 0 .16rem;
  }
 .btn.hold { font-size: 1.06rem; padding: .22rem .4rem .34rem; touch-action: none; }
 .btn.hold small { font-size: .72rem; }
 #b-rods .read.sm { padding: .2rem .45rem; gap: .35rem; }
-#b-rods .read.sm .seg { height: 1.5rem; }
+#b-rods .read.sm .seg { height: 1.4rem; }
 .u-sm { font-weight: 400; font-size: .667em; }   /* в em — сжимается вместе с единицей (fitFaces) */
 /* ярус 1 (STYLE.md, 2.4): мощность — самые крупные цифры на щите */
 /* ярус 1 (STYLE.md 2.4): мощность, вода, давление, генератор — самые крупные цифры */
@@ -855,6 +919,16 @@ canvas.sched { flex: 1 1 2.6rem; margin: .14rem .14rem 0; width: calc(100% - .28
 .mb-goal span { color: var(--paper-pencil); font-weight: 400; }
 .mb-new { display: inline-block; color: var(--paper-stamp); font-weight: 700; font-size: 1.12rem; margin: .5rem 0; padding: .1rem .5rem; border: .14rem solid var(--paper-stamp); border-radius: .2rem; transform: rotate(-.6deg); }
 /* кнопки окон — на тёмной планке пульта под листом */
+/* клавиши — слой игры (П7, 5.1): плоские плашки, никогда не путаются с органами щита */
+.mb-keys { display: flex; flex-wrap: wrap; align-items: center; gap: .45rem .7rem; margin: 1.6rem -1.8rem -1.5rem; padding: .55rem 1.8rem; background: #161A17;
+  font: 400 .95rem/1 var(--f-text); color: #D9D3C3; }
+.mb-keys span { display: inline-flex; align-items: center; gap: .3rem; } .mb-keys i { color: #6F7568; font-style: normal; }
+.kh { position: fixed; z-index: 40; display: flex; align-items: center; gap: .32rem; padding: .3rem .5rem; border-radius: 3px; background: #161A17;
+  box-shadow: 0 0 0 1px #2F3631, 0 .2rem .5rem rgba(0,0,0,.55); font: 400 .9rem/1 var(--f-text); color: #E2DCCB; white-space: nowrap; pointer-events: none;
+  opacity: 0; transform: translateY(.3rem); transition: opacity .25s var(--ease-paper), transform .25s var(--ease-paper); }
+.kh.on { opacity: 1; transform: none; }
+.kh i { font-style: normal; color: #7E8478; font-size: .8rem; }
+@media (prefers-reduced-motion: reduce) { .kh { transition: none; transform: none; } }
 .mb-actions, .mr-actions { display: flex; gap: .7rem; flex-wrap: wrap; margin: 1.1rem -1.8rem -1.5rem; padding: .8rem 1.8rem .9rem;
   background: var(--tex-bakelite), var(--iron-bakelite); box-shadow: inset 0 2px 0 rgba(0,0,0,.45); }
 .j-cover .menu-foot .btn { font-size: .98rem; }
@@ -993,7 +1067,8 @@ body { background: radial-gradient(ellipse 75% 70% at 46% 60%, rgba(0,0,0,0) 30%
 
 /* мнемосхема под стеклом: блик и тень от рамы */
 #b-mimic .glass { position: absolute; left: .42rem; right: .42rem; top: .42rem; bottom: .9rem; z-index: 2; pointer-events: none; border-radius: 1px;
-  background: linear-gradient(118deg, rgba(255,255,255,0) 18%, rgba(255,255,255,.08) 24%, rgba(255,255,255,.025) 34%, rgba(255,255,255,0) 40%);
+  background: linear-gradient(118deg, rgba(255,255,255,0) 18%, rgba(255,255,255,.08) 24%, rgba(255,255,255,.025) 34%, rgba(255,255,255,0) 40%),
+    linear-gradient(rgba(6,7,6,var(--paper-shade, 0)), rgba(6,7,6,var(--paper-shade, 0)));   /* бумага в полутени — вариант на пробу (П7, вопрос автору) */
   box-shadow: inset 0 .3rem .6rem rgba(0,0,0,.35), inset 0 0 0 1px rgba(0,0,0,.6); }
 
 /* ---------- аварийное освещение (П4, МОМ-04: обесточивание) ----------
@@ -1385,7 +1460,7 @@ button, .gs-plate, .gs-kplate, .p-name, .blk-h { -webkit-user-select: none; user
 @media (max-width: 600px) {
   .goal { flex-wrap: wrap; row-gap: .45rem; }
   .goal-slip { flex: 1 1 calc(100% - 6rem); }
-  .goal-meter { margin-left: auto; }
+  .gb { flex: 1 1 100%; flex-wrap: wrap; justify-content: center; }
 }
 @media (max-width: 600px) {
   .gs-box { padding: 1.1rem .9rem 1rem; }
@@ -1617,13 +1692,14 @@ body { -webkit-touch-callout: none; }
 .tb-keys .btn:first-child { border-radius: 4px 0 0 4px; } .tb-keys .btn:last-child { border-radius: 0 4px 4px 0; }
 .tb-serv { gap: .2rem; }
 .tb-serv .btn { padding: .42rem .62rem; font-size: .95rem; }
-/* надпись паузы — вне потока: висит под клавишей «Пауза» и ничего на полосе не сдвигает (плейтест П6: пробел «двигал панель») */
-.tb-btns { position: relative; }
-.gl-pz { display: none; position: absolute; left: 0; top: calc(100% + .45rem); z-index: 30; align-items: center; gap: .3rem; padding: .28rem .5rem; border-radius: 3px;
-  background: #161A17; box-shadow: 0 0 0 1px #2F3631, 0 .2rem .4rem rgba(0,0,0,.5); font: 400 .9rem/1 var(--f-text); color: #E9C46A; white-space: nowrap; pointer-events: none; }
-#app.paused .gl-pz { display: inline-flex; }
-.gl-pz.flash { animation: autoFlash2 .9s steps(1, end) 1; }
-@keyframes autoFlash2 { 0%, 66% { color: #FFF4D2; } 33%, 100% { color: #E9C46A; } }
+/* на паузе вместо «Пауза» на клавише — клавиша «Пробел»: чем продолжить. Обе надписи в одной ячейке, ширина клавиши постоянная —
+   ничего на полосе не сдвигается (плейтест П6: пробел «двигал панель»), и ничего не висит над табло (П7, АРТ-ж: подсказка ложилась на окна табло) */
+.pz-l { display: inline-grid; justify-items: center; align-items: center; }
+.pz-l > * { grid-area: 1 / 1; }
+.gl-pz { visibility: hidden; pointer-events: none; }
+#app.paused .gl-pz { visibility: visible; } #app.paused .pz-t { visibility: hidden; }
+.gl-pz.flash .kc { animation: kcFlash .9s steps(1, end) 1; }
+@keyframes kcFlash { 0%, 66% { background: #FFF4D2; } 33%, 100% { background: #E9C46A; } }
 
 /* ---------- отладочная панель звука (#sound-debug в адресе): инструмент разработки, в обычной игре её нет ---------- */
 #snd-dbg { position: fixed; right: .5rem; top: 4.4rem; z-index: 90; width: 26rem; max-width: calc(100vw - 1rem); max-height: calc(100vh - 4.9rem); overflow: auto;   /* ниже верхней планки, чтобы не закрывать её кнопки */
@@ -1652,18 +1728,26 @@ body { -webkit-touch-callout: none; }
     <div class="goal" id="goal" data-tip="goal">
       <div class="goal-h">Задание</div>
       <div class="goal-slip"><div class="goal-label" id="goal-label"></div></div>
-      <div class="goal-meter">
-        <div class="goal-lamps" id="goal-lamps" aria-hidden="true"><i class="lmp"></i><i class="lmp"></i><i class="lmp"></i><i class="lmp"></i><i class="lmp"></i><i class="lmp"></i><i class="lmp"></i><i class="lmp"></i><i class="lmp"></i><i class="lmp"></i></div>
-        <div class="goal-count" id="goal-count"></div>
-        <div class="goal-ok"><i class="lmp" id="goal-okl"></i><span>в цели</span></div>
+      <!-- табло задания (П7, ярус 0): сейчас → нужно, отклонение, выполнение, остаток. Железо и свет, не веб-прогресс -->
+      <div class="gb gb-lamps" id="goal-board">
+        <div class="gb-now"><b class="gb-val" id="gb-val"></b><span class="gb-need"><i class="gb-sw" aria-hidden="true"></i><span id="gb-need"></span></span></div>
+        <div class="gb-dev" id="gb-dev">
+          <span class="gb-d lo"><i class="lmp"></i>ниже</span>
+          <span class="gb-d in"><i class="lmp" id="goal-okl"></i>в цели</span>
+          <span class="gb-d hi"><i class="lmp"></i>выше</span>
+        </div>
+        <div class="gb-prog">
+          <div class="goal-lamps" id="goal-lamps" aria-hidden="true"><i class="lmp"></i><i class="lmp"></i><i class="lmp"></i><i class="lmp"></i><i class="lmp"></i><i class="lmp"></i><i class="lmp"></i><i class="lmp"></i><i class="lmp"></i><i class="lmp"></i></div>
+          <div class="gb-slot" id="gb-slot" aria-hidden="true"><i class="gb-fill"></i><i class="gb-glint"></i></div>
+          <div class="goal-count" id="goal-count"></div>
+        </div>
       </div>
     </div>
     <div class="clock" id="t-clock"></div>
     <div class="tb-btns">
       <!-- время: клавиши с зависимой фиксацией, нажатая утоплена -->
-      <span class="gl-pz" id="gl-pz">пауза · <kbd class="kc">Пробел</kbd></span>
       <div class="tb-keys">
-        <button class="btn" id="btn-pause" aria-label="Пауза" data-tip="pause"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="2" width="3.5" height="12"/><rect x="9.5" y="2" width="3.5" height="12"/></svg><span>Пауза</span></button>
+        <button class="btn" id="btn-pause" aria-label="Пауза" data-tip="pause"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="2" width="3.5" height="12"/><rect x="9.5" y="2" width="3.5" height="12"/></svg><span class="pz-l"><span class="pz-t">Пауза</span><span class="gl-pz" id="gl-pz"><kbd class="kc">Пробел</kbd></span></span></button>
         <button class="btn spd sel" data-spd="1">×1</button>
         <button class="btn spd" data-spd="2">×2</button>
         <button class="btn spd" data-spd="4">×4</button>
@@ -1694,9 +1778,17 @@ body { -webkit-touch-callout: none; }
         <div class="blk" data-g="rods" id="b-rods">
           <div class="blk-h">Стержни</div>
           <div class="rods-body">
-            <svg class="rodviz" id="rodviz" viewBox="0 0 60 130" preserveAspectRatio="xMidYMid meet" data-tip="rods"></svg>
+            <!-- указатель положения стержней (П7, РЗ): шкала погружения 0 сверху — 100 снизу, рабочая зона краской, указатель у концов стержней -->
+            <div class="rodviz" id="rv-box" data-tip="rods">
+              <svg id="rodviz" viewBox="0 0 72 130" preserveAspectRatio="none" aria-hidden="true"></svg>
+              <div class="rv-ruler" id="rv-ruler" aria-hidden="true"></div>
+              <i class="rv-ptr" id="rv-ptr" aria-hidden="true"></i>
+            </div>
             <div class="rods-ctl">
-              <div class="read sm" data-tip="rods"><div class="seg" id="r-rods"></div><span class="unit">%<br><small class="u-sm">погружены</small></span></div>
+              <div class="rv-top">
+                <div class="read sm" data-tip="rods"><div class="seg" id="r-rods"></div><span class="unit">%</span></div>
+                <div class="rv-cap"><span>погружение</span><span class="rv-zc"><i class="gb-sw" aria-hidden="true"></i>рабочая зона <span id="rv-zn"></span></span></div>
+              </div>
               <!-- на колпачке — только функция; «нажал — подожди» объясняет Палыч, клавиши — подсказка при наведении -->
               <div class="pad">
                 <button class="btn hold worn" id="btn-up" data-tip="rodUp" aria-label="Стержни вверх">Вверх</button>
@@ -2288,7 +2380,7 @@ const TIPS = {
   sprayForgot:  { text: 'Впрыск всё ещё включён — давление уходит вниз.', cond: g => g.s.spray && g.s.p < 15.6 },
   rodsZone:     { text: g => `Стержни на ${Math.round(g.s.h)}% — слишком глубоко. Добавь бор (кнопка «Добавить» у борной кислоты) и понемногу поднимай стержни: бор ослабит реакцию, стержни вернут её.`,
                   cond: g => g.t > 5 && !g.rodsInZone() },
-  rodsZoneSoft: { text: 'Стержни вышли из рабочей зоны. Подправь бором: «Добавить», если они слишком высоко, «Разбавить» — если глубоко.',
+  rodsZoneSoft: { text: g => g.s.h > CONFIG.rods.workZone[1] ? 'Стержни ушли глубже рабочей зоны. Подправь бором: «Добавить» — и понемногу поднимай стержни.' : 'Стержни погружены меньше рабочей зоны. Подправь бором: «Разбавить» — и понемногу опускай стержни.',
                   cond: g => g.t > 20 && !g.rodsInZone() },
   boronSlow:    { text: 'Бор действует медленно: видишь, «факт» догоняет «задание». Не жми лишнего — подожди.',
                   cond: g => g.boronUsed && Math.abs(g.s.cBset - g.s.cB) > 0.05 },
@@ -2636,7 +2728,7 @@ const LAMPS = [
     f: g => g.s.scram ? 2 : 0 },
   { id: 'grid', label: 'Отклонение от задания', kind: 'soft', tip: 'Генератор выдаёт не столько, сколько просит диспетчер. Подправь клапан турбины.',
     f: g => g.hasDemand() && g.s.turbineOnline && Math.abs(g.goalErrRel()) > g.goalCfg.tolRel ? 1 : 0 },
-  { id: 'rods', label: 'Стержни вне зоны', full: 'Стержни вне рабочей зоны', kind: 'soft', tip: 'Стержни слишком глубоко или слишком высоко. Верни их в зелёную зону, компенсируя бором.',
+  { id: 'rods', label: 'Стержни вне зоны', full: 'Стержни вне рабочей зоны', kind: 'soft', tip: 'Стержни погружены глубже или мельче рабочей зоны — полосы на шкале стержней. Верни их туда, компенсируя бором.',
     f: g => g.open.has('boron') && !g.s.scram && !g.rodsInZone() ? 1 : 0 },
   { id: 'xenon', label: 'Отравление ксеноном', kind: 'soft', tip: 'В топливе накопилось больше ксенона, чем обычно. Он поглощает нейтроны — реактор «ленится».',
     f: g => g.s.flags.xenon && (g.s.xx - xenonEq(g.s.P)) > 0.3 ? 1 : 0 },
@@ -3106,6 +3198,7 @@ const FEEL = {
     // лампа — над группой, выше кадра (y — доля высоты экрана). Между пятнами и к углам — тень
     lamps: [
       { el: '#colL', k: 1, spread: [0.62, 0.6], y: -0.3 },     // левые приборы: стержни, АЗ, бор, ксенон, насосы
+      { el: '#goal-board', k: 0.85, spread: [0.85, 2.2], y: -0.12 },   // табло задания (П7, ярус 0): своё дежурное пятно
       { el: '#b-scram', k: 0.9, spread: [1.3, 0.9], y: -0.3 },   // АЗ — своя лампа (плейтест П6: «плохо видно АЗ»)
       { el: '#tier1', k: 1, spread: [0.56, 1.05], y: -0.3 },      // главная тройка: мощность, вода, давление
       { el: '#b-mimic', k: 1, spread: [0.6, 0.85], y: -0.25 },  // мнемосхема
@@ -3128,6 +3221,7 @@ const FEEL = {
             // П7: тень вытянута из детали слоями — layers слоёв, каждый с плотностью a × fade (у основания слои складываются — там темнее);
             // near — доля размытия у основания (полутень растёт к концу); contact — контактная тень: сдвиг вниз и размытие (rem), плотность
             layers: 4, fade: 0.42, near: 0.25, contact: [0.07, 0.14, 0.6] },
+    paperShade: 0,         // бумага в полутени (П7, вопрос автору): доля затемнения лент и плаката; 0 — яркая бумага по решению П6
     auditMs: 700,          // как часто сверяется геометрия запечённых теней с раскладкой (Tex.audit, П7): сдвинулась деталь — лист перепекается
     rim: { a: 0.07, reach: 0.22 },   // контровой из окна: холодный тон у правого края щита (прозрачность) и как далеко заходит (доля ширины щита)
   },
@@ -3153,6 +3247,12 @@ const FEEL = {
     wake: 650,                      // приборы просыпаются: цифры загораются за столько мс
   },
   // фокус-свет (STYLE.md 2.8): зал приглушается, на объект падает пятно, рядом записка Палыча
+  // табло задания (П7, раздел 3)
+  goal: {
+    scale: 'lamps',        // шкала выполнения: 'lamps' — ряд крупных ламп, 'slot' — световая щель (выбор автора; на пробу — адрес ?goalv=slot)
+    stuckS: 25,            // «застрял»: не раньше стольких секунд смены …
+    stuckIdle: 14,         // … и если игрок столько секунд ничего не нажимал, прогресса нет и он вне коридора — Палыч напоминает задание
+  },
   focus: {
     dim: 0.6,              // тень на зал вокруг пятна (прозрачность): остальное читаемо
     pad: 0.7, soft: 2.4,   // поле света вокруг объекта и мягкая кромка пятна, rem
@@ -3244,7 +3344,7 @@ const FEEL = {
 const UI_TIPS = {
   power: ['Мощность реактора', 'Сколько тепла даёт реактор: 100% — это 3000 МВт. Как газ на плите: его держат ровно, а не крутят туда-сюда. Зелёная зона — сколько унесут насосы.'],
   rate: ['Разгон', 'Куда идёт мощность прямо сейчас. Как педаль газа: стрелка реагирует сразу, а машина разгоняется постепенно.'],
-  rods: ['Стержни управления', 'Поглощают нейтроны и глушат реакцию. Опустил — как прикрутил конфорку, поднял — прибавил огня. Цифра — насколько глубоко они в реакторе.'],
+  rods: ['Стержни управления', 'Поглощают нейтроны и глушат реакцию. Опустил — как прикрутил конфорку, поднял — прибавил огня. Цифра — насколько глубоко они в реакторе: 0 — над активной зоной, 100 — до дна. На шкале синее — вода, тёмные столбики — топливо (активная зона), светлые — стержни; полоса со штриховкой — их рабочая зона.'],
   // третий элемент — клавиши: слой игры, показываются в подсказке маленькими клавишами (на корпусе их нет)
   rodUp: ['Стержни вверх', 'Реакция сильнее. Жми коротко и жди: мощность догонит не сразу.', ['↑', 'W']],
   rodDown: ['Стержни вниз', 'Реакция слабее.', ['↓', 'S']],
@@ -3274,7 +3374,7 @@ const UI_TIPS = {
   ack: ['Квитирование', 'Дать знать, что сигнал замечен: мигающие окна загорятся ровно и замолчат. Гореть будут, пока причина не уйдёт.', ['Q']],
   mimic: ['Мнемосхема', 'Путь энергии: реактор греет воду, в парогенераторе вода делает пар, пар крутит турбину, генератор даёт ток городу.'],
   window: ['Окно', 'Посёлок за станцией. Свет в окнах и на улицах — это мощность, которую станция отдаёт в сеть.'],
-  goal: ['Задание на смену', 'Лампы загораются по одной, пока условие выполняется. Вышел из коридора — гаснут. «В цели» горит зелёным, пока всё как надо.'],
+  goal: ['Задание на смену', 'Слева — что сейчас и что нужно. «Ниже — в цели — выше» показывает, куда ушла величина. Лампы разгораются, пока условие выполняется; вышел из коридора — медленно гаснут. «В цели» зелёная — всё как надо, янтарная — в коридоре, но нарушено второе условие.'],
   pause: ['Пауза', 'Остановить время.', ['Пробел']],
   sound: ['Звук', 'Включить или выключить звуки пульта и тревоги.'],
   restart: ['Заново', 'Начать смену с начала.'],
@@ -4944,7 +5044,7 @@ const Save = {
   // sound и vol переживают миграции. Полишинг (v: 2) добавил: introSeen — вступление и подпись пройдены, hallSeen — первое
   // включение ламп зала показано целиком, sign — подпись игрока (штрихи в долях строки подписи), comfort — настройки комфорта,
   // moments — сколько раз видел большие моменты (П4: повтор — короткая версия)
-  key: 'night-shift-npp-v1', data: { v: 2, stars: {}, sound: true, vol: Object.assign({}, SOUND.volume), introSeen: false, hallSeen: false, sign: null, comfort: null, moments: {}, expert: false },
+  key: 'night-shift-npp-v1', data: { v: 2, stars: {}, sound: true, vol: Object.assign({}, SOUND.volume), introSeen: false, hallSeen: false, sign: null, comfort: null, moments: {}, expert: false, keysSeen: {} },
   load() { try { const j = localStorage.getItem(this.key); if (j) Object.assign(this.data, JSON.parse(j)); } catch (e) { /* без сохранения */ } this.migrate(); },
   save() { try { localStorage.setItem(this.key, JSON.stringify(this.data)); } catch (e) { /* без сохранения */ } },
   // миграция: старое сохранение получает новые поля; кто уже проходил смены, вступление повторно не видит
@@ -4957,9 +5057,10 @@ const Save = {
     if (!Array.isArray(d.sign && d.sign.strokes)) d.sign = null;
     if (!d.moments || typeof d.moments !== 'object') d.moments = {};   // П4: какие большие моменты уже видел (повтор — короче)
     if (typeof d.expert !== 'boolean') d.expert = false;              // П6: рубильник «Я опытный» на пульте «График смен»
+    if (!d.keysSeen || typeof d.keysSeen !== 'object') d.keysSeen = {};   // П7: какие подсказки клавиш уже выучены (стержни, клапан, квитирование)
     d.v = 2;
   },
-  reset() { Object.assign(this.data, { stars: {}, introSeen: false, hallSeen: false, sign: null, moments: {}, expert: false }); this.save(); },   // звук, громкость и комфорт остаются
+  reset() { Object.assign(this.data, { stars: {}, introSeen: false, hallSeen: false, sign: null, moments: {}, expert: false, keysSeen: {} }); this.save(); },   // звук, громкость и комфорт остаются
   stars(i) { return this.data.stars[LEVELS[i].id] || 0; },
   playable(i) {
     const lv = LEVELS[i]; if (i === 0) return true;
@@ -5017,13 +5118,20 @@ function buildDesk() {
     const c = document.createElement('div'); c.className = 'cover'; if (NICHE_GROUPS.has(b.dataset.g)) c.dataset.niche = '1';
     c.innerHTML = `<span class="tag-plate">ввод в работу<b>смена ${unlockLevelOf(b.dataset.g)}</b></span>`; b.appendChild(c);   // табличка на заглушке; рёбра и герб рисует Tex
   });
-  // стержни в миниатюре — в той же плакатной манере, что и мнемосхема: разрез активной зоны
-  let rv = '<rect x="8" y="58" width="44" height="66" fill="#3D84CF" stroke="#1F1D1A" stroke-width="1.6"/>';
-  for (let i = 0; i < 4; i++) rv += `<rect x="${12 + i * 10}" y="62" width="5" height="58" fill="#8A8678" stroke="#1F1D1A" stroke-width=".8"/>`;
-  rv += '<rect id="rv-glow" x="9" y="59" width="42" height="64" fill="#E3661B" opacity=".5"/>';
-  rv += '<rect id="rv-zone" x="54" y="0" width="4" height="10" fill="#2E9E47" stroke="#1F1D1A" stroke-width=".6"/><g id="rv-rods">';
-  for (let i = 0; i < 4; i++) rv += `<rect x="${17.5 + i * 10}" y="-20" width="3.5" height="78" fill="#1F1D1A"/><rect x="${16.5 + i * 10}" y="54" width="5.5" height="4" fill="#1F1D1A"/>`;
+  // указатель положения стержней (П7, РЗ) — в плакатной манере мнемосхемы: разрез активной зоны (синее — вода, тёмные столбики —
+  // топливные сборки), слева линейка погружения, рабочая зона — краской со штриховкой задания во всю ширину шкалы
+  const X0 = 24, ns = 'vector-effect="non-scaling-stroke"', [z0, z1] = CONFIG.rods.workZone, Y = h => 58 + h * 0.62;
+  let rv = `<defs><pattern id="rv-hatch" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)"><rect width="4" height="4" fill="rgba(46,158,71,.26)"/><rect width="2" height="4" fill="rgba(46,158,71,.62)"/></pattern></defs>`;
+  rv += `<rect x="${X0}" y="58" width="44" height="66" fill="#3D84CF" stroke="#1F1D1A" stroke-width="1.4" ${ns}/>`;
+  for (let i = 0; i < 4; i++) rv += `<rect x="${X0 + 4 + i * 10}" y="62" width="5" height="58" fill="#6B6253" stroke="#1F1D1A" stroke-width=".8" ${ns}/>`;
+  rv += `<rect id="rv-glow" x="${X0 + 1}" y="59" width="42" height="64" fill="#E3661B" opacity=".5"/>`;
+  for (let h = 0; h <= 100; h += 10) rv += `<line x1="${h % 50 ? 18 : 14}" x2="22" y1="${Y(h)}" y2="${Y(h)}" stroke="#CFC9B5" stroke-width="${h % 50 ? 1 : 1.4}" ${ns}/>`;
+  rv += `<g id="rv-zone-band"><rect x="16" y="${Y(z0)}" width="56" height="${Y(z1) - Y(z0)}" fill="url(#rv-hatch)"/>`
+     + `<line id="rv-z0" x1="16" x2="72" y1="${Y(z0)}" y2="${Y(z0)}" stroke="#1C6E35" stroke-width="1.6" ${ns}/><line id="rv-z1" x1="16" x2="72" y1="${Y(z1)}" y2="${Y(z1)}" stroke="#1C6E35" stroke-width="1.6" ${ns}/></g><g id="rv-rods">`;
+  for (let i = 0; i < 4; i++) rv += `<rect x="${X0 + 9.5 + i * 10}" y="-20" width="3.5" height="78" fill="#1F1D1A"/><rect x="${X0 + 8.5 + i * 10}" y="54" width="5.5" height="4" fill="#1F1D1A"/>`;
   $('rodviz').innerHTML = rv + '</g>';
+  $('rv-ruler').innerHTML = [0, 50, 100].map(h => `<b style="top:${(Y(h) / 130 * 100).toFixed(2)}%">${h}</b>`).join('');
+  $('rv-zn').textContent = `${z0}–${z1}`;
   // лопатки турбины и окна города
   let bl = ''; for (let x = 672; x <= 850; x += 10) bl += `<path d="M${x},112 L${x + 24},24"/>`; $('mm-blades').innerHTML = bl;
   const bld = [];   // окна города на схеме убраны: город — в окне зала, на схеме — значок потребителей
@@ -5047,7 +5155,7 @@ function buildDesk() {
    рисуется под размер каждой панели и перерисовывается только при смене её размера. Всё — статичные картинки. */
 // запечённая тень: грязь и тень вокруг всего, что выступает из листа или утоплено в нём (окна, шкалы, фланцы кнопок, тумблеры)
 const WEAR_AO = { panel: '.read, .scale, .rodviz, canvas.sched, .az-wrap, .tog, .btn, .rate-txt, #r-allow, .p-st, .pkey, .prot-lens, .p-name',
-  strip: '.lvl-name, .goal-slip, .goal-lamps, .clock' };
+  strip: '.lvl-name, .goal-slip, .gb, .clock' };
 const WEAR_TOUCH = { 'b-rods': ['#btn-up, #btn-down', 1.5], 'b-turb': ['#btn-vminus, #btn-vplus', 1.3], 'b-pres': ['.btn', .8],
   'b-boron': ['.btn', .8], 'b-pumps': ['.tog', 1], 'b-dg': ['.btn', .7] };
 const Tex = {
@@ -5607,8 +5715,11 @@ function renderDesk(g) {
   R.rods.set(s.h.toFixed(1), showZone && !inZone && !s.scram ? 'warn' : 'neu');
   $('rv-rods').setAttribute('transform', `translate(0 ${(s.h * 0.62).toFixed(2)})`);
   $('rv-glow').setAttribute('opacity', (s.P > 1e-4 ? clamp(0.1 + 0.6 * Math.sqrt(s.P), 0, .7) : 0).toFixed(2));   // нагрев зоны — тише цифры мощности
-  const [z0, z1] = CONFIG.rods.workZone, rz = $('rv-zone');
-  rz.setAttribute('y', (58 + z0 * 0.62).toFixed(1)); rz.setAttribute('height', ((z1 - z0) * 0.62).toFixed(1)); rz.style.display = showZone ? '' : 'none';
+  // указатель у концов стержней; вне зоны он янтарный, и подсвечен край зоны со стороны стержней (сведения, а не «что нажать»)
+  { const [z0, z1] = CONFIG.rods.workZone, out = showZone && !inZone && !s.scram, key = `${s.h.toFixed(1)}${showZone}${out}`, ptr = $('rv-ptr');
+    if (ptr._k !== key) { ptr._k = key; ptr.style.top = ((58 + s.h * 0.62) / 130 * 100).toFixed(2) + '%'; ptr.classList.toggle('warn', out);
+      $('b-rods').classList.toggle('zone', showZone);
+      $('rv-z0').setAttribute('stroke', out && s.h < z0 ? 'var(--sig-warn)' : '#1C6E35'); $('rv-z1').setAttribute('stroke', out && s.h > z1 ? 'var(--sig-warn)' : '#1C6E35'); } }
   $('btn-az').classList.toggle('fired', s.scram);
   { const pk = $('prot'), out = !s.flags.automation, st = `${out}${!!g.sealBroken}${g.keyLocked}`;
     if (pk._st !== st) { pk._st = st; pk.classList.toggle('out', out); pk.classList.toggle('broken', !!g.sealBroken); pk.classList.toggle('locked', g.keyLocked); $('prot-lmp').classList.toggle('on', out); } }
@@ -5909,7 +6020,11 @@ function drawTrend(key, g) {
   }
   // лента за стеклом самописца: один косой блик
   ctx.fillStyle = 'rgba(255,255,255,.12)'; ctx.beginPath(); ctx.moveTo(w * .62, 0); ctx.lineTo(w * .7, 0); ctx.lineTo(w * .7 - h * .5, h); ctx.lineTo(w * .62 - h * .5, h); ctx.closePath(); ctx.fill();
+  paperShade(ctx, w, h);
 }
+// бумага в полутени (П7, вопрос автору): FEEL.light.paperShade > 0 — ленты и плакат темнее на эту долю, чтобы табло задания
+// стало вторым в прищуре после тревоги. По решению П6 бумага яркая — 0; на пробу — адрес ?paper=0.2
+function paperShade(ctx, w, h) { const k = FEEL.light.paperShade; if (k > 0) { ctx.fillStyle = `rgba(6,7,6,${k})`; ctx.fillRect(0, 0, w, h); } }
 
 /* ---------- мини-график диспетчера ---------- */
 function drawSched(g) {
@@ -5940,6 +6055,7 @@ function drawSched(g) {
   ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left'; ctx.fillText(g.clockAt(0), L, h - fs * 0.12); ctx.textAlign = 'right'; ctx.fillText(g.clockAt(T1), L + pw, h - fs * 0.12);
   // бланк лежит под оргстеклом: один косой блик
   ctx.fillStyle = 'rgba(255,255,255,.16)'; ctx.beginPath(); ctx.moveTo(w * 0.16, 0); ctx.lineTo(w * 0.24, 0); ctx.lineTo(w * 0.24 - h * 0.6, h); ctx.lineTo(w * 0.16 - h * 0.6, h); ctx.closePath(); ctx.fill();
+  paperShade(ctx, w, h);
 }
 
 /* ---------- разбор: график всей попытки ---------- */
@@ -6039,12 +6155,15 @@ function hideModal() { $('overlay').hidden = true; UI.modal = null; document.que
 function showMenu() { Guide.stop(true); Reveal.finish(); Scenes.go('shifts'); }
 
 // задание на смену: номер, название, 1–3 фразы, цель и одна кнопка «Принять смену» (задание 4, 6.7)
+// строка клавиш под «Принять смену» (П7, 5.1) — слой игры, не бумага
+const BRIEF_KEYS = { wake: [['Стержни', ['↑', '↓']], ['Пауза', ['Пробел']], ['Все клавиши', ['?']]], power: [['Клапан', ['←', '→']]] };
 function showBrief(idx) {
   const lv = LEVELS[idx], news = idx > 0 ? lv.unlock.map(gp => GROUP_NAMES[gp]).filter(Boolean) : [], nMain = LEVELS.filter(l => !l.hidden).length;
   let h = `<div class="mb-num">${lv.hidden ? 'Особый режим' : `Смена ${lv.num} из ${nMain}`}</div><h2>${lv.title}</h2><div class="mb-lines">${lv.brief.map(p => `<p>${p}</p>`).join('')}</div>`;
   h += `<div class="mb-goal"><span>Цель:</span><b>${lv.goal.label}</b></div>`;
   if (news.length) h += `<div class="mb-new">Сегодня вводят в работу: ${news.join(', ')}</div>`;
   h += '<div class="mb-actions"><button class="btn primary big" id="mb-go">Принять смену</button><button class="btn big" id="mb-back">К сменам</button></div>';
+  const bk = BRIEF_KEYS[lv.id]; if (bk) h += `<div class="mb-keys">${bk.map(([t, ks]) => `<span>${t} ${ks.map(k => `<kbd class="kc">${k}</kbd>`).join('')}</span>`).join('<i>·</i>')}</div>`;
   $('m-brief').innerHTML = h;
   $('mb-go').addEventListener('click', () => { Snd.ui(); beginPlay(); });
   $('mb-back').addEventListener('click', () => { Snd.ui(); showMenu(); });
@@ -6101,29 +6220,73 @@ function showResult(g) {
 
 /* ---------- верхняя полоса и наставник ---------- */
 const mmss = t => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, '0')}`;
+// табло задания (П7, раздел 3): что сейчас, что нужно, куда отклонился, сколько выполнено и сколько осталось
+function goalNow(g) {
+  const gc = g.goalCfg, s = g.s, P = s.Pth * 100, pv = P < 10 ? f1(P) : String(Math.round(P));
+  if (gc.v === 'power') return { val: pv, u: '%', need: `нужно ${pct(gc.target - gc.tol)}–${pct(gc.target + gc.tol)} %` };
+  if (gc.v === 'powerMax') return { val: pv, u: '%', need: `не выше ${pct(gc.max)} %` };
+  if (gc.v === 'cool') return { val: String(Math.round(s.Tout)), u: '°C', need: `не выше ${gc.maxTout} °C` };
+  const d = g.demand(), lo = Math.round(d * (1 - gc.tolRel)), hi = Math.round(d * (1 + gc.tolRel));
+  return { val: String(Math.round(s.mwe)), u: 'МВт', need: gc.points ? `по графику ${Math.round(d)} ± ${Math.round(gc.tolRel * 100)} %` : `нужно ${lo}–${hi} МВт` };
+}
 function renderTop(g) {
   const gc = g.goalCfg, st = g.status || g.goalStatus(), waiting = !!gc.after && g.happened[gc.after] == null;
   setText($('goal-label'), waiting && gc.waitLabel ? gc.waitLabel : gc.label);
-  let cnt, frac;
-  if (waiting) { cnt = gc.waitLabel ? '' : 'будь начеку'; frac = 0; }
-  else if (gc.type === 'hold') { frac = g.prog / gc.time; cnt = `${Math.floor(g.prog)} из ${gc.time} с`; }
+  let cnt, frac, kind = '';
+  if (waiting) { cnt = 'будь начеку'; frac = 0; kind = 'wait'; }
+  else if (gc.type === 'hold') { frac = g.prog / gc.time; cnt = g.prog > 0.05 ? `${Math.floor(g.prog)} из ${gc.time} с` : `держать ${gc.time} с`; }
   else if (gc.type === 'schedule') { const tg = g.goalTarget(); frac = g.m.inBandTime / tg; cnt = `в норме ${Math.floor(g.m.inBandTime)} из ${Math.ceil(tg)} с`; }
   else { frac = g.t / g.duration(); cnt = `счёт ${g.scoreNow()}`; }
-  if (!waiting && st.inBand && !st.ok) { const bad = st.conds.find(c => !c.ok); if (bad) cnt = COND_TEXT[bad.c] || cnt; }
-  setText($('goal-count'), cnt);
-  // лампы выполнения: по одной на десятую часть; новая лампа — тихий щелчок реле (подтверждение, STYLE.md 2.11)
-  const n = waiting ? 0 : Math.min(10, Math.floor(clamp(frac, 0, 1) * 10 + 1e-6));
-  if (UI.goalN !== n) {
-    if (!UI.goalLamps) UI.goalLamps = [...document.querySelectorAll('#goal-lamps .lmp')];
-    UI.goalLamps.forEach((l, i) => l.classList.toggle('mlk', i < n));
-    if (n > UI.goalN && UI.goalN >= 0 && UI.mode === 'play') Snd.cue('relay');
-    UI.goalN = n;
+  if (!waiting && st.inBand && !st.ok) { const bad = st.conds.find(c => !c.ok); if (bad) { cnt = COND_TEXT[bad.c] || cnt; kind = 'cond'; } }
+  const ce = $('goal-count'); setText(ce, cnt); if (ce._k !== kind) { ce.className = 'goal-count' + (kind ? ' ' + kind : ''); ce._k = kind; }
+  // сейчас → нужно
+  const nw = goalNow(g); if (nw) { const v = `${nw.val}<small>${nw.u}</small>`, ve = $('gb-val'); if (ve._h !== v) { ve.innerHTML = v; ve._h = v; } setText($('gb-need'), nw.need); }
+  // отклонение: ниже — в цели — выше (сведения)
+  const dev = waiting ? '' : gc.v === 'powerMax' ? (g.s.Pth > gc.max ? 'hi' : 'in') : gc.v === 'cool' ? (g.s.Tout > gc.maxTout ? 'hi' : 'in') : st.err < -1 || (gc.v === 'mwe' && !st.inBand && st.err <= 1) ? 'lo' : st.err > 1 ? 'hi' : 'in';
+  if (UI.goalDev !== dev) {
+    document.querySelectorAll('#gb-dev .gb-d').forEach(d => { const on = d.classList.contains(dev); d.classList.toggle('on', on); if (!d.classList.contains('in')) d.querySelector('.lmp').classList.toggle('mlk', on); });
+    UI.goalDev = dev;
   }
+  // выполнение: доля разгорается непрерывно, новая целая доля — тихий щелчок реле (подтверждение, STYLE.md 2.11)
+  const f = waiting ? 0 : clamp(frac, 0, 1), n = Math.min(10, Math.floor(f * 10 + 1e-6));
+  if (!UI.goalLamps) UI.goalLamps = [...document.querySelectorAll('#goal-lamps .lmp')];
+  const fq = Math.round(f * 200) / 200;
+  if (UI.goalF !== fq && !Moments.end) {
+    UI.goalLamps.forEach((l, i) => { const on = clamp(f * 10 - i, 0, 1); l.style.setProperty('--on', on.toFixed(2)); l.classList.toggle('mlk', on >= 1); });
+    $('gb-slot').style.setProperty('--p', f.toFixed(3)); UI.goalF = fq;   // ns-ok: доля для CSS-переменной, не число на экране
+  }
+  if (UI.goalN !== n) { if (n > UI.goalN && UI.goalN >= 0 && UI.mode === 'play') Snd.cue('relay'); UI.goalN = n; }
+  // заполняется: условие выполняется — текущая лампа (край щели) мигает (автор, П7)
+  const fill = !waiting && st.ok && f < 1 && !g.done ? n : -1;
+  if (UI.goalFill !== fill) { UI.goalLamps.forEach((l, i) => l.classList.toggle('fill', i === fill)); $('gb-slot').classList.toggle('fill', fill >= 0); UI.goalFill = fill; }
+  // «в цели»: вход в коридор — щелчок включения, выход — отпускание
   const okc = waiting ? '' : st.ok ? 'ok' : st.inBand ? 'warn' : '';
-  if (UI.goalOk !== okc) { $('goal-okl').className = 'lmp' + (okc ? ' ' + okc : ''); UI.goalOk = okc; }
+  if (UI.goalOk !== okc) {
+    $('goal-okl').className = 'lmp' + (okc ? ' ' + okc : ''); document.querySelector('#gb-dev .gb-d.in').classList.toggle('on', !!okc);
+    if (UI.mode === 'play' && UI.goalOk != null && !g.done) Snd.cue(okc && !UI.goalOk ? 'latch' : !okc && UI.goalOk ? 'buttonUp' : 'relay');
+    UI.goalOk = okc;
+  }
   $('goal').classList.toggle('ok', !waiting && st.ok);
   setText($('t-clock'), g.level.clock ? fmtClock(g.level.clock.start + g.t * g.level.clock.minPerSec) : mmss(g.t));
+  Stuck.check(g, st, waiting);
 }
+// «Застрял» (П7, раздел 3): прогресса нет, игрок давно ничего не нажимал — Палыч один раз за смену напоминает задание,
+// пятно — на табло вместе с прибором цели. Подача в интерфейсе, а не физика
+const Stuck = {
+  said: false, lastAct: 0,
+  reset() { this.said = false; this.lastAct = 0; },
+  acted(g) { if (g) this.lastAct = g.t; },
+  check(g, st, waiting) {
+    const F = FEEL.goal; if (this.said || waiting || UI.mode !== 'play' || UI.paused || g.done || Guide.steps || Moments.end) return;
+    if (g.t < F.stuckS || g.t - this.lastAct < F.stuckIdle || st.inBand || g.prog > 0.05 || (g.m && g.m.inBandTime > 0.05) || alarmFresh(g)) return;
+    this.said = true; const nw = goalNow(g), gc = g.goalCfg, lo = st.err < 0;
+    const hint = gc.v === 'power' ? (lo ? 'Стержни — вверх, понемногу.' : 'Стержни — вниз, понемногу.')
+      : gc.v === 'mwe' ? (!g.s.turbineOnline ? 'Клапан турбины — открывай понемногу.' : lo ? 'Клапан турбины — открывай понемногу.' : 'Клапан турбины — прикрой понемногу.')
+      : gc.v === 'powerMax' ? 'Стержни вниз и клапан прикрыть.' : 'Насосы — в работу.';
+    const need = nw.need.replace(/^нужно /, '');
+    Guide.remind(`Задание помнишь? Нужно ${need}, а у тебя ${nw.val}\u00A0${nw.u}. ${hint}`, DUTY_EL[gc.v] ? '#' + DUTY_EL[gc.v] : null);
+  },
+};
 function renderMentor(g) {
   const m = g.msg; if (!m || m.id === UI.msgId) return;
   UI.msgId = m.id;
@@ -6205,12 +6368,42 @@ function canAct(gp) {
   if (UI.paused) { Snd.deny(); flashPause(); return false; }
   if (!g.open.has(gp)) return false;
   if (Guide.steps) Guide.act(gp);                          // показ: игрок сделал действие — свет возвращается, физика идёт
+  Stuck.acted(g);
   return true;
 }
+// подсказки клавиш в начале (П7, 5.1): плашка слоя игры у органа, пока игрок хотя бы раз не нажмёт клавишу; потом тихо уходит.
+// Что уже показано и выучено — Save.data.keysSeen (миграция), повторно не надоедаем
+const KEY_HINTS = {
+  rods: { at: '#b-rods .pad', label: 'стержни', keys: [['↑', '↓'], ['W', 'S']] },
+  valve: { at: '#b-turb .btn-row', label: 'клапан', keys: [['←', '→'], ['A', 'D']] },
+  ack: { at: '#btn-ack', label: 'квитировать', keys: [['Q']] },
+  rodsMouse: { at: '#b-rods .pad', label: 'можно клавишами', keys: [['↑', '↓']] },   // трижды мышью и ни разу клавишей — один раз за всё сохранение
+};
+const KeyHint = {
+  cur: {}, mouse: 0,
+  show(id) {
+    if (Save.data.keysSeen[id] || this.cur[id] || UI.mode !== 'play') return;
+    const H = KEY_HINTS[id], at = document.querySelector(H.at); if (!at || !at.offsetParent) return;
+    const el = document.createElement('div'); el.className = 'kh'; el.setAttribute('aria-hidden', 'true');
+    el.innerHTML = `<span>${H.label}</span>` + H.keys.map(gr => gr.map(k => `<kbd class="kc">${k}</kbd>`).join('')).join('<i>или</i>');
+    document.body.appendChild(el); this.cur[id] = { el, at }; this.place(id); void el.offsetWidth; el.classList.add('on');
+  },
+  place(id) {
+    const c = this.cur[id]; if (!c) return; const r = c.at.getBoundingClientRect(), w = c.el.offsetWidth, h = c.el.offsetHeight, gap = (UI.remPx || 14) * .4;
+    let y = r.bottom + gap; if (y + h > innerHeight - 4) y = r.top - h - gap;
+    c.el.style.left = Math.round(clamp(r.left + r.width / 2 - w / 2, 6, innerWidth - w - 6)) + 'px'; c.el.style.top = Math.round(y) + 'px';
+  },
+  done(id) { if (!Save.data.keysSeen[id]) { Save.data.keysSeen[id] = true; Save.save(); } this.hide(id); },
+  hide(id) { const c = this.cur[id]; if (!c) return; delete this.cur[id]; c.el.classList.remove('on'); setTimeout(() => c.el.remove(), 500); },
+  hideAll() { Object.keys(this.cur).forEach(id => this.hide(id)); this.mouse = 0; },
+  resize() { Object.keys(this.cur).forEach(id => this.place(id)); },
+  mousePress() { if (Save.data.keysSeen.rods || Save.data.keysSeen.rodsMouse) return; if (++this.mouse >= 3) this.show('rodsMouse'); },
+  keyUsed(kind) { if (kind === 'rods') { this.done('rods'); this.done('rodsMouse'); } else this.done(kind); },
+};
 function bindHold(btn, dir) {
   const press = () => { if (!canAct('rods')) return false; btn.classList.add('pressed'); UI.game.rodPress(dir); Snd.click(); return true; };
   const up = () => { if (!btn.classList.contains('pressed')) return; btn.classList.remove('pressed'); Snd.cue('buttonUp'); if (UI.game) UI.game.rodRelease(); };
-  btn.addEventListener('pointerdown', e => { if (e.button > 0) return; e.preventDefault(); if (press()) { try { btn.setPointerCapture(e.pointerId); } catch (_) { /* не критично */ } } });
+  btn.addEventListener('pointerdown', e => { if (e.button > 0) return; e.preventDefault(); if (press()) { KeyHint.mousePress(); try { btn.setPointerCapture(e.pointerId); } catch (_) { /* не критично */ } } });
   ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(ev => btn.addEventListener(ev, up));
   btn.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); if (!e.repeat) press(); } });
   btn.addEventListener('keyup', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); up(); } });
@@ -6249,7 +6442,7 @@ function autoCloseAZ() { if (UI.azOpen) Snd.cue('coverClose'); closeAZ(); }     
 // квитирование: кнопка у табло и клавиша Q. Можно и на паузе — это работа с информацией, а не управление станцией
 function ackAll() {
   const g = UI.game; if (!g || UI.mode !== 'play') return;
-  Snd.cue('ack'); g.ack();
+  Snd.cue('ack'); g.ack(); KeyHint.hide('ack');
   const b = $('btn-ack'); b.classList.add('pressed'); setTimeout(() => b.classList.remove('pressed'), 140);
 }
 // ключ вывода защит: первый клик срывает пломбу, дальше ключ ходит туда и обратно. В «Без страховки» ключа нет — глухой упор
@@ -6306,13 +6499,13 @@ document.addEventListener('keydown', e => {
   }
   if (e.target && e.target.tagName === 'BUTTON' && (e.key === 'Enter' || e.key === ' ')) return;
   if (e.code === 'Space') { e.preventDefault(); if (!e.repeat) togglePause(); return; }
-  if (e.code === 'KeyQ') { e.preventDefault(); if (!e.repeat) ackAll(); return; }
+  if (e.code === 'KeyQ') { e.preventDefault(); if (!e.repeat) { ackAll(); KeyHint.keyUsed('ack'); } return; }
   const g = UI.game; if (!g || UI.mode !== 'play') return;
   if (KEY_ROD[e.code] != null) {
     e.preventDefault(); if (e.repeat || keyRod || !canAct('rods')) return;
-    keyRod = KEY_ROD[e.code]; g.rodPress(keyRod); (keyRod > 0 ? $('btn-up') : $('btn-down')).classList.add('pressed'); Snd.click(); return;
+    KeyHint.keyUsed('rods'); keyRod = KEY_ROD[e.code]; g.rodPress(keyRod); (keyRod > 0 ? $('btn-up') : $('btn-down')).classList.add('pressed'); Snd.click(); return;
   }
-  if (KEY_VALVE[e.code] != null) { e.preventDefault(); if (e.repeat && UI.paused) return; if (!canAct('turbine')) return; g.valve(KEY_VALVE[e.code], e.repeat); if (!e.repeat) Snd.click(); }
+  if (KEY_VALVE[e.code] != null) { e.preventDefault(); if (e.repeat && UI.paused) return; if (!canAct('turbine')) return; KeyHint.keyUsed('valve'); g.valve(KEY_VALVE[e.code], e.repeat); if (!e.repeat) Snd.click(); }
 });
 document.addEventListener('keyup', e => {
   if (Scenes.cur) { if (Scenes.cur.keyUp) Scenes.cur.keyUp(e); return; }
@@ -7167,18 +7360,24 @@ const GUIDE = {
   // смена 1: мощность → стержни «Вверх» → «Разгон»
   wake: [
     { el: '#b-power .read', text: 'Это мощность реактора: сейчас 1 %, он почти спит. Сегодня выведем его на 20 %.', hold: true },
+    // П7, 5.2: табло задания и самописец показываются тоже — по одному, после действия игрока
+    { el: '#goal-board', also: '#b-power .read', text: 'Задание на смену — вот оно: мощность 20 %, продержать 30 секунд. Пока держишь — лампы загораются. Все десять — смена сделана.', hold: true },
     { el: '#b-rods .pad', text: 'Стержни глушат реакцию. Нажми «Вверх» — коротко, один раз.', hold: true, act: 'rods' },
     { el: '#b-power .rate-row', also: '#s-rate', text: 'Смотри на «Разгон»: стрелка ушла вправо — реакция усиливается. Мощность догонит не сразу. Нажал — подожди.', after: 700, needs: 'rods', auto: 9000 },
+    { el: '[data-tip="chart:power"]', when: g => g.s.Pth > 0.04, text: 'Самописец пишет мощность за последнюю минуту. Зелёная полоса — куда надо, линия — где реактор. По наклону видно, куда он идёт.', auto: 9000 },
+    { el: '#goal-board', when: g => Boolean(g.status && g.status.ok), text: 'Вот, попал. Лампы пошли — теперь не дёргайся.', auto: 6000 },
   ],
   // смена 2: после раскрытия — насосы и температура воды
   water: [
     { el: '#b-pumps', text: 'Сегодня ввели в работу насосы. Каждый уносит тепло примерно на 25 % мощности. Сейчас работает один — включи второй.', hold: true, act: 'pumps' },
     { el: '#b-temp', text: 'А это вода на выходе из реактора. Пока стрелка в зелёной зоне — насосы справляются.', after: 600, auto: 8000 },
+    { el: '[data-tip="chart:tout"]', text: 'Вторая лента пишет воду на выходе. Пока линия в зелёной полосе, насосы справляются.', after: 600, auto: 8000 },
   ],
   // смена 3: клапан турбины и генератор
   power: [
     { el: '#b-turb', text: 'Сегодня ввели клапан турбины. Пока он закрыт, пар уходит мимо турбины в конденсатор. «Открыть» — и пар пойдёт на лопатки.', hold: true, act: 'turbine' },
     { el: '#b-grid', text: 'Генератор показывает, сколько мегаватт станция отдаёт в сеть. Нужно 600. Открывай клапан понемногу — реактор пойдёт следом.', after: 600, auto: 9000 },
+    { el: '[data-tip="chart:mwe"]', text: 'Новая лента — генератор. Держи линию в коридоре вокруг пунктира: пунктир — задание диспетчера.', after: 600, auto: 8000 },
   ],
   // смена 4: давление
   pressure: [
@@ -7187,7 +7386,7 @@ const GUIDE = {
   // смена 5: бор
   peak: [
     { el: '#b-boron', text: 'Бор растворён в воде и тоже глушит реакцию — медленно, но на весь реактор. «Добавить» — реакция слабее, «Разбавить» — сильнее.', hold: true },
-    { el: '#b-rods', text: 'Стержни сейчас слишком глубоко. Чтобы поднять их и не разогнать реактор, добавляй бор понемногу — по очереди со стержнями.', after: 500, auto: 9000 },
+    { el: '#rv-box', text: 'Рабочая зона стержней — вот эта полоса. Ниже неё стержни слишком глубоко: добавь бор и поднимай их понемногу — по очереди.', after: 500, hold: true },
   ],
   // смена 7: дизель-генераторы
   blackout: [
@@ -7221,11 +7420,12 @@ const Guide = {
   show(st) {
     const g = UI.game, el = document.querySelector(st.el);
     if (!g || g.done || UI.mode !== 'play' || !el) { this.next(); return; }
-    if (st.when && g.happened[st.when] == null) { UI.guideHold = false; this.cur = null; this.t = setTimeout(() => this.show(st), 250); return; }   // ждём события смены (блэкаут), время идёт
+    if (st.when && (typeof st.when === 'function' ? !st.when(g) : g.happened[st.when] == null)) { UI.guideHold = false; this.cur = null; this.t = setTimeout(() => this.show(st), 250); return; }   // ждём события смены (блэкаут), время идёт
     this.cur = st; UI.guideHold = !!st.hold; hideTip();
     g.say(st.text, 1);                                         // селектор щёлкает, лампа вызова горит — Палыч говорит
     if (!st.alarm && alarmFresh(g)) { UI.guideHold = false; this.t = setTimeout(() => this.next(), 2500); return; }
     this.into(el); this.paint(el, st.also && document.querySelector(st.also)); this.note(el, st.text);
+    if (st.act === 'rods') KeyHint.show('rods'); else if (st.act === 'turbine') KeyHint.show('valve');   // П7: клавиши — пока игрок их не нажмёт
     if (st.auto) this.t = setTimeout(() => this.next(), st.auto);
   },
   // игрок что-то сделал на пульте (canAct): свет возвращается, физика идёт
@@ -7248,6 +7448,14 @@ const Guide = {
     this.stop(true); this.steps = [{ el, text: g.msg.text, expl: true }]; this.i = 0; this.acted = null;
     const st = this.steps[0], e = document.querySelector(el); if (!e) { this.stop(true); return; }
     this.cur = st; this.into(e); this.paint(e); this.note(e, st.text);
+    this.t = setTimeout(() => this.next(), FEEL.focus.explainMs);
+  },
+  // напоминание задания («застрял», П7): пятно на табло задания и прибор цели, физика идёт, гаснет само
+  remind(text, also) {
+    const g = UI.game; if (!g) return; g.say(text, 1);
+    this.stop(true); this.steps = [{ el: '#goal-board', also, text, expl: true }]; this.i = 0; this.acted = null;
+    const st = this.steps[0], e = $('goal-board'); if (!e) { this.stop(true); return; }
+    this.cur = st; this.into(e); this.paint(e, also && document.querySelector(also)); this.note(e, text);
     this.t = setTimeout(() => this.next(), FEEL.focus.explainMs);
   },
   // узкий экран и 1024×768 — щит в одну колонку и прокручивается: объект показа выводится на середину экрана
@@ -7869,9 +8077,10 @@ const Moments = {
     const M = FEEL.moments.dawn, dur = first ? M.dur : M.durRepeat;
     this.begin('dawn'); Snd.forceMode = 'calm';
     // лампы цели (референс Slots & Daggers): по ряду бежит волна — тройка огней дважды проходит слева направо, потом горят все
-    const lamps = [...document.querySelectorAll('#goal-lamps .lmp')], W = M.wave, n = lamps.length;
+    const lamps = [...document.querySelectorAll('#goal-lamps .lmp')], W = M.wave, n = lamps.length, slot = $('gb-slot');
     if (n) this.add(t => { const done = t >= W.step * (n + 3) * W.passes, head = Math.floor(t / W.step) % (n + 3);
-      lamps.forEach((l, i) => l.classList.toggle('mlk', done || (i <= head && i > head - 3)));
+      lamps.forEach((l, i) => { const on = done || (i <= head && i > head - 3); l.classList.toggle('mlk', on); l.style.setProperty('--on', on ? 1 : 0); });
+      slot.style.setProperty('--p', 1); slot.classList.toggle('wave', !done); slot.style.setProperty('--sw', ((head - 2) / n).toFixed(3));   // щель: по свету бежит блик   // ns-ok: доля для CSS-переменной, не число на экране
       return done; });
     this.add(t => { const k = Math.min(1, Math.max(0, (t - M.start) / dur)), e = k * k * (3 - 2 * k); Win.dawnTo(e); Sun.set(e * FEEL.moments.sun);
       if (Math.random() < .5 * e) FX.add('dust', innerWidth * (.45 + Math.random() * .55), innerHeight * Math.random(), { vy: (4 + Math.random() * 10), vx: -(4 + Math.random() * 8), life: 3 + Math.random() * 2, r: 1.2 });   // пылинки в луче
@@ -7905,11 +8114,12 @@ const NICHE_GROUPS = new Set(['xenon', 'dg']);
 const DUTY_EL = { power: 'b-power', powerMax: 'b-power', mwe: 'b-grid', cool: 'b-temp' };   // прибор цели по величине задания
 // o.hall — вошли в зал из графика смен или после подписи: сначала свет рядами, потом задание
 function startLevel(idx, quick, o = {}) {
-  hideTip(); Guide.stop(true); Reveal.finish(); KeysOv.close();
+  hideTip(); Guide.stop(true); Reveal.finish(); KeysOv.close(); KeyHint.hideAll();
   const g = UI.game = new Game(idx);
   Object.assign(UI, { mode: 'brief', running: false, paused: false, resultShown: false, endT: 0, acc: 0, chartT: 0,
-    prevScram: g.s.scram, prevRed: 0, prevEv: 0, prevWarn: 0, msgId: 0, winLit: -1, guideHold: false, goalN: -1, goalOk: null });
-  releaseKeys(); closeAZ(); Moments.reset(g);
+    prevScram: g.s.scram, prevRed: 0, prevEv: 0, prevWarn: 0, msgId: 0, winLit: -1, guideHold: false, goalN: -1, goalOk: null, goalF: null, goalDev: null, goalFill: null });
+  releaseKeys(); closeAZ(); Moments.reset(g); Stuck.reset();
+  $('goal-board').classList.toggle('gb-slots', FEEL.goal.scale === 'slot'); $('gb-slot').classList.remove('wave');
   document.querySelectorAll('.btn.pressed').forEach(b => b.classList.remove('pressed'));
   $('app').classList.remove('menu-mode', 'paused');
   UI.quick = !!quick;
@@ -7957,6 +8167,7 @@ function updateSoundUI() {
 
 function renderAll(g, dtG, now = performance.now()) {
   renderDesk(g); renderLamps(g); renderMimic(g, dtG); renderTop(g); renderMentor(g);
+  if (UI.mode === 'play' && !KeyHint.cur.ack && !Save.data.keysSeen.ack && alarmFresh(g)) KeyHint.show('ack');   // первая тревога — «квитировать Q»
   // ленты: 5 раз в секунду (окно 60 с — чаще глаз не заметит); после конца смены данные лент не меняются — не перерисовываем (ПЕРФ-01)
   if ((dtG > 0 && !g.done && now - UI.chartT > FEEL.charts.ms) || UI.chartsDirty) {
     UI.chartT = now; UI.chartsDirty = false;
@@ -7992,7 +8203,7 @@ function init() {
   renderAll(UI.game, 0);
   updateSoundUI(); updatePauseUI();
   if (!debugWanted()) Entry.start();
-  const onResize = () => { UI.remPx = remPx(); UI.chartsDirty = true; UI.cvEpoch = (UI.cvEpoch || 0) + 1; UI.annFit = true; Scenes.resize(); Guide.resize(); Win.resize(); FX.size(); Tex._pools = null; if (UI.modal === 'm-result' && UI.game && UI.game.result) drawRun($('mr-canvas'), UI.game); };
+  const onResize = () => { UI.remPx = remPx(); UI.chartsDirty = true; UI.cvEpoch = (UI.cvEpoch || 0) + 1; UI.annFit = true; Scenes.resize(); Guide.resize(); KeyHint.resize(); Win.resize(); FX.size(); Tex._pools = null; if (UI.modal === 'm-result' && UI.game && UI.game.result) drawRun($('mr-canvas'), UI.game); };
   window.addEventListener('resize', onResize);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { onResize(); Tex.refreshAll(); }).catch(() => {});
   document.addEventListener('visibilitychange', () => { if (document.hidden && UI.mode === 'play' && !UI.paused) togglePause(); });
@@ -8014,6 +8225,8 @@ function debugStart() {
   // ?moment=hall — свет рядами (полностью); unlock — раскрытие приборов смены 2; guide — показ смены 1
   // ?dim=0.45…0.85 — сила затенения фокус-света для пробы на глаз (FEEL.focus.dim)
   const dim = parseFloat(q.get('dim')); if (dim >= 0 && dim <= 1) FEEL.focus.dim = dim;
+  if (q.get('goalv') === 'slot' || q.get('goalv') === 'lamps') FEEL.goal.scale = q.get('goalv');
+  { const ps = parseFloat(q.get('paper')); if (ps >= 0 && ps <= .6) { FEEL.light.paperShade = ps; document.documentElement.style.setProperty('--paper-shade', ps); } }   // вариант шкалы задания на пробу (П7, выбор автора)
   const mom = q.get('moment');
   if (mom === 'hall') { Save.data.hallSeen = false; startLevel(0, false, { hall: true }); return; }
   if (mom === 'unlock') { startLevel(1, false); beginPlay(true); return; }

@@ -148,6 +148,8 @@ def main():
     ap.add_argument("--sizes", default=",".join(SIZES))
     ap.add_argument("--offline", action="store_true", help="без сети: проверить запасные шрифты")
     ap.add_argument("--reduced", action="store_true", help="prefers-reduced-motion")
+    ap.add_argument("--q", default="", help="добавка к адресу каждого состояния, например paper=0.25 или goalv=slot")
+    ap.add_argument("--spots", type=int, default=5, help="сколько пятен искать (П7: 12 — чтобы тройка шла по разным элементам, а не по одной ленте)")
     ap.add_argument("--dpr", type=float, default=1, help="масштаб устройства (П7: 1; 1,25; 1,5; 2)")
     ap.add_argument("--list", action="store_true")
     a = ap.parse_args()
@@ -166,6 +168,7 @@ def main():
                                  reduced_motion="reduce" if a.reduced else "no-preference", offline=a.offline)
             for name in a.states.split(","):
                 q, js, wait = STATES[name]
+                if a.q: q = (q + "&" if q else "") + a.q
                 page = ctx.new_page()
                 errs = []
                 page.on("console", lambda m: errs.append(m.text) if m.type == "error" else None)
@@ -179,7 +182,7 @@ def main():
                 png = out / f"{stem}.png"
                 page.screenshot(path=str(png))
                 img = Image.open(png).convert("RGB")
-                spots = salience_spots(img)
+                spots = salience_spots(img, a.spots)
                 for s in spots:
                     s["el"] = page.evaluate(DESCRIBE_JS, [s["x"], s["y"]])
                 fonts = page.evaluate("[...document.fonts].filter(f => f.status === 'loaded').map(f => f.family + ' ' + f.weight)")

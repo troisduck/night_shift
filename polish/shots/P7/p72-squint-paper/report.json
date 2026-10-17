@@ -1,0 +1,1574 @@
+[
+ {
+  "state": "play1",
+  "size": "1920x1080",
+  "spots": [
+   {
+    "x": 550,
+    "y": 50,
+    "score": 89.4,
+    "L": 64.3,
+    "C": 14.7,
+    "el": "header#topbar > div#goal > div.goal-slip > div#goal-label  «Мощность 20 ± 3%, удержать 30 с»"
+   },
+   {
+    "x": 598,
+    "y": 922,
+    "score": 84.4,
+    "L": 64.2,
+    "C": 16.7,
+    "el": "div#m-text  «Жми «Вверх» коротко и смотри на шкалу «Р»"
+   },
+   {
+    "x": 1850,
+    "y": 906,
+    "score": 79.4,
+    "L": 62.2,
+    "C": 11.4,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 1446,
+    "y": 910,
+    "score": 77.6,
+    "L": 64.2,
+    "C": 10.3,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 262,
+    "y": 962,
+    "score": 77.3,
+    "L": 60.4,
+    "C": 15.7,
+    "el": "div#m-text  «Жми «Вверх» коротко и смотри на шкалу «Р»"
+   },
+   {
+    "x": 1042,
+    "y": 914,
+    "score": 75.7,
+    "L": 63.3,
+    "C": 11.5,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 74,
+    "y": 46,
+    "score": 72.6,
+    "L": 52.5,
+    "C": 11.6,
+    "el": "header#topbar > div#t-level  «1. Пробуждение»"
+   },
+   {
+    "x": 634,
+    "y": 410,
+    "score": 72.2,
+    "L": 56.7,
+    "C": 14.8,
+    "el": "div#b-power > div#s-rate > div.sc-ticks  «гаснетровноразгоняется»"
+   },
+   {
+    "x": 642,
+    "y": 670,
+    "score": 71.5,
+    "L": 58.0,
+    "C": 13.4,
+    "el": "div#b-mimic > svg#mimic > rect"
+   },
+   {
+    "x": 86,
+    "y": 322,
+    "score": 71.5,
+    "L": 54.7,
+    "C": 5.9,
+    "el": "div#rv-box > svg#rodviz > g#rv-rods > rect"
+   },
+   {
+    "x": 1254,
+    "y": 658,
+    "score": 71.1,
+    "L": 56.1,
+    "C": 14.2,
+    "el": "div#b-mimic > svg#mimic > rect"
+   },
+   {
+    "x": 958,
+    "y": 562,
+    "score": 64.4,
+    "L": 54.1,
+    "C": 13.1,
+    "el": "div#b-mimic > svg#mimic > rect"
+   },
+   {
+    "x": 1658,
+    "y": 126,
+    "score": 59.5,
+    "L": 44.4,
+    "C": 5.4,
+    "el": "section#annunciator > button#btn-ack  «Квити­рование»"
+   },
+   {
+    "x": 346,
+    "y": 298,
+    "score": 55.6,
+    "L": 37.6,
+    "C": 27.2,
+    "el": "div#az-wrap > button#az-cover > svg > rect"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ },
+ {
+  "state": "play3",
+  "size": "1920x1080",
+  "spots": [
+   {
+    "x": 1410,
+    "y": 134,
+    "score": 97.7,
+    "L": 57.8,
+    "C": 42.6,
+    "el": "section#annunciator > div#ann-grid  «Отклонение от задания»"
+   },
+   {
+    "x": 526,
+    "y": 50,
+    "score": 87.5,
+    "L": 63.1,
+    "C": 14.1,
+    "el": "header#topbar > div#goal > div.goal-slip > div#goal-label  «Генератор 600 МВт ± 5%, 60 с»"
+   },
+   {
+    "x": 598,
+    "y": 958,
+    "score": 82.9,
+    "L": 63.4,
+    "C": 16.1,
+    "el": "div#m-text  «Пар сейчас уходит в конденсатор — видишь»"
+   },
+   {
+    "x": 86,
+    "y": 334,
+    "score": 77.3,
+    "L": 54.9,
+    "C": 15.5,
+    "el": "div#rv-box > svg#rodviz > g#rv-rods > rect"
+   },
+   {
+    "x": 346,
+    "y": 962,
+    "score": 76.7,
+    "L": 60.0,
+    "C": 15.7,
+    "el": "div#m-text  «Пар сейчас уходит в конденсатор — видишь»"
+   },
+   {
+    "x": 1406,
+    "y": 910,
+    "score": 76.6,
+    "L": 62.3,
+    "C": 11.3,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 1518,
+    "y": 606,
+    "score": 75.0,
+    "L": 56.8,
+    "C": 13.5,
+    "el": "div#b-turb > div#s-valve > div.sc-ticks  «0255075100»"
+   },
+   {
+    "x": 66,
+    "y": 874,
+    "score": 75.0,
+    "L": 56.4,
+    "C": 11.2,
+    "el": "div#mentor > div.m-side > svg.face > path"
+   },
+   {
+    "x": 1002,
+    "y": 910,
+    "score": 74.9,
+    "L": 62.0,
+    "C": 11.3,
+    "el": "div#charts > div.chart > canvas#ch-mwe"
+   },
+   {
+    "x": 1850,
+    "y": 894,
+    "score": 73.9,
+    "L": 56.2,
+    "C": 13.1,
+    "el": "div#charts > div.chart > canvas#ch-tout"
+   },
+   {
+    "x": 642,
+    "y": 534,
+    "score": 73.6,
+    "L": 55.8,
+    "C": 22.3,
+    "el": "svg#mimic > g#ap-pzr > g > rect#mm-pzw"
+   },
+   {
+    "x": 86,
+    "y": 46,
+    "score": 71.8,
+    "L": 52.1,
+    "C": 11.6,
+    "el": "header#topbar > div#t-level  «3. Даёшь ток»"
+   },
+   {
+    "x": 1246,
+    "y": 658,
+    "score": 70.9,
+    "L": 56.5,
+    "C": 14.2,
+    "el": "div#b-mimic > svg#mimic > rect"
+   },
+   {
+    "x": 1658,
+    "y": 326,
+    "score": 70.5,
+    "L": 52.7,
+    "C": 11.7,
+    "el": "div#b-grid > div#s-mwe > div.sc-ticks  «02505007501000»"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ },
+ {
+  "state": "play5",
+  "size": "1920x1080",
+  "spots": [
+   {
+    "x": 514,
+    "y": 50,
+    "score": 98.7,
+    "L": 71.2,
+    "C": 16.8,
+    "el": "header#topbar > div#goal > div.goal-slip > div#goal-label  «Нагрузка по графику ± 5%, стержни в рабо»"
+   },
+   {
+    "x": 1518,
+    "y": 134,
+    "score": 94.6,
+    "L": 58.2,
+    "C": 38.1,
+    "el": "section#annunciator > div#ann-rods  «Стержни вне зоны»"
+   },
+   {
+    "x": 594,
+    "y": 954,
+    "score": 84.0,
+    "L": 64.2,
+    "C": 16.2,
+    "el": "div#m-text  «Стержни — руль для быстрых поправок, бор»"
+   },
+   {
+    "x": 546,
+    "y": 554,
+    "score": 83.5,
+    "L": 51.2,
+    "C": 48.1,
+    "el": "div#b-mimic > svg#mimic > g#ap-reactor > path#mm-vwater"
+   },
+   {
+    "x": 86,
+    "y": 334,
+    "score": 81.8,
+    "L": 56.3,
+    "C": 20.9,
+    "el": "div#rv-box > svg#rodviz > g#rv-rods > rect"
+   },
+   {
+    "x": 294,
+    "y": 958,
+    "score": 81.0,
+    "L": 62.7,
+    "C": 16.8,
+    "el": "div#m-text  «Стержни — руль для быстрых поправок, бор»"
+   },
+   {
+    "x": 1834,
+    "y": 898,
+    "score": 77.9,
+    "L": 60.6,
+    "C": 11.6,
+    "el": "div#charts > div.chart > canvas#ch-pressure"
+   },
+   {
+    "x": 1554,
+    "y": 902,
+    "score": 76.2,
+    "L": 60.9,
+    "C": 11.7,
+    "el": "div#charts > div.chart > canvas#ch-pressure"
+   },
+   {
+    "x": 1498,
+    "y": 606,
+    "score": 75.0,
+    "L": 56.7,
+    "C": 13.4,
+    "el": "div#b-turb > div#s-valve > div.sc-ticks  «0255075100»"
+   },
+   {
+    "x": 1006,
+    "y": 910,
+    "score": 74.7,
+    "L": 62.0,
+    "C": 11.3,
+    "el": "div#charts > div.chart > canvas#ch-mwe"
+   },
+   {
+    "x": 1166,
+    "y": 322,
+    "score": 72.5,
+    "L": 53.8,
+    "C": 15.5,
+    "el": "div#b-pres > div#s-pres > div.sc-ticks  «12141618»"
+   },
+   {
+    "x": 74,
+    "y": 46,
+    "score": 72.1,
+    "L": 52.6,
+    "C": 11.0,
+    "el": "header#topbar > div#t-level  «5. Вечерний пик»"
+   },
+   {
+    "x": 1246,
+    "y": 658,
+    "score": 70.5,
+    "L": 56.5,
+    "C": 14.2,
+    "el": "div#b-mimic > svg#mimic > rect"
+   },
+   {
+    "x": 862,
+    "y": 330,
+    "score": 70.1,
+    "L": 54.9,
+    "C": 13.7,
+    "el": "div#b-temp > div#s-tout > div.sc-ticks  «250275300325350»"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ },
+ {
+  "state": "play9",
+  "size": "1920x1080",
+  "spots": [
+   {
+    "x": 502,
+    "y": 46,
+    "score": 88.9,
+    "L": 64.2,
+    "C": 14.6,
+    "el": "header#topbar > div#goal > div.goal-slip > div#goal-label  «Следуй графику диспетчера до 08:00»"
+   },
+   {
+    "x": 582,
+    "y": 950,
+    "score": 84.4,
+    "L": 64.6,
+    "C": 16.7,
+    "el": "div#m-text  «Смена твоя. Ночью ксенон будет копиться »"
+   },
+   {
+    "x": 214,
+    "y": 958,
+    "score": 80.8,
+    "L": 62.7,
+    "C": 16.3,
+    "el": "div#m-text  «Смена твоя. Ночью ксенон будет копиться »"
+   },
+   {
+    "x": 82,
+    "y": 330,
+    "score": 79.2,
+    "L": 54.0,
+    "C": 22.1,
+    "el": "div#rv-box > svg#rodviz > g#rv-zone-band > rect"
+   },
+   {
+    "x": 1502,
+    "y": 322,
+    "score": 78.8,
+    "L": 61.5,
+    "C": 13.0,
+    "el": "div#b-grid > div#s-mwe > div.sc-ticks  «02505007501000»"
+   },
+   {
+    "x": 1834,
+    "y": 898,
+    "score": 77.5,
+    "L": 60.6,
+    "C": 11.6,
+    "el": "div#charts > div.chart > canvas#ch-pressure"
+   },
+   {
+    "x": 550,
+    "y": 550,
+    "score": 76.5,
+    "L": 48.4,
+    "C": 44.2,
+    "el": "div#b-mimic > svg#mimic > g#ap-reactor > path#mm-vwater"
+   },
+   {
+    "x": 1558,
+    "y": 902,
+    "score": 75.7,
+    "L": 61.0,
+    "C": 11.6,
+    "el": "div#charts > div.chart > canvas#ch-pressure"
+   },
+   {
+    "x": 1522,
+    "y": 598,
+    "score": 75.2,
+    "L": 57.5,
+    "C": 13.4,
+    "el": "div#b-turb > div#s-valve > div.sc-ticks  «0255075100»"
+   },
+   {
+    "x": 1002,
+    "y": 910,
+    "score": 74.5,
+    "L": 62.0,
+    "C": 11.3,
+    "el": "div#charts > div.chart > canvas#ch-mwe"
+   },
+   {
+    "x": 74,
+    "y": 46,
+    "score": 72.9,
+    "L": 52.5,
+    "C": 11.6,
+    "el": "header#topbar > div#t-level  «9. Смена»"
+   },
+   {
+    "x": 1162,
+    "y": 326,
+    "score": 72.7,
+    "L": 53.9,
+    "C": 15.1,
+    "el": "div#b-pres > div#s-pres > div.sc-ticks  «12141618»"
+   },
+   {
+    "x": 874,
+    "y": 326,
+    "score": 72.3,
+    "L": 54.7,
+    "C": 14.3,
+    "el": "div#b-temp > div#s-tout > div.sc-ticks  «250275300325350»"
+   },
+   {
+    "x": 1306,
+    "y": 894,
+    "score": 70.2,
+    "L": 56.9,
+    "C": 13.2,
+    "el": "div#charts > div.chart > canvas#ch-tout"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ },
+ {
+  "state": "alarm",
+  "size": "1920x1080",
+  "spots": [
+   {
+    "x": 678,
+    "y": 134,
+    "score": 93.8,
+    "L": 58.1,
+    "C": 38.5,
+    "el": "section#annunciator > div#ann-plow  «Давление низкое»"
+   },
+   {
+    "x": 1278,
+    "y": 134,
+    "score": 92.9,
+    "L": 57.9,
+    "C": 37.0,
+    "el": "section#annunciator > div#ann-grid  «Отклонение от задания»"
+   },
+   {
+    "x": 1526,
+    "y": 134,
+    "score": 92.4,
+    "L": 57.4,
+    "C": 36.3,
+    "el": "section#annunciator > div#ann-xenon  «Отравление ксеноном»"
+   },
+   {
+    "x": 198,
+    "y": 134,
+    "score": 90.4,
+    "L": 57.8,
+    "C": 36.8,
+    "el": "section#annunciator > div#ann-power  «Мощность выше нормы»"
+   },
+   {
+    "x": 1530,
+    "y": 766,
+    "score": 86.5,
+    "L": 58.6,
+    "C": 29.5,
+    "el": "div#b-dg > div.dg-row > div.dg-status > div#ann-dg  «Дизели в работе»"
+   },
+   {
+    "x": 926,
+    "y": 138,
+    "score": 86.1,
+    "L": 50.2,
+    "C": 43.9,
+    "el": "section#annunciator > div#ann-pump  «Отказ насоса»"
+   },
+   {
+    "x": 598,
+    "y": 954,
+    "score": 83.9,
+    "L": 64.2,
+    "C": 16.7,
+    "el": "div#m-text  «Жми «Вверх» коротко и смотри на шкалу «Р»"
+   },
+   {
+    "x": 1846,
+    "y": 906,
+    "score": 79.3,
+    "L": 62.6,
+    "C": 11.4,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 262,
+    "y": 962,
+    "score": 76.9,
+    "L": 60.4,
+    "C": 15.7,
+    "el": "div#m-text  «Жми «Вверх» коротко и смотри на шкалу «Р»"
+   },
+   {
+    "x": 1078,
+    "y": 910,
+    "score": 75.5,
+    "L": 63.3,
+    "C": 11.5,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 1422,
+    "y": 1014,
+    "score": 73.4,
+    "L": 63.2,
+    "C": 11.1,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 634,
+    "y": 410,
+    "score": 73.2,
+    "L": 57.6,
+    "C": 14.8,
+    "el": "div#b-power > div#s-rate > div.sc-ticks  «гаснетровноразгоняется»"
+   },
+   {
+    "x": 638,
+    "y": 674,
+    "score": 71.3,
+    "L": 58.0,
+    "C": 13.4,
+    "el": "div#b-mimic > svg#mimic > rect"
+   },
+   {
+    "x": 1246,
+    "y": 658,
+    "score": 69.9,
+    "L": 56.5,
+    "C": 14.2,
+    "el": "div#b-mimic > svg#mimic > rect"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ },
+ {
+  "state": "goal",
+  "size": "1920x1080",
+  "spots": [
+   {
+    "x": 550,
+    "y": 46,
+    "score": 89.2,
+    "L": 64.3,
+    "C": 14.7,
+    "el": "header#topbar > div#goal > div.goal-slip > div#goal-label  «Мощность 20 ± 3%, удержать 30 с»"
+   },
+   {
+    "x": 594,
+    "y": 946,
+    "score": 84.5,
+    "L": 64.6,
+    "C": 16.7,
+    "el": "div#m-text  «Жми «Вверх» коротко и смотри на шкалу «Р»"
+   },
+   {
+    "x": 1842,
+    "y": 910,
+    "score": 79.4,
+    "L": 62.9,
+    "C": 11.5,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 246,
+    "y": 962,
+    "score": 77.5,
+    "L": 60.7,
+    "C": 15.7,
+    "el": "div#m-text  «Жми «Вверх» коротко и смотри на шкалу «Р»"
+   },
+   {
+    "x": 1478,
+    "y": 906,
+    "score": 77.1,
+    "L": 63.8,
+    "C": 10.3,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 978,
+    "y": 38,
+    "score": 76.9,
+    "L": 55.6,
+    "C": 11.1,
+    "el": "div#goal-board > div.gb-prog > div#goal-lamps > i.lmp.mlk"
+   },
+   {
+    "x": 86,
+    "y": 334,
+    "score": 75.8,
+    "L": 55.6,
+    "C": 13.1,
+    "el": "div#rv-box > svg#rodviz > g#rv-rods > rect"
+   },
+   {
+    "x": 1218,
+    "y": 910,
+    "score": 75.1,
+    "L": 62.9,
+    "C": 11.5,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 914,
+    "y": 910,
+    "score": 74.9,
+    "L": 62.9,
+    "C": 11.5,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 606,
+    "y": 322,
+    "score": 74.2,
+    "L": 56.9,
+    "C": 14.8,
+    "el": "div#b-power > div#s-power > div.sc-ticks > span  «75»"
+   },
+   {
+    "x": 642,
+    "y": 670,
+    "score": 73.1,
+    "L": 59.1,
+    "C": 13.9,
+    "el": "div#b-mimic > svg#mimic > rect"
+   },
+   {
+    "x": 74,
+    "y": 46,
+    "score": 73.1,
+    "L": 53.3,
+    "C": 11.0,
+    "el": "header#topbar > div#t-level  «1. Пробуждение»"
+   },
+   {
+    "x": 1246,
+    "y": 650,
+    "score": 70.9,
+    "L": 56.9,
+    "C": 14.1,
+    "el": "div#b-mimic > svg#mimic > rect"
+   },
+   {
+    "x": 966,
+    "y": 566,
+    "score": 65.9,
+    "L": 54.9,
+    "C": 13.6,
+    "el": "div#b-mimic > svg#mimic > rect"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ },
+ {
+  "state": "play1",
+  "size": "1366x768",
+  "spots": [
+   {
+    "x": 398,
+    "y": 34,
+    "score": 99.0,
+    "L": 70.4,
+    "C": 16.2,
+    "el": "header#topbar > div#goal > div.goal-slip > div#goal-label  «Мощность 20 ± 3%, удержать 30 с»"
+   },
+   {
+    "x": 430,
+    "y": 650,
+    "score": 84.9,
+    "L": 64.6,
+    "C": 16.7,
+    "el": "div#m-text  «Жми «Вверх» коротко и смотри на шкалу «Р»"
+   },
+   {
+    "x": 1318,
+    "y": 642,
+    "score": 79.5,
+    "L": 62.0,
+    "C": 11.3,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 54,
+    "y": 34,
+    "score": 79.3,
+    "L": 56.6,
+    "C": 12.7,
+    "el": "header#topbar > div#t-level  «1. Пробуждение»"
+   },
+   {
+    "x": 186,
+    "y": 690,
+    "score": 79.3,
+    "L": 61.5,
+    "C": 16.2,
+    "el": "div#m-text  «Жми «Вверх» коротко и смотри на шкалу «Р»"
+   },
+   {
+    "x": 62,
+    "y": 234,
+    "score": 79.2,
+    "L": 59.4,
+    "C": 8.0,
+    "el": "div.rods-body > div#rv-box > svg#rodviz > rect#rv-glow"
+   },
+   {
+    "x": 418,
+    "y": 230,
+    "score": 78.1,
+    "L": 58.7,
+    "C": 15.2,
+    "el": "div#b-power > div#s-power > div.sc-ticks  «0255075100»"
+   },
+   {
+    "x": 1070,
+    "y": 642,
+    "score": 77.0,
+    "L": 63.2,
+    "C": 10.7,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 838,
+    "y": 642,
+    "score": 75.8,
+    "L": 62.7,
+    "C": 11.3,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 642,
+    "y": 646,
+    "score": 75.1,
+    "L": 62.7,
+    "C": 11.3,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 450,
+    "y": 470,
+    "score": 71.2,
+    "L": 58.1,
+    "C": 13.0,
+    "el": "div#b-mimic > svg#mimic > rect"
+   },
+   {
+    "x": 886,
+    "y": 458,
+    "score": 70.7,
+    "L": 56.5,
+    "C": 14.2,
+    "el": "div#b-mimic > svg#mimic > rect"
+   },
+   {
+    "x": 686,
+    "y": 398,
+    "score": 65.8,
+    "L": 54.9,
+    "C": 13.6,
+    "el": "div#b-mimic > svg#mimic > rect"
+   },
+   {
+    "x": 1178,
+    "y": 90,
+    "score": 64.1,
+    "L": 47.3,
+    "C": 5.9,
+    "el": "section#annunciator > button#btn-ack  «Квити­рование»"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ },
+ {
+  "state": "play3",
+  "size": "1366x768",
+  "spots": [
+   {
+    "x": 1006,
+    "y": 94,
+    "score": 103.2,
+    "L": 60.6,
+    "C": 44.5,
+    "el": "section#annunciator > div#ann-grid  «Отклонение от задания»"
+   },
+   {
+    "x": 378,
+    "y": 34,
+    "score": 97.1,
+    "L": 69.3,
+    "C": 15.7,
+    "el": "header#topbar > div#goal > div.goal-slip > div#goal-label  «Генератор 600 МВт ± 5%, 60 с»"
+   },
+   {
+    "x": 62,
+    "y": 234,
+    "score": 85.3,
+    "L": 59.2,
+    "C": 18.5,
+    "el": "div.rods-body > div#rv-box > svg#rodviz > rect#rv-glow"
+   },
+   {
+    "x": 426,
+    "y": 686,
+    "score": 84.5,
+    "L": 64.2,
+    "C": 16.7,
+    "el": "div#m-text  «Пар сейчас уходит в конденсатор — видишь»"
+   },
+   {
+    "x": 1082,
+    "y": 430,
+    "score": 81.0,
+    "L": 60.3,
+    "C": 15.1,
+    "el": "div#b-turb > div#s-valve > div.sc-ticks  «0255075100»"
+   },
+   {
+    "x": 50,
+    "y": 34,
+    "score": 78.7,
+    "L": 56.2,
+    "C": 12.1,
+    "el": "header#topbar > div#t-level  «3. Даёшь ток»"
+   },
+   {
+    "x": 202,
+    "y": 690,
+    "score": 78.6,
+    "L": 61.2,
+    "C": 15.8,
+    "el": "div#m-text  «Пар сейчас уходит в конденсатор — видишь»"
+   },
+   {
+    "x": 1010,
+    "y": 642,
+    "score": 76.1,
+    "L": 61.4,
+    "C": 11.2,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 458,
+    "y": 382,
+    "score": 75.7,
+    "L": 55.6,
+    "C": 26.5,
+    "el": "svg#mimic > g#ap-pzr > g > rect#mm-pzw"
+   },
+   {
+    "x": 1302,
+    "y": 634,
+    "score": 74.1,
+    "L": 56.7,
+    "C": 12.9,
+    "el": "div#charts > div.chart > canvas#ch-tout"
+   },
+   {
+    "x": 806,
+    "y": 722,
+    "score": 74.1,
+    "L": 61.9,
+    "C": 11.4,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 658,
+    "y": 234,
+    "score": 73.9,
+    "L": 56.1,
+    "C": 15.3,
+    "el": "div#b-temp > div#s-tout > div.sc-ticks  «250275300325350»"
+   },
+   {
+    "x": 1182,
+    "y": 230,
+    "score": 73.5,
+    "L": 54.0,
+    "C": 12.3,
+    "el": "div#b-grid > div#s-mwe > div.sc-ticks > span  «1000»"
+   },
+   {
+    "x": 602,
+    "y": 642,
+    "score": 73.0,
+    "L": 61.1,
+    "C": 11.2,
+    "el": "div#charts > div.chart > canvas#ch-mwe"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ },
+ {
+  "state": "play5",
+  "size": "1366x768",
+  "spots": [
+   {
+    "x": 374,
+    "y": 34,
+    "score": 102.1,
+    "L": 73.1,
+    "C": 17.3,
+    "el": "header#topbar > div#goal > div.goal-slip > div#goal-label  «Нагрузка по графику ± 5%, стержни в рабо»"
+   },
+   {
+    "x": 1078,
+    "y": 94,
+    "score": 100.7,
+    "L": 61.4,
+    "C": 38.2,
+    "el": "section#annunciator > div#ann-rods  «Стержни вне зоны»"
+   },
+   {
+    "x": 58,
+    "y": 242,
+    "score": 88.5,
+    "L": 59.4,
+    "C": 24.5,
+    "el": "div#rv-box > svg#rodviz > g#rv-zone-band > rect"
+   },
+   {
+    "x": 390,
+    "y": 390,
+    "score": 86.2,
+    "L": 52.2,
+    "C": 50.0,
+    "el": "div#b-mimic > svg#mimic > g#ap-reactor > path#mm-vwater"
+   },
+   {
+    "x": 426,
+    "y": 682,
+    "score": 84.9,
+    "L": 64.6,
+    "C": 16.7,
+    "el": "div#m-text  «Стержни — руль для быстрых поправок, бор»"
+   },
+   {
+    "x": 206,
+    "y": 682,
+    "score": 82.9,
+    "L": 64.2,
+    "C": 16.7,
+    "el": "div#m-text  «Стержни — руль для быстрых поправок, бор»"
+   },
+   {
+    "x": 1062,
+    "y": 430,
+    "score": 81.4,
+    "L": 60.3,
+    "C": 14.5,
+    "el": "div#b-turb > div#s-valve > div.sc-ticks  «0255075100»"
+   },
+   {
+    "x": 46,
+    "y": 34,
+    "score": 78.8,
+    "L": 56.1,
+    "C": 12.6,
+    "el": "header#topbar > div#t-level  «5. Вечерний пик»"
+   },
+   {
+    "x": 1306,
+    "y": 638,
+    "score": 78.3,
+    "L": 60.9,
+    "C": 11.3,
+    "el": "div#charts > div.chart > canvas#ch-pressure"
+   },
+   {
+    "x": 830,
+    "y": 230,
+    "score": 78.3,
+    "L": 57.1,
+    "C": 16.7,
+    "el": "div#b-pres > div#s-pres > div.sc-ticks  «12141618»"
+   },
+   {
+    "x": 1102,
+    "y": 642,
+    "score": 77.1,
+    "L": 61.4,
+    "C": 12.1,
+    "el": "div#charts > div.chart > canvas#ch-pressure"
+   },
+   {
+    "x": 610,
+    "y": 234,
+    "score": 74.2,
+    "L": 57.2,
+    "C": 14.7,
+    "el": "div#b-temp > div#s-tout > div.sc-ticks  «250275300325350»"
+   },
+   {
+    "x": 714,
+    "y": 642,
+    "score": 74.2,
+    "L": 61.1,
+    "C": 11.2,
+    "el": "div#charts > div.chart > canvas#ch-mwe"
+   },
+   {
+    "x": 118,
+    "y": 450,
+    "score": 72.5,
+    "L": 54.1,
+    "C": 12.0,
+    "el": "div#b-pumps > div#pumps > div.pump  «ГЦН-2работает»"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ },
+ {
+  "state": "play9",
+  "size": "1366x768",
+  "spots": [
+   {
+    "x": 362,
+    "y": 34,
+    "score": 99.2,
+    "L": 70.8,
+    "C": 16.2,
+    "el": "header#topbar > div#goal > div.goal-slip > div#goal-label  «Следуй графику диспетчера до 08:00»"
+   },
+   {
+    "x": 62,
+    "y": 230,
+    "score": 85.5,
+    "L": 58.0,
+    "C": 23.1,
+    "el": "div#rv-box > svg#rodviz > g#rv-zone-band > line#rv-z0"
+   },
+   {
+    "x": 1110,
+    "y": 230,
+    "score": 84.7,
+    "L": 64.0,
+    "C": 14.8,
+    "el": "div#b-grid > div#s-mwe > div.sc-ticks  «02505007501000»"
+   },
+   {
+    "x": 418,
+    "y": 682,
+    "score": 84.7,
+    "L": 64.6,
+    "C": 16.7,
+    "el": "div#m-text  «Смена твоя. Ночью ксенон будет копиться »"
+   },
+   {
+    "x": 174,
+    "y": 686,
+    "score": 82.7,
+    "L": 63.8,
+    "C": 16.7,
+    "el": "div#m-text  «Смена твоя. Ночью ксенон будет копиться »"
+   },
+   {
+    "x": 1074,
+    "y": 426,
+    "score": 80.6,
+    "L": 60.4,
+    "C": 14.6,
+    "el": "div#b-turb > div#s-valve > div.sc-ticks  «0255075100»"
+   },
+   {
+    "x": 50,
+    "y": 34,
+    "score": 79.6,
+    "L": 56.5,
+    "C": 12.6,
+    "el": "header#topbar > div#t-level  «9. Смена»"
+   },
+   {
+    "x": 390,
+    "y": 390,
+    "score": 79.1,
+    "L": 48.8,
+    "C": 46.4,
+    "el": "div#b-mimic > svg#mimic > g#ap-reactor > path#mm-vwater"
+   },
+   {
+    "x": 830,
+    "y": 230,
+    "score": 78.5,
+    "L": 57.1,
+    "C": 16.7,
+    "el": "div#b-pres > div#s-pres > div.sc-ticks  «12141618»"
+   },
+   {
+    "x": 1306,
+    "y": 638,
+    "score": 78.3,
+    "L": 60.9,
+    "C": 11.3,
+    "el": "div#charts > div.chart > canvas#ch-pressure"
+   },
+   {
+    "x": 1102,
+    "y": 642,
+    "score": 77.0,
+    "L": 61.4,
+    "C": 12.1,
+    "el": "div#charts > div.chart > canvas#ch-pressure"
+   },
+   {
+    "x": 622,
+    "y": 234,
+    "score": 75.1,
+    "L": 57.2,
+    "C": 15.3,
+    "el": "div#b-temp > div#s-tout > div.sc-ticks  «250275300325350»"
+   },
+   {
+    "x": 710,
+    "y": 642,
+    "score": 74.2,
+    "L": 61.1,
+    "C": 11.2,
+    "el": "div#charts > div.chart > canvas#ch-mwe"
+   },
+   {
+    "x": 118,
+    "y": 450,
+    "score": 72.5,
+    "L": 54.1,
+    "C": 12.0,
+    "el": "div#b-pumps > div#pumps > div.pump  «ГЦН-2работает»"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ },
+ {
+  "state": "alarm",
+  "size": "1366x768",
+  "spots": [
+   {
+    "x": 994,
+    "y": 94,
+    "score": 98.6,
+    "L": 60.5,
+    "C": 39.9,
+    "el": "section#annunciator > div#ann-rods  «Стержни вне зоны»"
+   },
+   {
+    "x": 478,
+    "y": 94,
+    "score": 97.8,
+    "L": 60.6,
+    "C": 38.8,
+    "el": "section#annunciator > div#ann-plow  «Давление низкое»"
+   },
+   {
+    "x": 142,
+    "y": 94,
+    "score": 96.4,
+    "L": 60.7,
+    "C": 37.9,
+    "el": "section#annunciator > div#ann-power  «Мощность выше нормы»"
+   },
+   {
+    "x": 738,
+    "y": 94,
+    "score": 91.7,
+    "L": 51.8,
+    "C": 49.0,
+    "el": "section#annunciator > div#ann-offsite  «Нет сети»"
+   },
+   {
+    "x": 422,
+    "y": 678,
+    "score": 84.5,
+    "L": 64.6,
+    "C": 16.7,
+    "el": "div#m-text  «Жми «Вверх» коротко и смотри на шкалу «Р»"
+   },
+   {
+    "x": 1078,
+    "y": 426,
+    "score": 81.2,
+    "L": 61.0,
+    "C": 14.9,
+    "el": "div#b-turb > div#s-valve > div.sc-ticks  «0255075100»"
+   },
+   {
+    "x": 186,
+    "y": 690,
+    "score": 79.2,
+    "L": 61.5,
+    "C": 16.2,
+    "el": "div#m-text  «Жми «Вверх» коротко и смотри на шкалу «Р»"
+   },
+   {
+    "x": 1318,
+    "y": 642,
+    "score": 79.1,
+    "L": 62.0,
+    "C": 11.3,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 450,
+    "y": 294,
+    "score": 77.4,
+    "L": 59.7,
+    "C": 15.7,
+    "el": "div#b-power > div#s-rate > div.sc-ticks  «гаснетровноразгоняется»"
+   },
+   {
+    "x": 1170,
+    "y": 234,
+    "score": 76.5,
+    "L": 56.2,
+    "C": 13.2,
+    "el": "div#b-grid > div#s-mwe > div.sc-ticks  «02505007501000»"
+   },
+   {
+    "x": 1070,
+    "y": 642,
+    "score": 76.4,
+    "L": 63.2,
+    "C": 10.7,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 874,
+    "y": 642,
+    "score": 75.4,
+    "L": 62.7,
+    "C": 11.3,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 662,
+    "y": 650,
+    "score": 74.6,
+    "L": 62.7,
+    "C": 11.3,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 246,
+    "y": 398,
+    "score": 73.4,
+    "L": 53.8,
+    "C": 16.8,
+    "el": "div#b-xenon > div#s-xenon > div.sc-ticks  «012»"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ },
+ {
+  "state": "goal",
+  "size": "1366x768",
+  "spots": [
+   {
+    "x": 398,
+    "y": 34,
+    "score": 98.9,
+    "L": 70.4,
+    "C": 15.7,
+    "el": "header#topbar > div#goal > div.goal-slip > div#goal-label  «Мощность 20 ± 3%, удержать 30 с»"
+   },
+   {
+    "x": 62,
+    "y": 234,
+    "score": 84.7,
+    "L": 59.6,
+    "C": 16.0,
+    "el": "div.rods-body > div#rv-box > svg#rodviz > rect#rv-glow"
+   },
+   {
+    "x": 426,
+    "y": 686,
+    "score": 84.7,
+    "L": 64.5,
+    "C": 16.6,
+    "el": "div#m-text  «Жми «Вверх» коротко и смотри на шкалу «Р»"
+   },
+   {
+    "x": 686,
+    "y": 26,
+    "score": 83.8,
+    "L": 59.8,
+    "C": 11.5,
+    "el": "div#goal-board > div.gb-prog > div#goal-lamps > i.lmp.mlk"
+   },
+   {
+    "x": 50,
+    "y": 34,
+    "score": 80.6,
+    "L": 57.7,
+    "C": 12.0,
+    "el": "header#topbar > div#t-level  «1. Пробуждение»"
+   },
+   {
+    "x": 418,
+    "y": 230,
+    "score": 79.4,
+    "L": 60.0,
+    "C": 15.7,
+    "el": "div#b-power > div#s-power > div.sc-ticks  «0255075100»"
+   },
+   {
+    "x": 186,
+    "y": 690,
+    "score": 79.4,
+    "L": 62.0,
+    "C": 15.8,
+    "el": "div#m-text  «Жми «Вверх» коротко и смотри на шкалу «Р»"
+   },
+   {
+    "x": 1310,
+    "y": 642,
+    "score": 79.0,
+    "L": 62.3,
+    "C": 11.3,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 1046,
+    "y": 638,
+    "score": 77.2,
+    "L": 63.2,
+    "C": 10.1,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 866,
+    "y": 642,
+    "score": 74.7,
+    "L": 62.3,
+    "C": 11.3,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 662,
+    "y": 642,
+    "score": 74.5,
+    "L": 62.3,
+    "C": 11.3,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 450,
+    "y": 462,
+    "score": 73.2,
+    "L": 59.5,
+    "C": 13.4,
+    "el": "div#b-mimic > svg#mimic > rect"
+   },
+   {
+    "x": 890,
+    "y": 458,
+    "score": 71.2,
+    "L": 56.9,
+    "C": 14.1,
+    "el": "div#b-mimic > svg#mimic > rect"
+   },
+   {
+    "x": 666,
+    "y": 390,
+    "score": 67.2,
+    "L": 55.6,
+    "C": 13.4,
+    "el": "div#b-mimic > svg#mimic > rect"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ }
+]
