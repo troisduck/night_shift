@@ -978,23 +978,28 @@ canvas.sched { flex: 1 1 2.6rem; margin: .14rem .14rem 0; width: calc(100% - .28
    материал и следы работы. Плитки материалов и износ панелей рисует модуль Tex (canvas, один раз,
    под размер панели, статично); переменные --tex-* в :root — запасной вариант без canvas.
    ===================================================================== */
-@property --wear { syntax: '*'; inherits: false; }
+/* фактура листа — холст canvas.wear под содержимым (Tex.mount): подменяется в одном кадре с тенью, без асинхронной PNG.
+   Лист — свой контекст наложения, иначе холст с z-index: -1 ушёл бы под фон листа */
+canvas.wear { position: absolute; left: 0; top: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; border-radius: inherit; }
+.blk, .cover, #topbar, #bottom { isolation: isolate; }
+#topbar, #bottom { position: relative; }
+#bottom > canvas.wear { clip-path: inset(0 0 .34rem 0); }   /* хромированная кромка столешницы остаётся поверх */
 /* цвета колпачка зарегистрированы как цвета — тогда наведение плавно переливает фаску, а не щёлкает */
 @property --cap { syntax: '<color>'; inherits: true; initial-value: #30322C; }
 @property --cap-hi { syntax: '<color>'; inherits: true; initial-value: #5B5E54; }
 body { background: radial-gradient(ellipse 75% 70% at 46% 60%, rgba(0,0,0,0) 30%, rgba(0,0,0,.62) 100%), var(--tex-enamel), var(--iron-frame); }   /* рама щита: в тени к краям — свет пульта не дотягивается (П6) */
 /* панель — лист крашеной стали на винтах: фаска, сколы по кромкам, грязь в углах (рисует Tex) */
-.blk { background: var(--wear, none) 0 0 / 100% 100% no-repeat, var(--tex-enamel), var(--iron-enamel);
+.blk { background: var(--tex-enamel), var(--iron-enamel);
   box-shadow: 0 0 0 1px #0C0F0D, 0 .12rem 0 1px rgba(0,0,0,.5), var(--cast, 0 0 0 transparent); }   /* --cast — тень панели на раму от светильника (Tex.shade) */
 .blk > canvas.shade { position: absolute; left: 0; top: 0; width: 100%; height: 100%; z-index: 6; pointer-events: none; }   /* тень зала: свет пульта спадает к краям; источники света — в окнах */   /* лист сидит в раме: чёткий стык, а не парение */
-#b-dg { background: var(--wear, none) 0 0 / 100% 100% no-repeat, var(--tex-enamel), var(--iron-enamel-new); }
+#b-dg { background: var(--tex-enamel), var(--iron-enamel-new); }
 .blk::before { right: .22rem; top: .78rem; writing-mode: vertical-rl; letter-spacing: .1em; }   /* номер панели — по кромке, под верхним винтом */
 #b-mimic::before { writing-mode: horizontal-tb; right: 1.05rem; top: auto; bottom: .17rem; letter-spacing: .06em; }
-.cover { background: var(--wear, none) 0 0 / 100% 100% no-repeat, var(--tex-enamel), var(--iron-enamel-plug);
+.cover { background: var(--tex-enamel), var(--iron-enamel-plug);
   box-shadow: inset 0 0 0 1px rgba(0,0,0,.45), inset 0 .25rem .6rem rgba(0,0,0,.35); }   /* глухая крышка тёмная и матовая — закрытое отступает */
 .cover span { font-size: .86rem; padding: .56rem .6rem .2rem; box-shadow: 0 1px 0 rgba(0,0,0,.4); }
 .cover svg { opacity: .7; }
-#topbar { padding: 0 1rem; border-radius: 2px; background: var(--wear, none) 0 0 / 100% 100% no-repeat, var(--tex-enamel), #3B4A42; box-shadow: 0 0 0 1px #0C0F0D, 0 .12rem 0 1px rgba(0,0,0,.5); }
+#topbar { padding: 0 1rem; border-radius: 2px; background: var(--tex-enamel), #3B4A42; box-shadow: 0 0 0 1px #0C0F0D, 0 .12rem 0 1px rgba(0,0,0,.5); }
 /* таблички: пластик слоновой кости с толщиной и грязью по кромке; буквы гравированы */
 .brand, .p-name, .m-name { text-shadow: 0 1px 0 rgba(255,253,244,.6); }
 .brand { box-shadow: inset 0 -2px 0 var(--iron-ivory-lo), inset 0 0 .5rem rgba(110,84,44,.32), 0 0 0 1px #0C0F0D, 0 .16rem .2rem rgba(0,0,0,.55); }
@@ -1062,7 +1067,7 @@ body { background: radial-gradient(ellipse 75% 70% at 46% 60%, rgba(0,0,0,0) 30%
 /* столешница: древесный пластик (Tex), передняя кромка — алюминиевый уголок */
 #bottom { background:
     linear-gradient(0deg, #3E423C 0, #8E928A .06rem, #C9CCC4 .12rem, #8A8E87 .24rem, #5A5E58 .32rem, rgba(0,0,0,0) .32rem) bottom / 100% .34rem no-repeat,
-    var(--wear, none) 0 0 / 100% 100% no-repeat, var(--tex-desk), var(--iron-desk);
+    var(--tex-desk), var(--iron-desk);
   box-shadow: inset 0 2px 0 rgba(0,0,0,.5); }
 
 /* мнемосхема под стеклом: блик и тень от рамы */
@@ -1251,7 +1256,7 @@ body { background: radial-gradient(ellipse 75% 70% at 46% 60%, rgba(0,0,0,0) 30%
 .cover .tag-plate::before, .cover .tag-plate::after { display: none; }
 .cover .tag-plate b { font-size: .9rem; letter-spacing: .1em; }
 .cover[data-v="boss"] { justify-content: flex-end; padding-bottom: 1.15rem; }
-.cover[data-niche] { background: var(--wear, none) 0 0 / 100% 100% no-repeat, #0B0E0C; justify-content: flex-end; padding-bottom: .9rem; }
+.cover[data-niche] { background: #0B0E0C; justify-content: flex-end; padding-bottom: .9rem; }
 .cover[data-niche] .tag-plate { opacity: .75; }   /* металлическая бирка в глубине ниши — ещё тише */
 /* прибор вставляют в нишу: ниша гаснет, прибор приходит снизу на направляющих */
 .cover.installing { transition: opacity 380ms var(--ease-paper); opacity: 0; }
@@ -1654,7 +1659,7 @@ svg.crack .ck-l { fill: none; stroke: rgba(236,240,234,.62); stroke-width: .9; }
   html { font-size: 14px; }
   body { height: auto; overflow: auto; }
   #app { height: auto; display: flex; flex-direction: column; }
-  #topbar { flex-wrap: wrap; position: sticky; top: 0; z-index: 20; background: var(--iron-frame); padding: .4rem .3rem; }
+  #topbar > canvas.wear { display: none; } #topbar { flex-wrap: wrap; position: sticky; top: 0; z-index: 20; background: var(--iron-frame); padding: .4rem .3rem; }
   #annunciator { padding-right: .28rem; padding-bottom: 3.2rem; }
   #btn-ack { top: auto; left: .28rem; width: auto; height: 2.6rem; flex-direction: row; gap: .5rem; }
   .goal { order: 5; flex: 1 1 100%; max-width: none; }
@@ -5371,6 +5376,13 @@ const Tex = {
       const old = this.urls.get(key); this.urls.set(key, u); apply(u); if (old && old.startsWith('blob:')) setTimeout(() => URL.revokeObjectURL(old), 3000); };
     try { if (c.toBlob) c.toBlob(b => { if (b) done(URL.createObjectURL(b)); }); else done(c.toDataURL()); } catch (e) { /* без фактуры — останутся CSS-запасные */ }
   },
+  // фактура листа — холст под содержимым, подменяется в том же кадре, что и тень (П7.6, АРТ-д): через toBlob PNG листов
+  // кодировался 2–4 с после смены масштаба, и всё это время под деталями висела прежняя раскладка теней
+  mount(el, c, after) {
+    c.className = 'wear'; c.setAttribute('aria-hidden', 'true');
+    const old = el.querySelector(':scope > canvas.wear'); if (old) old.replaceWith(c); else el.appendChild(c);
+    if (after) after();
+  },
   // бесшовный сглаженный шум T×T
   vnoise(T, N, rnd) {
     const g = new Float32Array(N * N); for (let i = 0; i < g.length; i++) g[i] = rnd();
@@ -5463,7 +5475,7 @@ const Tex = {
     const isCover = el.classList.contains('cover'), kind = el.dataset.wear || (isCover ? 'cover' : 'panel');
     const key = (el.id || (el.parentElement && el.parentElement.id) || 'x') + ':' + kind;
     const rnd = this.rng(this.hash(key)), c = this.cv(W, H), x = c.getContext('2d');
-    if (isCover && el.dataset.niche) { this.niche(x, W, H, rnd, rem, d); this.scene(x, el, W, H); this.publish(c, key, u => { el.style.setProperty('--wear', `url("${u}")`); if (after) after(); }); return; }
+    if (isCover && el.dataset.niche) { this.niche(x, W, H, rnd, rem, d); this.scene(x, el, W, H); this.mount(el, c, after); return; }
     // крупный масштаб: лист светлее сверху — свет потолочных ламп, темнее снизу — туда оседает пыль
     { const gg = x.createLinearGradient(0, 0, 0, H); gg.addColorStop(0, 'rgba(255,250,236,.05)'); gg.addColorStop(.5, 'rgba(0,0,0,0)'); gg.addColorStop(1, 'rgba(18,14,8,.17)'); x.fillStyle = gg; x.fillRect(0, 0, W, H); }
     // фаска листа: свет потолочных ламп сверху и слева, тень снизу и справа
@@ -5552,7 +5564,7 @@ const Tex = {
       if (isCover) for (let n = 0; n < 2; n++) this.scratch(x, sx + (rnd() - .5) * sr * 5, sy + (rnd() - .5) * sr * 5, sr * (1.5 + rnd() * 2.5), rnd, d, 1.5);   // отвёртка соскальзывала
     }
     if (kind !== 'strip') this.scene(x, el, W, H);
-    this.publish(c, key, u => { el.style.setProperty('--wear', `url("${u}")`); if (after) after(); });
+    this.mount(el, c, after);
   },
   // пустое гнездо: монтажная ниша, как от снятой магнитолы — направляющие по бокам, разъём со жгутом проводов, темнота и пыль
   niche(x, W, H, rnd, rem, d) {
@@ -5673,7 +5685,7 @@ const Tex = {
     let g = x.createLinearGradient(0, 0, 0, rem * 1.3); g.addColorStop(0, 'rgba(0,0,0,.4)'); g.addColorStop(1, 'rgba(0,0,0,0)'); x.fillStyle = g; x.fillRect(0, 0, W, rem * 1.3);
     for (let i = 0; i < 14; i++) this.scratch(x, rnd() * W, H * (.55 + rnd() * .4), rem * (.6 + rnd() * 2.5), rnd, d, 1.2);
     this.scene(x, el, W, H);
-    this.publish(c, 'desk', u => el.style.setProperty('--wear', `url("${u}")`));
+    this.mount(el, c);
   },
   // пятна светильников по раскладке (px экрана): центр, полуоси, сила, где лампа. Кэш до resize и смены света
   pools() {

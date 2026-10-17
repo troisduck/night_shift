@@ -28,7 +28,7 @@ STATES = {
     'alarm': 'unlockall=1&event=alarm_test',
 }
 # живые места, которые меняются сами: часы, ленты самописцев, окно в город (огни мачт), табло (мигание неквитированных)
-MASK = ['#clock', '.clock', '#charts', '#window', '#ann', '.ann', '#gl-pz', '.pz-hint']
+MASK = ['#clock', '.clock', '#charts', '#window', '#ann', '.ann', '#gl-pz', '.pz-hint', '#m-text']   # #m-text: лист Палыча выходит на свет, пока он говорит, — живое
 THR = 10
 
 
@@ -59,6 +59,7 @@ def main():
     ap.add_argument('--sizes', default='1920x1080,1366x768,1024x768')
     ap.add_argument('--dprs', default='1,1.25,1.5,2')
     ap.add_argument('--checks', default='static,resize,dpr')
+    ap.add_argument('--settle', type=int, default=1800, help='мс после смены размера или масштаба до кадра')
     a = ap.parse_args()
     from playwright.sync_api import sync_playwright
     import numpy as np
@@ -99,7 +100,7 @@ def main():
                     # другой размер: 1920 ↔ 1366
                     W0, H0 = (1366, 768) if W != 1366 else (1920, 1080)
                     ctx, pg = load(q, W, H, 1); f1 = tmp / 'fresh.png'; masked(pg, f1); ctx.close()
-                    ctx, pg = load(q, W0, H0, 1); pg.set_viewport_size({'width': W, 'height': H}); pg.wait_for_timeout(1800)
+                    ctx, pg = load(q, W0, H0, 1); pg.set_viewport_size({'width': W, 'height': H}); pg.wait_for_timeout(a.settle)
                     f2 = tmp / 'moved.png'; masked(pg, f2); ctx.close()
                     m, pct = diff(f1, f2); name = f'resize-{st}-{W0}to{W}x{H}@1'
                     rows.append((name, pct)); save_diff(m, f1, name) if pct and pct > .05 else None
@@ -110,7 +111,7 @@ def main():
                         ctx, pg = load(q, W, H, 1)
                         cdp = ctx.new_cdp_session(pg)
                         cdp.send('Emulation.setDeviceMetricsOverride', {'width': W, 'height': H, 'deviceScaleFactor': d, 'mobile': False})
-                        pg.wait_for_timeout(1800); f2 = tmp / 'moved.png'; masked(pg, f2); ctx.close()
+                        pg.wait_for_timeout(a.settle); f2 = tmp / 'moved.png'; masked(pg, f2); ctx.close()
                         m, pct = diff(f1, f2); name = f'dpr-{st}-{W}x{H}@{d}'
                         rows.append((name, pct)); save_diff(m, f1, name) if pct and pct > .05 else None
                 print(f'{st} {W}x{H}: ' + ', '.join(f'{n} {p:.3f}%' for n, p in rows if p is not None and f'-{st}-' in n and f'{W}x{H}' in n), flush=True)
