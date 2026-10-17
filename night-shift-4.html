@@ -351,7 +351,7 @@ button { font: inherit; color: inherit; }
 .read-row { display: flex; gap: .45rem; flex: 0 0 auto; } .read-row > .read { flex: 1 1 auto; min-width: 0; } .read-row > .read + .read { flex: 0 1 auto; }
 .seg svg { height: 100%; display: block; }
 .unit { font-weight: 700; font-size: 1.05rem; color: var(--glass-print); white-space: nowrap; }
-.read .sub { margin-left: auto; text-align: right; color: var(--glass-live); font-size: .8rem; min-width: 0; }
+.read .sub { margin-left: auto; text-align: right; color: var(--glass-live); font-size: .8rem; min-width: min-content; }   /* не уже самого длинного слова: переполнение окна подгоняет fitFaces */
 /* «в воде сейчас …» у бора — поверх окна справа, вне потока: появление подписи не двигает прибор и кнопки (плейтест П6: «прибор с бором сбегает») */
 #b-boron .read { position: relative; }
 #r-boron-sub { position: absolute; right: .35rem; top: 50%; transform: translateY(-50%); margin: 0; font-size: .6rem; line-height: 1.08; white-space: pre-line; pointer-events: none; }
@@ -536,7 +536,7 @@ button { font: inherit; color: inherit; }
 .btn.hold small { font-size: .72rem; }
 #b-rods .read.sm { padding: .2rem .45rem; gap: .35rem; }
 #b-rods .read.sm .seg { height: 1.5rem; }
-.u-sm { font-weight: 400; font-size: .7rem; }
+.u-sm { font-weight: 400; font-size: .667em; }   /* в em — сжимается вместе с единицей (fitFaces) */
 /* ярус 1 (STYLE.md, 2.4): мощность — самые крупные цифры на щите */
 /* ярус 1 (STYLE.md 2.4): мощность, вода, давление, генератор — самые крупные цифры */
 /* ярус 1 и генератор — одной строкой: шильда, окно цифр, шкала на одной высоте во всех четырёх блоках (просьба автора, П6) */
@@ -1128,7 +1128,9 @@ body { background: radial-gradient(ellipse 75% 70% at 46% 60%, rgba(0,0,0,0) 30%
 #annunciator { gap: .7rem .66rem; padding: .56rem 8.2rem .56rem .62rem; }
 :is(#annunciator, #b-dg, #b-turb) .ann {
   --tint: var(--sig-warn); --halo: var(--halo-warn);
-  --lens-off: color-mix(in srgb, var(--tint) 30%, #15130F); --txt-off: color-mix(in srgb, var(--tint) 40%, #ABA698);
+  /* погашенная линза — дымчатое стекло с намёком на цвет (П7, АРТ-з: красные «АЗ СРАБОТАЛА», «ОТКАЗ НАСОСА» в первую секунду читались горящими);
+     надпись читается (≈ 4,5:1), но не светится */
+  --lens-off: color-mix(in srgb, var(--tint) 13%, #121310); --txt-off: color-mix(in srgb, var(--tint) 18%, #8F8C80);
   --lens: var(--lens-off); --ltxt: var(--txt-off);
   min-height: 2.62rem; padding: .04rem .07rem; border: .3rem solid; border-radius: .12rem;
   border-color: color-mix(in srgb, var(--lens) 58%, #FFF4DC) color-mix(in srgb, var(--lens) 68%, #000) color-mix(in srgb, var(--lens) 46%, #000) color-mix(in srgb, var(--lens) 80%, #FFF4DC);
@@ -3120,7 +3122,13 @@ const FEEL = {
     hands: { sel: '.btn, .tog, .az-wrap, .pkey, .p-name, .sub, .p-st, .gen-row', keep: 0.65 },   // органы управления: тень зала на них ослаблена на keep — их всегда видно (плейтест П6: «плохо видно АЗ и кнопки»)
     // падающие тени: вниз и в сторону от светильника. len — длина, rem; blur — размытие, rem; a — плотность. Выступающее (кнопки, тумблеры, грибок) — длиннее
     cast: { len: 0.95, side: 0.8, blur: 0.55, a: 0.78, over: 0.7, overLen: 1.5, overBlur: 0.35,   // over — тени приборов поверх панели: плотность, длина и размытие (в долях len и rem)
-            tall: '.btn, .tog, .az-wrap, .pkey', tallK: 1.6, blk: { len: 0.55, side: 0.6, blur: 0.9, a: 0.85 } },
+            tall: '.btn, .tog, .az-wrap, .pkey', tallK: 1.6,
+            // заподлицо: окна индикаторов, шкалы, шильды, таблички — ободок выступает на пару миллиметров, тень короткая и плотная
+            flat: '.read, .scale, .rodviz, canvas.sched, .p-name, .rate-txt, .p-st, #r-allow, .prot-lens', flatK: 0.32, blk: { len: 0.55, side: 0.6, blur: 0.9, a: 0.85 },
+            // П7: тень вытянута из детали слоями — layers слоёв, каждый с плотностью a × fade (у основания слои складываются — там темнее);
+            // near — доля размытия у основания (полутень растёт к концу); contact — контактная тень: сдвиг вниз и размытие (rem), плотность
+            layers: 4, fade: 0.42, near: 0.25, contact: [0.07, 0.14, 0.6] },
+    auditMs: 700,          // как часто сверяется геометрия запечённых теней с раскладкой (Tex.audit, П7): сдвинулась деталь — лист перепекается
     rim: { a: 0.07, reach: 0.22 },   // контровой из окна: холодный тон у правого края щита (прозрачность) и как далеко заходит (доля ширины щита)
   },
   // вход в игру (П2): заставки, дверь, вступление, подпись. Время — мс реального времени
@@ -5043,12 +5051,16 @@ const WEAR_AO = { panel: '.read, .scale, .rodviz, canvas.sched, .az-wrap, .tog, 
 const WEAR_TOUCH = { 'b-rods': ['#btn-up, #btn-down', 1.5], 'b-turb': ['#btn-vminus, #btn-vplus', 1.3], 'b-pres': ['.btn', .8],
   'b-boron': ['.btn', .8], 'b-pumps': ['.tog', 1], 'b-dg': ['.btn', .7] };
 const Tex = {
-  dpr: Math.min(2, window.devicePixelRatio || 1), urls: new Map(), dirty: new Set(), timer: 0, ro: null,
+  dpr: Math.min(2, window.devicePixelRatio || 1), urls: new Map(), gen: new Map(), sig: new WeakMap(), dirty: new Set(), timer: 0, ro: null,
   rng(seed) { let s = (seed >>> 0) || 0x9E3779B9; return () => { s ^= s << 13; s >>>= 0; s ^= s >>> 17; s ^= s << 5; s >>>= 0; return s / 4294967296; }; },
   hash(t) { let h = 2166136261; for (let i = 0; i < t.length; i++) { h ^= t.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; },
   cv(w, h) { const c = document.createElement('canvas'); c.width = Math.max(1, Math.round(w)); c.height = Math.max(1, Math.round(h)); return c; },
+  // фактура уходит в CSS через blob асинхронно: старая держится до готовности новой и подменяется за один кадр (П7, АРТ-д);
+  // поколение на ключ — запоздавший toBlob от прежней раскладки не перетирает свежую фактуру
   publish(c, key, apply) {
-    const done = u => { const old = this.urls.get(key); this.urls.set(key, u); apply(u); if (old && old.startsWith('blob:')) setTimeout(() => URL.revokeObjectURL(old), 3000); };
+    const n = (this.gen.get(key) || 0) + 1; this.gen.set(key, n);
+    const done = u => { if (this.gen.get(key) !== n) { if (u.startsWith('blob:')) URL.revokeObjectURL(u); return; }
+      const old = this.urls.get(key); this.urls.set(key, u); apply(u); if (old && old.startsWith('blob:')) setTimeout(() => URL.revokeObjectURL(old), 3000); };
     try { if (c.toBlob) c.toBlob(b => { if (b) done(URL.createObjectURL(b)); }); else done(c.toDataURL()); } catch (e) { /* без фактуры — останутся CSS-запасные */ }
   },
   // бесшовный сглаженный шум T×T
@@ -5137,13 +5149,13 @@ const Tex = {
     const sgn = ny >= 0 ? 1 : -1, ox = nx * r * .2 * sgn, oy = ny * r * .2 * sgn;
     x.strokeStyle = 'rgba(255,255,255,.5)'; x.lineWidth = Math.max(.8, r * .09); x.beginPath(); x.moveTo(cx - dx * .9 + ox, cy - dy * .9 + oy); x.lineTo(cx + dx * .9 + ox, cy + dy * .9 + oy); x.stroke();
   },
-  wear(el) {
-    const w = el.clientWidth, h = el.clientHeight; if (w < 12 || h < 12) return;
+  wear(el, after) {
+    const w = el.clientWidth, h = el.clientHeight; if (w < 12 || h < 12) { if (after) after(); return; }
     const d = this.dpr, W = Math.round(w * d), H = Math.round(h * d), rem = (UI.remPx || 14) * d;
     const isCover = el.classList.contains('cover'), kind = el.dataset.wear || (isCover ? 'cover' : 'panel');
     const key = (el.id || (el.parentElement && el.parentElement.id) || 'x') + ':' + kind;
     const rnd = this.rng(this.hash(key)), c = this.cv(W, H), x = c.getContext('2d');
-    if (isCover && el.dataset.niche) { this.niche(x, W, H, rnd, rem, d); this.scene(x, el, W, H); this.publish(c, key, u => el.style.setProperty('--wear', `url("${u}")`)); return; }
+    if (isCover && el.dataset.niche) { this.niche(x, W, H, rnd, rem, d); this.scene(x, el, W, H); this.publish(c, key, u => { el.style.setProperty('--wear', `url("${u}")`); if (after) after(); }); return; }
     // крупный масштаб: лист светлее сверху — свет потолочных ламп, темнее снизу — туда оседает пыль
     { const gg = x.createLinearGradient(0, 0, 0, H); gg.addColorStop(0, 'rgba(255,250,236,.05)'); gg.addColorStop(.5, 'rgba(0,0,0,0)'); gg.addColorStop(1, 'rgba(18,14,8,.17)'); x.fillStyle = gg; x.fillRect(0, 0, W, H); }
     // фаска листа: свет потолочных ламп сверху и слева, тень снизу и справа
@@ -5182,16 +5194,14 @@ const Tex = {
     if (ao && !isCover) {
       // падающая тень от светильника (FEEL.light.cast): вниз и в сторону от него, у выступающих деталей длиннее; деталь «стоит» на листе
       const b = el.getBoundingClientRect(), grow = rem / d * .28, Lc = FEEL.light.cast, lp = this.lightAt();   // у кнопки фланец шире её рамки
-      x.save(); x.fillStyle = '#0B0A08';
       for (const t of el.querySelectorAll(ao)) {
         const r = t.getBoundingClientRect(); if (!r.width || !r.height) continue;
-        const e = t.classList.contains('btn') && !t.closest('.tb-keys') ? grow : 0, k = Lc && t.matches(Lc.tall) ? Lc.tallK : 1;
+        const e = t.classList.contains('btn') && !t.closest('.tb-keys') ? grow : 0, k = Lc ? this.rise(t) : 1;
+        const X0 = (r.left - b.left - e) * d, Y0 = (r.top - b.top - e) * d, w = (r.width + 2 * e) * d, h = (r.height + 2 * e) * d, round = t.matches(FEEL.light.vol.round);
         if (Lc && lp) { const [ux, uy] = this.castDir(r.left + r.width / 2, r.top + r.height / 2);
-          x.shadowColor = `rgba(4,3,2,${Lc.a})`; x.shadowBlur = Lc.blur * rem * k; x.shadowOffsetX = ux * Lc.side * rem * k; x.shadowOffsetY = Lc.len * rem * k * (.6 + .4 * uy); }
-        else { x.shadowColor = 'rgba(8,6,3,.55)'; x.shadowBlur = 5 * d; x.shadowOffsetY = 1.5 * d; }
-        x.fillRect((r.left - b.left - e) * d, (r.top - b.top - e) * d, (r.width + 2 * e) * d, (r.height + 2 * e) * d);
+          this.castShape(x, X0, Y0, w, h, ux * Lc.side * rem * k, Lc.len * rem * k * (.6 + .4 * uy), Lc.blur * rem * k, Lc.a, round, rem); }
+        else this.castShape(x, X0, Y0, w, h, 0, 1.5 * d, 5 * d, .55, round, rem);
       }
-      x.restore();
     }
     if (isCover) this.plate(x, el, W, H, rnd, rem, d);
     // сколы краски по кромкам — чаще у углов и на нижней кромке: её задевают
@@ -5234,7 +5244,7 @@ const Tex = {
       if (isCover) for (let n = 0; n < 2; n++) this.scratch(x, sx + (rnd() - .5) * sr * 5, sy + (rnd() - .5) * sr * 5, sr * (1.5 + rnd() * 2.5), rnd, d, 1.5);   // отвёртка соскальзывала
     }
     if (kind !== 'strip') this.scene(x, el, W, H);
-    this.publish(c, key, u => el.style.setProperty('--wear', `url("${u}")`));
+    this.publish(c, key, u => { el.style.setProperty('--wear', `url("${u}")`); if (after) after(); });
   },
   // пустое гнездо: монтажная ниша, как от снятой магнитолы — направляющие по бокам, разъём со жгутом проводов, темнота и пыль
   niche(x, W, H, rnd, rem, d) {
@@ -5279,7 +5289,9 @@ const Tex = {
     const box = (x0, y0, w, h, r) => { x.beginPath(); if (x.roundRect) x.roundRect(x0, y0, w, h, r); else x.rect(x0, y0, w, h); };
     const m = rem * .95;
     emb(c => { box(m, m, W - 2 * m, H - 2 * m, rem * .5); x.strokeStyle = c; x.lineWidth = rem * .2; x.stroke(); });   // отбортовка
-    const boss = W > rem * 9 && H > rem * 7 && rnd() < .34;
+    // рисунок заглушки — свой поток случайных чисел: общий расходуется сколами и царапинами, их число зависит от размера в пикселях,
+    // и при другом масштабе или размере крест сменялся гербом (П7, АРТ-д)
+    const boss = W > rem * 9 && H > rem * 7 && this.rng(this.hash((el.parentElement && el.parentElement.id || 'x') + ':plate'))() < .34;
     el.dataset.v = boss ? 'boss' : 'x';
     if (boss) {
       const cx = W / 2, cy = H * .36, R = Math.min(W, H) * .23;
@@ -5396,23 +5408,56 @@ const Tex = {
     const n = Math.hypot(vx, vy) || 1; return [vx / n, Math.max(.35, vy / n)];
   },
   lightAt() { return FEEL.light.lamps ? [0, 0] : null; },
+  // насколько деталь выступает над эмалью — во столько раз длиннее её тень (П7: окно индикатора с тенью кнопки «висело» над панелью)
+  rise(t) { const C = FEEL.light.cast; return t.matches(C.tall) ? C.tallK : t.matches(C.flat) ? C.flatK : 1; },
+  // выпуклая оболочка точек (монотонная цепь)
+  hull(P) {
+    P.sort((a, b) => a[0] - b[0] || a[1] - b[1]); const cr = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]), lo = [], up = [];
+    for (const p of P) { while (lo.length > 1 && cr(lo[lo.length - 2], lo[lo.length - 1], p) <= 0) lo.pop(); lo.push(p); }
+    for (let i = P.length - 1; i >= 0; i--) { const p = P[i]; while (up.length > 1 && cr(up[up.length - 2], up[up.length - 1], p) <= 0) up.pop(); up.push(p); }
+    return lo.slice(0, -1).concat(up.slice(0, -1));
+  },
+  // Падающая тень детали (П7, плейтест автора: «объект будто левитирует», «тени оторваны от объектов»). Раньше тень была копией детали,
+  // сдвинутой на len: у низких деталей между ними оставался зазор. Теперь тень — след детали, вытянутый от неё по направлению света:
+  // слои на ¼, ½, ¾ и всю длину — у основания плотная и резкая, к концу тает и размывается, как полутень. Плюс контактная тень по кромке —
+  // деталь «сидит» на эмали. Сама форма рисуется за краем холста (−1e4), на холст попадает только её тень. Числа — FEEL.light.cast
+  castShape(x, X0, Y0, w, h, ox, oy, blur, a, round, rem) {
+    const C = FEEL.light.cast, N = C.layers, pts = (dx, dy) => round
+      ? Array.from({ length: 20 }, (_, i) => [X0 + w / 2 + Math.cos(i / 20 * 6.283) * w / 2 + dx, Y0 + h / 2 + Math.sin(i / 20 * 6.283) * h / 2 + dy])
+      : [[X0 + dx, Y0 + dy], [X0 + w + dx, Y0 + dy], [X0 + w + dx, Y0 + h + dy], [X0 + dx, Y0 + h + dy]];
+    const fill = (dx, dy, bl, al) => {
+      const H = this.hull(pts(0, 0).concat(pts(dx, dy))); x.shadowColor = `rgba(4,3,2,${Math.min(1, al).toFixed(3)})`; x.shadowBlur = bl;   // ns-ok: прозрачность цвета на холсте, не число на экране
+      x.beginPath(); H.forEach(([px, py], i) => i ? x.lineTo(px - 1e4, py) : x.moveTo(px - 1e4, py)); x.closePath(); x.fill();
+    };
+    x.save(); x.fillStyle = '#000'; x.shadowOffsetX = 1e4; x.shadowOffsetY = 0;
+    for (let i = 1; i <= N; i++) { const f = i / N; fill(ox * f, oy * f, blur * (C.near + (1 - C.near) * f), a * C.fade); }
+    fill(0, C.contact[0] * rem, C.contact[1] * rem, C.contact[2]);   // контактная: тонкая тёмная кромка у основания
+    x.restore();
+  },
   // тень зала поверх панели (П6): спад от светильника к краям и к верху щита ложится на железо, кнопки, рамки и шильды;
   // у источников света (цифры, лампы, подсвеченные шкалы, табло) — окна, они светят сами. Панель отбрасывает тень на раму (--cast).
   // Рисуется один раз при раскладке; при аварийном свете — пусто (аварийная сцена запечена в износ)
+  // Рисуется во внеэкранный холст и возвращает commit: на экран тень попадает в том же кадре, что и новый износ (П7, АРТ-а/д) —
+  // иначе между ними видна тень от новой раскладки на износе от старой
   shade(el) {
-    const L = FEEL.light; if (!L.on || !L.shade) return;
-    let cv = el.querySelector(':scope > canvas.shade');
-    if (!cv) { cv = document.createElement('canvas'); cv.className = 'shade'; cv.setAttribute('aria-hidden', 'true'); el.appendChild(cv); }
+    const L = FEEL.light; if (!L.on || !L.shade) return null;
     const d = this.dpr, W = Math.max(1, Math.round(el.clientWidth * d)), H = Math.max(1, Math.round(el.clientHeight * d));
-    if (cv.width !== W || cv.height !== H) { cv.width = W; cv.height = H; }
-    const x = cv.getContext('2d'); x.setTransform(1, 0, 0, 1, 0, 0); x.clearRect(0, 0, W, H);
-    const desk = $('desk'), lp = this.lightAt(); if (!desk || !lp) return;
+    const off = this.cv(W, H), x = off.getContext('2d');
+    let cast = null;
+    const commit = () => {
+      let cv = el.querySelector(':scope > canvas.shade');
+      if (!cv) { cv = document.createElement('canvas'); cv.className = 'shade'; cv.setAttribute('aria-hidden', 'true'); el.appendChild(cv); }
+      if (cv.width !== W || cv.height !== H) { cv.width = W; cv.height = H; }
+      const cx = cv.getContext('2d'); cx.setTransform(1, 0, 0, 1, 0, 0); cx.clearRect(0, 0, W, H); cx.drawImage(off, 0, 0);
+      if (cast) el.style.setProperty('--cast', cast);
+    };
+    const desk = $('desk'), lp = this.lightAt(); if (!desk || !lp) return commit;
     const a = desk.getBoundingClientRect(), b = el.getBoundingClientRect(), C = L.cast && L.cast.blk, rem = UI.remPx || 14;
     if (C) { const [ux, uy] = this.castDir(b.left + b.width / 2, b.top + b.height / 2);
-      el.style.setProperty('--cast', `${(ux * C.side * rem).toFixed(1)}px ${(C.len * rem * (.6 + .4 * uy)).toFixed(1)}px ${(C.blur * rem).toFixed(1)}px rgba(0,0,0,${C.a})`); }
-    if (Light.emerg) return;
+      cast = `${(ux * C.side * rem).toFixed(1)}px ${(C.len * rem * (.6 + .4 * uy)).toFixed(1)}px ${(C.blur * rem).toFixed(1)}px rgba(0,0,0,${C.a})`; }
+    if (Light.emerg) return commit;
     this.field(x, b, W, H, d);
-    if (el.classList.contains('locked')) return;   // под заглушкой окон нет — она сплошная сталь
+    if (el.classList.contains('locked')) return commit;   // под заглушкой окон нет — она сплошная сталь
     // тени от самих приборов на панель (П6, автор: «рисунок тени от света»): деталь отбрасывает тень вниз и от своей лампы;
     // тень видна только там, где светло (в темноте её нет), а на самой детали её нет — вырезается
     const Cs = L.cast;
@@ -5420,10 +5465,10 @@ const Tex = {
       const sc = this.cv(W, H), sx = sc.getContext('2d'), ds = [...el.querySelectorAll(L.vol.sel)].filter(s => { const r = s.getBoundingClientRect(); return r.width && r.height && r.width < b.width * .95; });
       sx.clearRect(0, 0, W, H);
       for (const s of ds) {
-        const r = s.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2, I = this.lit(cx, cy), [ux, uy] = this.castDir(cx, cy), k = s.matches(Cs.tall) ? Cs.tallK : 1;
-        const Lk = Cs.overLen * k; sx.shadowColor = `rgba(3,3,2,${(Cs.over * (.45 + .55 * I)).toFixed(3)})`; sx.shadowBlur = Cs.overBlur * rem * d * k;
-        sx.shadowOffsetX = ux * Cs.side * rem * d * Lk + 1e4; sx.shadowOffsetY = Cs.len * rem * d * Lk * (.6 + .4 * uy);
-        sx.fillStyle = '#000'; sx.fillRect((r.left - b.left) * d - 1e4, (r.top - b.top) * d, r.width * d, r.height * d);
+        const r = s.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2, I = this.lit(cx, cy), [ux, uy] = this.castDir(cx, cy), k = this.rise(s);
+        const Lk = Cs.overLen * k;
+        this.castShape(sx, (r.left - b.left) * d, (r.top - b.top) * d, r.width * d, r.height * d, ux * Cs.side * rem * d * Lk, Cs.len * rem * d * Lk * (.6 + .4 * uy),
+          Cs.overBlur * rem * d * k, Cs.over * (.45 + .55 * I), s.matches(L.vol.round), rem * d);
       }
       sx.shadowColor = 'transparent'; sx.globalCompositeOperation = 'destination-out';
       for (const s of ds) { const r = s.getBoundingClientRect(); sx.fillRect((r.left - b.left) * d, (r.top - b.top) * d, r.width * d, r.height * d); }
@@ -5436,16 +5481,16 @@ const Tex = {
       const cx = r.left + r.width / 2, cy = r.top + r.height / 2, I = this.lit(cx, cy), [ux, uy] = this.castDir(cx, cy);
       const X0 = (r.left - b.left) * d, Y0 = (r.top - b.top) * d, w = r.width * d, h = r.height * d, round = s.matches(V.round);
       let g = x.createLinearGradient(X0 + w / 2 - ux * w / 2, Y0 + h / 2 - uy * h / 2, X0 + w / 2 + ux * w / 2, Y0 + h / 2 + uy * h / 2);
-      g.addColorStop(0, 'rgba(4,4,3,0)'); g.addColorStop(.55, 'rgba(4,4,3,0)'); g.addColorStop(1, `rgba(4,4,3,${(V.side * (1 - .35 * I)).toFixed(3)})`);
+      g.addColorStop(0, 'rgba(4,4,3,0)'); g.addColorStop(.55, 'rgba(4,4,3,0)'); g.addColorStop(1, `rgba(4,4,3,${(V.side * (1 - .35 * I)).toFixed(3)})`);   // ns-ok: прозрачность цвета на холсте, не число на экране
       x.fillStyle = g; x.beginPath(); if (round && x.ellipse) x.ellipse(X0 + w / 2, Y0 + h / 2, w / 2, h / 2, 0, 0, 6.283); else x.rect(X0, Y0, w, h); x.fill();
-      g = x.createLinearGradient(0, Y0 + h * .6, 0, Y0 + h); g.addColorStop(0, 'rgba(4,4,3,0)'); g.addColorStop(1, `rgba(4,4,3,${(V.under * (1 - .3 * I)).toFixed(3)})`);
+      g = x.createLinearGradient(0, Y0 + h * .6, 0, Y0 + h); g.addColorStop(0, 'rgba(4,4,3,0)'); g.addColorStop(1, `rgba(4,4,3,${(V.under * (1 - .3 * I)).toFixed(3)})`);   // ns-ok: прозрачность цвета на холсте, не число на экране
       x.fillStyle = g; x.fillRect(X0, Y0 + h * .6, w, h * .4);
       if (round) {   // блик на куполе со стороны света
         const gx = X0 + w / 2 - ux * w * .22, gy = Y0 + h * .26, R = Math.min(w, h) * .3;
-        g = x.createRadialGradient(gx, gy, 0, gx, gy, R); g.addColorStop(0, `rgba(255,246,226,${(V.glint * .8 * I).toFixed(3)})`); g.addColorStop(1, 'rgba(255,246,226,0)');
+        g = x.createRadialGradient(gx, gy, 0, gx, gy, R); g.addColorStop(0, `rgba(255,246,226,${(V.glint * .8 * I).toFixed(3)})`); g.addColorStop(1, 'rgba(255,246,226,0)');   // ns-ok: прозрачность цвета на холсте, не число на экране
         x.fillStyle = g; x.fillRect(gx - R, gy - R, 2 * R, 2 * R);
       } else {       // блик на верхней кромке обода, ярче к свету
-        const gh = Math.max(1.5 * d, Math.min(h * .12, 3 * d)), a = (V.glint * I).toFixed(3), a2 = (V.glint * I * .25).toFixed(3);
+        const gh = Math.max(1.5 * d, Math.min(h * .12, 3 * d)), a = (V.glint * I).toFixed(3), a2 = (V.glint * I * .25).toFixed(3);   // ns-ok: прозрачность цвета на холсте, не число на экране
         g = x.createLinearGradient(X0, 0, X0 + w, 0); g.addColorStop(0, `rgba(255,244,220,${ux > 0 ? a : a2})`); g.addColorStop(1, `rgba(255,244,220,${ux > 0 ? a2 : a})`);
         x.fillStyle = g; x.fillRect(X0 + d, Y0 - gh * .4, w - 2 * d, gh);
       }
@@ -5461,8 +5506,44 @@ const Tex = {
       x.beginPath(); if (x.roundRect) x.roundRect((r.left - b.left) * d, (r.top - b.top) * d, r.width * d, r.height * d, rr); else x.rect((r.left - b.left) * d, (r.top - b.top) * d, r.width * d, r.height * d); x.fill();
     }
     x.globalCompositeOperation = 'source-over';
+    return commit;
   },
-  draw(el) { if (el.id === 'bottom') this.desk(el); else { this.wear(el); if (el.classList.contains('blk')) this.shade(el); } },
+  draw(el) {
+    this.sig.set(el, this.geo(el));
+    if (el.id === 'bottom') this.desk(el);
+    else { const commit = el.classList.contains('blk') ? this.shade(el) : null; this.wear(el, commit); }
+  },
+  // сигнатура геометрии листа (П7, АРТ-а): размер и места всех, кто отбрасывает запечённую тень или светит, относительно листа.
+  // ResizeObserver видит только смену размера; деталь, которая сдвинулась без смены размера, ловит эта сверка
+  // Места — по раскладке (offset*), без transform: нажатая кнопка и тряска не будят перепечку
+  off(n) { let x = 0, y = 0; while (n) { x += n.offsetLeft; y += n.offsetTop; n = n.offsetParent; } return [x, y]; },
+  geo(el) {
+    const off = n => this.off(n), [bx, by] = off(el); let h = el.offsetWidth * 7919 + el.offsetHeight + (el.classList.contains('locked') ? 13 : 0);
+    const sel = el.id === 'topbar' ? WEAR_AO.strip : el.id === 'bottom' ? null : FEEL.light.vol.sel + ', ' + FEEL.light.glow;
+    if (sel) for (const t of el.querySelectorAll(sel)) { if (t.offsetParent === undefined) continue; const [x, y] = off(t); h = (Math.imul(h, 31) + (x - bx) * 131 + (y - by) * 17 + t.offsetWidth * 3 + t.offsetHeight) | 0; }
+    return h;
+  },
+  // пятна ламп считаются от раскладки щита: их места — в координатах щита (тряска двигает всё вместе и сверку не будит)
+  poolSig() {
+    const a = $('desk'); if (!a) return 0; let h = a.offsetWidth * 7 + a.offsetHeight;
+    for (const lp of FEEL.light.lamps) { const e = document.querySelector(lp.el); if (!e) continue; const [x, y] = this.off(e); h = (Math.imul(h, 31) + x * 131 + y * 17 + e.offsetWidth * 3 + e.offsetHeight) | 0; }
+    return h + innerHeight;
+  },
+  // сверка раз в FEEL.light.auditMs: поменялась раскладка — перепекается только то, что сдвинулось
+  audit() {
+    if (document.hidden || !this.ro) return;
+    const ps = this.poolSig(); if (this._ps !== undefined && ps !== this._ps) { this._ps = ps; this.refreshAll(); return; } this._ps = ps;
+    document.querySelectorAll('.blk, .cover, #topbar, #bottom').forEach(e => { if (!e.offsetWidth || this.dirty.has(e)) return; const g = this.geo(e); if (this.sig.has(e) && this.sig.get(e) !== g) this.schedule(e); });
+  },
+  // масштаб устройства меняется на ходу (масштаб страницы, перенос окна на другой монитор): фактуры пекутся заново в новом масштабе (П7, АРТ-г)
+  watchDpr() {
+    if (!window.matchMedia) return;
+    const mq = matchMedia(`(resolution: ${window.devicePixelRatio || 1}dppx)`);
+    const on = () => { if (mq.removeEventListener) mq.removeEventListener('change', on); else mq.removeListener(on);
+      this.dpr = Math.min(2, window.devicePixelRatio || 1); this.initTiles(); this.refreshAll();
+      UI.cvEpoch = (UI.cvEpoch || 0) + 1; UI.chartsDirty = true; this.watchDpr(); };
+    if (mq.addEventListener) mq.addEventListener('change', on); else mq.addListener(on);
+  },
   schedule(el) { this.dirty.add(el); clearTimeout(this.timer); this.timer = setTimeout(() => { const list = [...this.dirty]; this.dirty.clear(); list.forEach(e => this.draw(e)); }, 140); },
   refreshAll() { this._pools = null; document.querySelectorAll('.blk, .cover, #topbar, #bottom').forEach(e => this.schedule(e)); },
   init() {
@@ -5479,6 +5560,7 @@ const Tex = {
       if (window.MutationObserver) { this.mo = new MutationObserver(ms => ms.forEach(m => { const b = m.target, l = b.classList.contains('locked'); if (b._lk !== l) { b._lk = l; this.schedule(b); } }));
         document.querySelectorAll('.blk').forEach(b => this.mo.observe(b, { attributes: true, attributeFilter: ['class'] })); }
       else this.refreshAll();
+      this.watchDpr(); setInterval(() => { try { this.audit(); } catch (e) { /* сверка не обязательна */ } }, FEEL.light.auditMs);
     } catch (e) { /* фактуры не обязательны: останутся CSS-запасные */ }
   },
 };
@@ -5511,7 +5593,8 @@ function renderDesk(g) {
   SC.power.zones([[0, Math.min(allow, 120), 'ok'], [allow, Math.min(120, allow + 7), 'warn'], [Math.min(120, allow + 7), 120, 'bad']]);
   if (gc.v === 'power') SC.power.target((gc.target - gc.tol) * 100, (gc.target + gc.tol) * 100);
   else if (gc.v === 'powerMax' && g.happened.pumpTrip != null) SC.power.target(0, gc.max * 100); else SC.power.target(null);
-  setText($('r-power-sub'), s.decayHeat > 0.004 && s.decayHeat > 0.3 * s.Pth ? `из них остаточное\nтепло ${f1(s.decayHeat * 100)}%` : '');
+  { const sub = s.decayHeat > 0.004 && s.decayHeat > 0.3 * s.Pth ? `из них остаточное\nтепло ${f1(s.decayHeat * 100)}%` : '', el = $('r-power-sub');
+    if (!el._t !== !sub) UI.annFit = true; setText(el, sub); }   // подпись появилась или ушла — подогнать кегль (fitFaces)
   // разгон
   let rt, rc;
   if (s.scram) { rt = 'реакция заглушена'; rc = 'info'; }
@@ -5589,6 +5672,25 @@ function fitAnn(el) {
   const fits = () => { const b = r.getBoundingClientRect(); return b.width <= el.clientWidth - padX + .5 && b.height <= el.clientHeight - padY + .5; };   // текст по центру: меряем сам текст, а не прокрутку
   let fs = 1.12; el.style.setProperty('--ann-fs', fs + 'rem');
   while (fs > 0.62 && !fits()) { fs = Math.round((fs - 0.02) * 100) / 100; el.style.setProperty('--ann-fs', fs + 'rem'); }
+}
+// надписи в окнах индикаторов и на кнопках не вылезают за рамку (П7, АРТ-ж: «погружены», «× нормы», «Разбавить», «Прикрыть»,
+// «из них остаточное тепло» выходили за край на 5–20 px — ширину окна и кнопки задаёт раскладка, а текст не сжимался).
+// Группа — [окно или кнопка, что уменьшать]; у группы кегль один, как гравировка на парных кнопках
+const FIT_TEXT = [['#b-rods .read', '.unit'], ['#b-xenon .read', '.unit'], ['#b-power .read', '.sub'], ['#b-boron .btn-row .btn', null], ['#b-turb .btn-row .btn', null], ['#b-pres .btn-row .btn', null]];
+function fitFaces() {
+  for (const [sel, part] of FIT_TEXT) {
+    const list = [...document.querySelectorAll(sel)].filter(el => el.offsetParent), ks = [];
+    const tgt = el => part ? el.querySelector(part) : el;
+    list.forEach(el => { const t = tgt(el); if (t) t.style.fontSize = ''; });
+    for (const el of list) {
+      const t = tgt(el); if (!t) continue; const base = parseFloat(getComputedStyle(t).fontSize); let k = 1;
+      const over = () => { if (el.scrollWidth > el.clientWidth || el.scrollHeight > el.clientHeight) return true;   // и по строкам текста: выступ влево или вверх прокрутка не видит
+        const b = el.getBoundingClientRect(), r = document.createRange(); r.selectNodeContents(t); const q = r.getBoundingClientRect(); return q.left < b.left + el.clientLeft || q.right > b.right - el.clientLeft || q.top < b.top + el.clientTop || q.bottom > b.bottom - el.clientTop; };
+      while (k > .78 && over()) { k = Math.round((k - .04) * 100) / 100; t.style.fontSize = (base * k).toFixed(2) + 'px'; }   // мельче не сжимаем: нечитаемо — тогда нужна раскладка
+      ks.push([t, base, k]);
+    }
+    const k = Math.min(1, ...ks.map(x => x[2])); ks.forEach(([t, base]) => { t.style.fontSize = k < 1 ? (base * k).toFixed(2) + 'px' : ''; });
+  }
 }
 // кегль на табло один для всех окон, как гравировка на настоящем: самый мелкий из подобранных по каждому окну
 function fitAllAnn() {
@@ -7874,7 +7976,7 @@ function frame(now) {
     while (UI.acc >= CONFIG.dt && n < 400) { g.update(CONFIG.dt); UI.acc -= CONFIG.dt; n++; }
     if (n >= 400) UI.acc = 0;
   }
-  try { renderAll(g, n * CONFIG.dt, now); if (UI.annFit) { UI.annFit = false; fitAllAnn(); } } catch (err) { console.error(err); }
+  try { renderAll(g, n * CONFIG.dt, now); if (UI.annFit) { UI.annFit = false; fitAllAnn(); fitFaces(); } } catch (err) { console.error(err); }
   if (Guide.cur && Guide.cur.expl && alarmFresh(g)) Guide.stop(true);   // новая тревога перебивает объяснение
   try { Moments.frame(g, dtR); } catch (err) { console.error(err); }   // большие моменты: следят за станцией, ведут свет, тряску, частицы, конец смены
   try { Win.update(g, now); } catch (err) { console.error(err); }

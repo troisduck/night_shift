@@ -1,0 +1,1598 @@
+[
+ {
+  "state": "play1",
+  "size": "1920x1080",
+  "spots": [
+   {
+    "x": 1846,
+    "y": 910,
+    "score": 109.3,
+    "L": 85.3,
+    "C": 15.5,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 1458,
+    "y": 906,
+    "score": 106.9,
+    "L": 87.5,
+    "C": 14.0,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 770,
+    "y": 910,
+    "score": 105.7,
+    "L": 86.0,
+    "C": 15.6,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 1034,
+    "y": 910,
+    "score": 104.1,
+    "L": 86.3,
+    "C": 15.6,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 1266,
+    "y": 650,
+    "score": 97.5,
+    "L": 76.9,
+    "C": 18.9,
+    "el": "div#b-mimic > svg#mimic > rect"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ },
+ {
+  "state": "play3",
+  "size": "1920x1080",
+  "spots": [
+   {
+    "x": 1426,
+    "y": 914,
+    "score": 105.2,
+    "L": 85.1,
+    "C": 15.4,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 742,
+    "y": 914,
+    "score": 103.9,
+    "L": 84.2,
+    "C": 14.8,
+    "el": "div#charts > div.chart > canvas#ch-mwe"
+   },
+   {
+    "x": 1154,
+    "y": 914,
+    "score": 103.2,
+    "L": 85.1,
+    "C": 15.5,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 630,
+    "y": 526,
+    "score": 101.9,
+    "L": 75.3,
+    "C": 31.7,
+    "el": "svg#mimic > g#ap-pzr > g > rect#mm-pzw"
+   },
+   {
+    "x": 1854,
+    "y": 898,
+    "score": 101.5,
+    "L": 76.5,
+    "C": 18.1,
+    "el": "div#charts > div.chart > canvas#ch-tout"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ },
+ {
+  "state": "play5",
+  "size": "1920x1080",
+  "spots": [
+   {
+    "x": 534,
+    "y": 546,
+    "score": 114.9,
+    "L": 70.3,
+    "C": 63.2,
+    "el": "div#b-mimic > svg#mimic > g#ap-reactor > path#mm-vwater"
+   },
+   {
+    "x": 1842,
+    "y": 898,
+    "score": 106.8,
+    "L": 82.5,
+    "C": 15.7,
+    "el": "div#charts > div.chart > canvas#ch-pressure"
+   },
+   {
+    "x": 1554,
+    "y": 906,
+    "score": 104.7,
+    "L": 83.4,
+    "C": 15.8,
+    "el": "div#charts > div.chart > canvas#ch-pressure"
+   },
+   {
+    "x": 762,
+    "y": 914,
+    "score": 103.6,
+    "L": 84.6,
+    "C": 15.3,
+    "el": "div#charts > div.chart > canvas#ch-mwe"
+   },
+   {
+    "x": 1010,
+    "y": 910,
+    "score": 102.8,
+    "L": 84.5,
+    "C": 15.4,
+    "el": "div#charts > div.chart > canvas#ch-mwe"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ },
+ {
+  "state": "play9",
+  "size": "1920x1080",
+  "spots": [
+   {
+    "x": 1842,
+    "y": 898,
+    "score": 107.1,
+    "L": 82.5,
+    "C": 15.7,
+    "el": "div#charts > div.chart > canvas#ch-pressure"
+   },
+   {
+    "x": 538,
+    "y": 538,
+    "score": 106.5,
+    "L": 67.0,
+    "C": 56.8,
+    "el": "div#b-mimic > svg#mimic > g#ap-reactor > path#mm-vwater"
+   },
+   {
+    "x": 1554,
+    "y": 906,
+    "score": 104.6,
+    "L": 83.4,
+    "C": 15.8,
+    "el": "div#charts > div.chart > canvas#ch-pressure"
+   },
+   {
+    "x": 762,
+    "y": 914,
+    "score": 103.6,
+    "L": 84.6,
+    "C": 15.3,
+    "el": "div#charts > div.chart > canvas#ch-mwe"
+   },
+   {
+    "x": 1010,
+    "y": 918,
+    "score": 102.5,
+    "L": 84.5,
+    "C": 15.4,
+    "el": "div#charts > div.chart > canvas#ch-mwe"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ },
+ {
+  "state": "alarm",
+  "size": "1920x1080",
+  "spots": [
+   {
+    "x": 1838,
+    "y": 910,
+    "score": 109.3,
+    "L": 86.0,
+    "C": 15.6,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 734,
+    "y": 918,
+    "score": 105.7,
+    "L": 85.4,
+    "C": 15.0,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 1498,
+    "y": 906,
+    "score": 105.4,
+    "L": 86.9,
+    "C": 13.9,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 1198,
+    "y": 910,
+    "score": 103.7,
+    "L": 86.0,
+    "C": 15.6,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 1258,
+    "y": 654,
+    "score": 97.4,
+    "L": 77.6,
+    "C": 18.9,
+    "el": "div#b-mimic > svg#mimic > rect"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ },
+ {
+  "state": "guide1",
+  "size": "1920x1080",
+  "spots": [
+   {
+    "x": 1054,
+    "y": 270,
+    "score": 117.4,
+    "L": 88.9,
+    "C": 15.0,
+    "el": "div#b-pres > div.cover  «ввод в работусмена 4»"
+   },
+   {
+    "x": 802,
+    "y": 206,
+    "score": 107.5,
+    "L": 84.1,
+    "C": 11.0,
+    "el": "div#b-temp > div.cover  «ввод в работусмена 2»"
+   },
+   {
+    "x": 550,
+    "y": 302,
+    "score": 73.8,
+    "L": 53.2,
+    "C": 13.8,
+    "el": "div#b-power > div#s-power > div.sc-ticks  «0255075100»"
+   },
+   {
+    "x": 1850,
+    "y": 910,
+    "score": 49.5,
+    "L": 37.9,
+    "C": 7.7,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 1498,
+    "y": 906,
+    "score": 47.8,
+    "L": 38.3,
+    "C": 7.1,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ },
+ {
+  "state": "result-ok",
+  "size": "1920x1080",
+  "spots": [
+   {
+    "x": 1490,
+    "y": 154,
+    "score": 114.9,
+    "L": 89.2,
+    "C": 12.3,
+    "el": "div#m-result > div.jr-h.ok  «Смена сданаСмена 1. Пробуждение»"
+   },
+   {
+    "x": 430,
+    "y": 154,
+    "score": 113.5,
+    "L": 88.7,
+    "C": 12.5,
+    "el": "div#m-result  «Оперативный журнал БЩУ-1«17» октября 202»"
+   },
+   {
+    "x": 1486,
+    "y": 846,
+    "score": 111.8,
+    "L": 89.0,
+    "C": 12.4,
+    "el": "div#m-result > div.jr-sign > div.jr-sg.jr-boss  «Смену принялнач. смены»"
+   },
+   {
+    "x": 430,
+    "y": 850,
+    "score": 111.6,
+    "L": 88.7,
+    "C": 12.5,
+    "el": "div#m-result  «Оперативный журнал БЩУ-1«17» октября 202»"
+   },
+   {
+    "x": 998,
+    "y": 146,
+    "score": 109.0,
+    "L": 90.3,
+    "C": 12.8,
+    "el": "div#m-result  «Оперативный журнал БЩУ-1«17» октября 202»"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ },
+ {
+  "state": "result-fail",
+  "size": "1920x1080",
+  "spots": [
+   {
+    "x": 1842,
+    "y": 910,
+    "score": 110.1,
+    "L": 86.0,
+    "C": 15.6,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 1474,
+    "y": 910,
+    "score": 106.4,
+    "L": 87.6,
+    "C": 13.9,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 770,
+    "y": 910,
+    "score": 105.7,
+    "L": 86.0,
+    "C": 15.6,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 1074,
+    "y": 910,
+    "score": 104.1,
+    "L": 86.3,
+    "C": 15.6,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 1254,
+    "y": 658,
+    "score": 97.6,
+    "L": 77.6,
+    "C": 18.9,
+    "el": "div#b-mimic > svg#mimic > rect"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ },
+ {
+  "state": "sign",
+  "size": "1920x1080",
+  "spots": [
+   {
+    "x": 1302,
+    "y": 766,
+    "score": 114.8,
+    "L": 89.3,
+    "C": 12.9,
+    "el": "div#scene > div.sg-papers > div.sg-doc > canvas.sg-ink"
+   },
+   {
+    "x": 626,
+    "y": 762,
+    "score": 112.8,
+    "L": 88.9,
+    "C": 12.9,
+    "el": "div#scene > div.sg-papers > div.sg-doc > canvas.sg-ink"
+   },
+   {
+    "x": 1318,
+    "y": 254,
+    "score": 110.5,
+    "L": 86.4,
+    "C": 12.9,
+    "el": "div#scene > div.sg-papers > div.sg-doc > canvas.sg-ink"
+   },
+   {
+    "x": 622,
+    "y": 302,
+    "score": 110.4,
+    "L": 90.0,
+    "C": 12.9,
+    "el": "div#scene > div.sg-papers > div.sg-doc > canvas.sg-ink"
+   },
+   {
+    "x": 994,
+    "y": 242,
+    "score": 108.6,
+    "L": 89.6,
+    "C": 13.4,
+    "el": "div#scene > div.sg-papers > div.sg-doc > canvas.sg-ink"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400",
+   "NS Serif 700"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ },
+ {
+  "state": "play1",
+  "size": "1366x768",
+  "spots": [
+   {
+    "x": 1318,
+    "y": 642,
+    "score": 108.5,
+    "L": 84.3,
+    "C": 14.8,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 510,
+    "y": 718,
+    "score": 106.2,
+    "L": 84.6,
+    "C": 15.2,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 1038,
+    "y": 642,
+    "score": 105.5,
+    "L": 86.3,
+    "C": 13.8,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 846,
+    "y": 646,
+    "score": 103.7,
+    "L": 85.8,
+    "C": 15.4,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 902,
+    "y": 462,
+    "score": 97.2,
+    "L": 76.9,
+    "C": 18.4,
+    "el": "div#b-mimic > svg#mimic > rect"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ },
+ {
+  "state": "play3",
+  "size": "1366x768",
+  "spots": [
+   {
+    "x": 1002,
+    "y": 82,
+    "score": 105.0,
+    "L": 61.7,
+    "C": 44.8,
+    "el": "section#annunciator > div#ann-grid  «Отклонение от задания»"
+   },
+   {
+    "x": 1006,
+    "y": 642,
+    "score": 104.3,
+    "L": 84.0,
+    "C": 14.7,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 510,
+    "y": 722,
+    "score": 103.9,
+    "L": 83.0,
+    "C": 15.0,
+    "el": "div#charts > div.chart > canvas#ch-mwe"
+   },
+   {
+    "x": 806,
+    "y": 714,
+    "score": 102.8,
+    "L": 84.9,
+    "C": 15.1,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 450,
+    "y": 374,
+    "score": 102.7,
+    "L": 75.0,
+    "C": 34.4,
+    "el": "svg#mimic > g#ap-pzr > g > rect#mm-pzw"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ },
+ {
+  "state": "play5",
+  "size": "1366x768",
+  "spots": [
+   {
+    "x": 382,
+    "y": 386,
+    "score": 119.4,
+    "L": 72.1,
+    "C": 66.9,
+    "el": "div#b-mimic > svg#mimic > g#ap-reactor > path#mm-vwater"
+   },
+   {
+    "x": 1302,
+    "y": 638,
+    "score": 107.9,
+    "L": 83.4,
+    "C": 15.4,
+    "el": "div#charts > div.chart > canvas#ch-pressure"
+   },
+   {
+    "x": 1102,
+    "y": 642,
+    "score": 106.0,
+    "L": 83.8,
+    "C": 15.7,
+    "el": "div#charts > div.chart > canvas#ch-pressure"
+   },
+   {
+    "x": 510,
+    "y": 722,
+    "score": 103.9,
+    "L": 83.0,
+    "C": 15.0,
+    "el": "div#charts > div.chart > canvas#ch-mwe"
+   },
+   {
+    "x": 1082,
+    "y": 82,
+    "score": 102.7,
+    "L": 61.7,
+    "C": 40.9,
+    "el": "section#annunciator > div#ann-rods  «Стержни вне зоны»"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ },
+ {
+  "state": "play9",
+  "size": "1366x768",
+  "spots": [
+   {
+    "x": 382,
+    "y": 382,
+    "score": 110.5,
+    "L": 68.1,
+    "C": 61.2,
+    "el": "div#b-mimic > svg#mimic > g#ap-reactor > path#mm-vwater"
+   },
+   {
+    "x": 1302,
+    "y": 638,
+    "score": 107.9,
+    "L": 83.4,
+    "C": 15.4,
+    "el": "div#charts > div.chart > canvas#ch-pressure"
+   },
+   {
+    "x": 1098,
+    "y": 642,
+    "score": 105.8,
+    "L": 83.8,
+    "C": 15.8,
+    "el": "div#charts > div.chart > canvas#ch-pressure"
+   },
+   {
+    "x": 510,
+    "y": 722,
+    "score": 103.9,
+    "L": 83.0,
+    "C": 15.0,
+    "el": "div#charts > div.chart > canvas#ch-mwe"
+   },
+   {
+    "x": 714,
+    "y": 642,
+    "score": 101.7,
+    "L": 83.4,
+    "C": 14.7,
+    "el": "div#charts > div.chart > canvas#ch-mwe"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ },
+ {
+  "state": "alarm",
+  "size": "1366x768",
+  "spots": [
+   {
+    "x": 1310,
+    "y": 642,
+    "score": 109.4,
+    "L": 85.1,
+    "C": 15.4,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 510,
+    "y": 718,
+    "score": 106.6,
+    "L": 84.9,
+    "C": 15.1,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 1074,
+    "y": 642,
+    "score": 105.2,
+    "L": 86.2,
+    "C": 14.3,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 882,
+    "y": 646,
+    "score": 103.9,
+    "L": 85.8,
+    "C": 15.4,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 686,
+    "y": 646,
+    "score": 102.7,
+    "L": 85.5,
+    "C": 14.9,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ },
+ {
+  "state": "guide1",
+  "size": "1366x768",
+  "spots": [
+   {
+    "x": 754,
+    "y": 194,
+    "score": 117.2,
+    "L": 89.0,
+    "C": 14.5,
+    "el": "div#b-pres > div.cover  «ввод в работусмена 4»"
+   },
+   {
+    "x": 570,
+    "y": 142,
+    "score": 106.7,
+    "L": 83.3,
+    "C": 11.6,
+    "el": "div#b-temp > div.cover  «ввод в работусмена 2»"
+   },
+   {
+    "x": 390,
+    "y": 218,
+    "score": 80.6,
+    "L": 57.5,
+    "C": 14.7,
+    "el": "div#b-power > div#s-power > div.sc-ticks  «0255075100»"
+   },
+   {
+    "x": 1322,
+    "y": 642,
+    "score": 49.2,
+    "L": 37.2,
+    "C": 7.5,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 518,
+    "y": 722,
+    "score": 47.4,
+    "L": 37.1,
+    "C": 7.6,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ },
+ {
+  "state": "result-ok",
+  "size": "1366x768",
+  "spots": [
+   {
+    "x": 1062,
+    "y": 102,
+    "score": 115.6,
+    "L": 88.9,
+    "C": 12.3,
+    "el": "div#m-result > div.jr-top > span  ««17» октября 2026 г.»"
+   },
+   {
+    "x": 298,
+    "y": 102,
+    "score": 114.5,
+    "L": 88.0,
+    "C": 12.5,
+    "el": "div#m-result  «Оперативный журнал БЩУ-1«17» октября 202»"
+   },
+   {
+    "x": 1062,
+    "y": 590,
+    "score": 112.5,
+    "L": 90.0,
+    "C": 12.4,
+    "el": "div#m-result > div.jr-sign > div.jr-sg.jr-boss  «Смену принялнач. смены»"
+   },
+   {
+    "x": 298,
+    "y": 610,
+    "score": 112.0,
+    "L": 88.0,
+    "C": 12.0,
+    "el": "div#m-result  «Оперативный журнал БЩУ-1«17» октября 202»"
+   },
+   {
+    "x": 874,
+    "y": 102,
+    "score": 109.1,
+    "L": 90.3,
+    "C": 12.3,
+    "el": "div#m-result > div.jr-top  «Оперативный журнал БЩУ-1«17» октября 202»"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ },
+ {
+  "state": "result-fail",
+  "size": "1366x768",
+  "spots": [
+   {
+    "x": 1314,
+    "y": 642,
+    "score": 109.6,
+    "L": 85.2,
+    "C": 14.8,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 510,
+    "y": 718,
+    "score": 106.1,
+    "L": 84.6,
+    "C": 15.2,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 1074,
+    "y": 642,
+    "score": 105.7,
+    "L": 86.2,
+    "C": 14.3,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 878,
+    "y": 642,
+    "score": 103.7,
+    "L": 85.6,
+    "C": 14.8,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 686,
+    "y": 646,
+    "score": 102.7,
+    "L": 85.5,
+    "C": 14.9,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ },
+ {
+  "state": "sign",
+  "size": "1366x768",
+  "spots": [
+   {
+    "x": 930,
+    "y": 594,
+    "score": 114.9,
+    "L": 88.2,
+    "C": 12.9,
+    "el": "div#scene > div.sg-papers > div.sg-doc > canvas.sg-ink"
+   },
+   {
+    "x": 438,
+    "y": 586,
+    "score": 113.1,
+    "L": 88.2,
+    "C": 12.9,
+    "el": "div#scene > div.sg-papers > div.sg-doc > canvas.sg-ink"
+   },
+   {
+    "x": 434,
+    "y": 174,
+    "score": 110.7,
+    "L": 89.2,
+    "C": 13.3,
+    "el": "div#scene > div.sg-papers > div.sg-doc > canvas.sg-ink"
+   },
+   {
+    "x": 938,
+    "y": 130,
+    "score": 110.5,
+    "L": 85.4,
+    "C": 13.0,
+    "el": "div#scene > div.sg-papers > div.sg-doc > canvas.sg-ink"
+   },
+   {
+    "x": 618,
+    "y": 602,
+    "score": 109.3,
+    "L": 89.7,
+    "C": 12.9,
+    "el": "div#scene > div.sg-papers > div.sg-doc > canvas.sg-ink"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400",
+   "NS Serif 700"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ },
+ {
+  "state": "play1",
+  "size": "1024x768",
+  "spots": [
+   {
+    "x": 982,
+    "y": 682,
+    "score": 104.7,
+    "L": 82.9,
+    "C": 14.8,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 778,
+    "y": 682,
+    "score": 104.2,
+    "L": 86.0,
+    "C": 13.8,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 406,
+    "y": 682,
+    "score": 102.6,
+    "L": 82.8,
+    "C": 15.3,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 558,
+    "y": 682,
+    "score": 102.0,
+    "L": 84.1,
+    "C": 15.4,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 678,
+    "y": 490,
+    "score": 96.5,
+    "L": 76.9,
+    "C": 18.4,
+    "el": "div#b-mimic > svg#mimic > rect"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ },
+ {
+  "state": "play3",
+  "size": "1024x768",
+  "spots": [
+   {
+    "x": 750,
+    "y": 686,
+    "score": 104.1,
+    "L": 84.8,
+    "C": 15.4,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 526,
+    "y": 682,
+    "score": 102.3,
+    "L": 84.0,
+    "C": 14.7,
+    "el": "div#charts > div.chart > canvas#ch-mwe"
+   },
+   {
+    "x": 390,
+    "y": 682,
+    "score": 100.9,
+    "L": 81.2,
+    "C": 14.3,
+    "el": "div#charts > div.chart > canvas#ch-mwe"
+   },
+   {
+    "x": 982,
+    "y": 674,
+    "score": 97.2,
+    "L": 73.8,
+    "C": 19.5,
+    "el": "div#charts > div.chart > canvas#ch-tout"
+   },
+   {
+    "x": 334,
+    "y": 414,
+    "score": 97.0,
+    "L": 75.2,
+    "C": 25.1,
+    "el": "div#b-mimic > svg#mimic > g#ap-pzr > rect"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ },
+ {
+  "state": "play5",
+  "size": "1024x768",
+  "spots": [
+   {
+    "x": 282,
+    "y": 430,
+    "score": 111.6,
+    "L": 69.8,
+    "C": 60.7,
+    "el": "div#b-mimic > svg#mimic > g#ap-reactor > path#mm-vwater"
+   },
+   {
+    "x": 966,
+    "y": 674,
+    "score": 103.4,
+    "L": 80.9,
+    "C": 16.4,
+    "el": "div#charts > div.chart > canvas#ch-pressure"
+   },
+   {
+    "x": 526,
+    "y": 682,
+    "score": 102.4,
+    "L": 83.9,
+    "C": 14.8,
+    "el": "div#charts > div.chart > canvas#ch-mwe"
+   },
+   {
+    "x": 830,
+    "y": 674,
+    "score": 101.2,
+    "L": 80.3,
+    "C": 15.7,
+    "el": "div#charts > div.chart > canvas#ch-pressure"
+   },
+   {
+    "x": 390,
+    "y": 682,
+    "score": 100.9,
+    "L": 81.2,
+    "C": 14.3,
+    "el": "div#charts > div.chart > canvas#ch-mwe"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ },
+ {
+  "state": "play9",
+  "size": "1024x768",
+  "spots": [
+   {
+    "x": 282,
+    "y": 430,
+    "score": 103.6,
+    "L": 66.2,
+    "C": 55.8,
+    "el": "div#b-mimic > svg#mimic > g#ap-reactor > path#mm-vwater"
+   },
+   {
+    "x": 974,
+    "y": 674,
+    "score": 103.2,
+    "L": 80.6,
+    "C": 15.8,
+    "el": "div#charts > div.chart > canvas#ch-pressure"
+   },
+   {
+    "x": 530,
+    "y": 686,
+    "score": 102.4,
+    "L": 84.0,
+    "C": 15.2,
+    "el": "div#charts > div.chart > canvas#ch-mwe"
+   },
+   {
+    "x": 394,
+    "y": 682,
+    "score": 101.7,
+    "L": 81.9,
+    "C": 14.8,
+    "el": "div#charts > div.chart > canvas#ch-mwe"
+   },
+   {
+    "x": 834,
+    "y": 678,
+    "score": 101.3,
+    "L": 80.9,
+    "C": 16.4,
+    "el": "div#charts > div.chart > canvas#ch-pressure"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ },
+ {
+  "state": "alarm",
+  "size": "1024x768",
+  "spots": [
+   {
+    "x": 978,
+    "y": 682,
+    "score": 106.0,
+    "L": 83.8,
+    "C": 15.3,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 802,
+    "y": 678,
+    "score": 103.3,
+    "L": 85.0,
+    "C": 14.3,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 394,
+    "y": 682,
+    "score": 103.2,
+    "L": 82.7,
+    "C": 14.9,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 590,
+    "y": 682,
+    "score": 102.1,
+    "L": 84.1,
+    "C": 15.4,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 682,
+    "y": 66,
+    "score": 96.7,
+    "L": 58.9,
+    "C": 40.5,
+    "el": "section#annunciator > div#ann-grid  «Отклонение от задания»"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ },
+ {
+  "state": "guide1",
+  "size": "1024x768",
+  "spots": [
+   {
+    "x": 562,
+    "y": 138,
+    "score": 113.5,
+    "L": 87.1,
+    "C": 14.0,
+    "el": "div#b-pres > div.cover  «ввод в работусмена 4»"
+   },
+   {
+    "x": 426,
+    "y": 118,
+    "score": 103.2,
+    "L": 81.9,
+    "C": 10.0,
+    "el": "div#b-temp > div.cover  «ввод в работусмена 2»"
+   },
+   {
+    "x": 290,
+    "y": 162,
+    "score": 67.3,
+    "L": 49.4,
+    "C": 12.2,
+    "el": "div#b-power > div#s-power > div.sc-ticks  «0255075100»"
+   },
+   {
+    "x": 982,
+    "y": 682,
+    "score": 47.6,
+    "L": 36.9,
+    "C": 7.4,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 790,
+    "y": 682,
+    "score": 46.4,
+    "L": 37.7,
+    "C": 6.9,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ },
+ {
+  "state": "result-ok",
+  "size": "1024x768",
+  "spots": [
+   {
+    "x": 794,
+    "y": 186,
+    "score": 111.7,
+    "L": 88.6,
+    "C": 11.8,
+    "el": "div#m-result > div.jr-h.ok  «Смена сданаСмена 1. Пробуждение»"
+   },
+   {
+    "x": 790,
+    "y": 546,
+    "score": 111.0,
+    "L": 88.6,
+    "C": 11.8,
+    "el": "div#m-result > div.jr-sign > div.jr-sg.jr-boss  «Смену принялнач. смены»"
+   },
+   {
+    "x": 230,
+    "y": 546,
+    "score": 110.5,
+    "L": 88.0,
+    "C": 12.0,
+    "el": "div#m-result  «Оперативный журнал БЩУ-1«17» октября 202»"
+   },
+   {
+    "x": 230,
+    "y": 182,
+    "score": 109.4,
+    "L": 86.7,
+    "C": 11.7,
+    "el": "div#m-result  «Оперативный журнал БЩУ-1«17» октября 202»"
+   },
+   {
+    "x": 650,
+    "y": 178,
+    "score": 107.1,
+    "L": 90.0,
+    "C": 12.3,
+    "el": "div#m-result > div.jr-h.ok  «Смена сданаСмена 1. Пробуждение»"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ },
+ {
+  "state": "result-fail",
+  "size": "1024x768",
+  "spots": [
+   {
+    "x": 982,
+    "y": 682,
+    "score": 106.4,
+    "L": 83.8,
+    "C": 15.4,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 802,
+    "y": 678,
+    "score": 103.7,
+    "L": 85.0,
+    "C": 14.3,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 406,
+    "y": 682,
+    "score": 103.2,
+    "L": 83.1,
+    "C": 15.9,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 578,
+    "y": 682,
+    "score": 102.0,
+    "L": 84.1,
+    "C": 15.4,
+    "el": "div#charts > div.chart > canvas#ch-power"
+   },
+   {
+    "x": 678,
+    "y": 490,
+    "score": 96.5,
+    "L": 76.9,
+    "C": 18.4,
+    "el": "div#b-mimic > svg#mimic > rect"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ },
+ {
+  "state": "sign",
+  "size": "1024x768",
+  "spots": [
+   {
+    "x": 694,
+    "y": 574,
+    "score": 112.8,
+    "L": 88.2,
+    "C": 12.8,
+    "el": "div#scene > div.sg-papers > div.sg-doc > canvas.sg-ink"
+   },
+   {
+    "x": 334,
+    "y": 574,
+    "score": 111.3,
+    "L": 87.5,
+    "C": 12.8,
+    "el": "div#scene > div.sg-papers > div.sg-doc > canvas.sg-ink"
+   },
+   {
+    "x": 702,
+    "y": 162,
+    "score": 109.5,
+    "L": 86.8,
+    "C": 13.0,
+    "el": "div#scene > div.sg-papers > div.sg-doc > canvas.sg-ink"
+   },
+   {
+    "x": 334,
+    "y": 182,
+    "score": 108.8,
+    "L": 89.3,
+    "C": 12.9,
+    "el": "div#scene > div.sg-papers > div.sg-doc > canvas.sg-ink"
+   },
+   {
+    "x": 466,
+    "y": 578,
+    "score": 107.6,
+    "L": 89.7,
+    "C": 12.9,
+    "el": "div#scene > div.sg-papers > div.sg-doc > canvas.sg-ink"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400",
+   "NS Serif 700"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ }
+]

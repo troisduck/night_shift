@@ -148,6 +148,7 @@ def main():
     ap.add_argument("--sizes", default=",".join(SIZES))
     ap.add_argument("--offline", action="store_true", help="без сети: проверить запасные шрифты")
     ap.add_argument("--reduced", action="store_true", help="prefers-reduced-motion")
+    ap.add_argument("--dpr", type=float, default=1, help="масштаб устройства (П7: 1; 1,25; 1,5; 2)")
     ap.add_argument("--list", action="store_true")
     a = ap.parse_args()
     if a.list:
@@ -161,7 +162,7 @@ def main():
         br = p.chromium.launch(args=["--autoplay-policy=no-user-gesture-required"])
         for size in a.sizes.split(","):
             W, H = map(int, size.split("x"))
-            ctx = br.new_context(viewport={"width": W, "height": H}, device_scale_factor=1,
+            ctx = br.new_context(viewport={"width": W, "height": H}, device_scale_factor=a.dpr,
                                  reduced_motion="reduce" if a.reduced else "no-preference", offline=a.offline)
             for name in a.states.split(","):
                 q, js, wait = STATES[name]
