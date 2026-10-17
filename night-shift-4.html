@@ -6775,6 +6775,7 @@ const KeysOv = {
   },
 };
 function showTip(el) {
+  if (Guide.nt && Guide.nt.classList.contains('on')) return;   // пока висит записка Палыча, подсказки при наведении на неё не ложатся (плейтест П7)
   const c = tipFor(el); if (!c) return;
   const keys = c[2] ? `<span class="tip-keys">клавиша ${c[2].map(k => `<kbd class="kc">${k}</kbd>`).join(' или ')}</span>` : '';
   const t = $('tooltip'); t.innerHTML = `<b>${c[0]}</b>${c[1]}${keys}`; t.classList.add('show'); Tip.cur = el;
@@ -6944,8 +6945,8 @@ document.addEventListener('keydown', e => {
     if (e.key === 'Enter' && !(e.target && e.target.tagName === 'BUTTON')) { const b = $(UI.modal).querySelector('.btn.primary'); if (b) { e.preventDefault(); b.click(); } }
     return;
   }
-  if (Guide.cur && Guide.nt && Guide.nt.classList.contains('on') && !e.repeat && (e.key === 'Enter' || e.code === 'Escape' || (e.code === 'Space' && UI.guideHold))) {
-    e.preventDefault(); Guide.tearOff(); return; }   // П7: записку срывают и клавишей
+  if (Guide.cur && Guide.nt && Guide.nt.classList.contains('on') && !e.repeat && e.code === 'Escape') {
+    e.preventDefault(); Guide.tearOff(); return; }   // записку срывают рукой; Esc — запасной выход. Enter и Пробел её не трогают (решение автора после плейтеста П7)
   if (e.target && e.target.tagName === 'BUTTON' && (e.key === 'Enter' || e.key === ' ')) return;
   if (e.code === 'Space') { e.preventDefault(); if (!e.repeat) togglePause(); return; }
   if (e.code === 'KeyQ') { e.preventDefault(); if (!e.repeat) { ackAll(); KeyHint.keyUsed('ack'); } return; }
@@ -7201,8 +7202,11 @@ const Town = {
     red(tx, ty - u * 58); this.redAt = [tx, ty - u * 58];
     // земля и дорога с фонарями
     g = x.createLinearGradient(0, hz, 0, H); g.addColorStop(0, '#07090B'); g.addColorStop(1, '#030405'); x.fillStyle = g; x.fillRect(0, hz + u * 4, W, H - hz);
-    // П7: снег отражает свет посёлка — тёплый отсвет у домов, растёт с выдачей
-    g = x.createLinearGradient(0, hz + u * 4, 0, H); g.addColorStop(0, `rgba(255,172,96,${(.6 * lit).toFixed(3)})`); g.addColorStop(.5, `rgba(214,140,80,${(.26 * lit).toFixed(3)})`); g.addColorStop(1, `rgba(170,110,70,${(.1 * lit).toFixed(3)})`); x.fillStyle = g; x.fillRect(W * .55, hz + u * 4, W * .47, H - hz);   // ns-ok: прозрачность цвета на холсте
+    // П7: снег отражает свет посёлка — тёплый отсвет у домов, растёт с выдачей. Пятно-эллипс с мягкими краями:
+    // прямоугольник от начала посёлка давал на снегу резкую вертикальную границу (плейтест П7)
+    { const ry = (H - hz) * 1.15, rx = W * .3; x.save(); x.translate(W * .8, hz + u * 4); x.scale(rx / ry, 1);
+      g = x.createRadialGradient(0, 0, 0, 0, 0, ry); g.addColorStop(0, `rgba(255,172,96,${(.6 * lit).toFixed(3)})`); g.addColorStop(.45, `rgba(214,140,80,${(.26 * lit).toFixed(3)})`); g.addColorStop(1, 'rgba(170,110,70,0)');   // ns-ok: прозрачность цвета на холсте
+      x.fillStyle = g; x.fillRect(-ry, 0, 2 * ry, H - hz); x.restore(); }
     for (let i = 0; i < 16; i++) {
       const lx = W * (.3 + i * .05), ly = hz + u * (16 + i * 1.5);
       const sOn = o.streets != null ? o.streets : .85 * (lit + .3), so = !T || (T.by === 'x' ? ordX(lx) : T.by === 'xr' ? 1 - ordX(lx) : hashR(i + 50)) <= T.k ? sOn : T.streets, la = 1 - .85 * dn;   // на рассвете фонари бледнеют
@@ -7973,7 +7977,7 @@ const Tear = {
     }
     if (onTear) onTear();
   },
-  // сорвать без руки: Enter / Пробел / Esc или игрок уже сделал то, о чём просили
+  // сорвать без руки: Esc или игрок уже сделал то, о чём просили
   auto(nt, onTear) { const paper = nt && nt.querySelector('.fc-paper'); if (!paper || !nt.classList.contains('on')) { if (onTear) onTear(); return; } this.rip(nt, paper, FEEL.note.autoV[0], FEEL.note.autoV[1], onTear); },
   clearScraps() { this.scraps.forEach(s => { s.classList.add('fade'); setTimeout(() => s.remove(), 600); }); this.scraps = []; },
 };
@@ -7995,7 +7999,7 @@ const Guide = {
   show(st) {
     const g = UI.game, el = document.querySelector(st.el);
     if (!g || g.done || UI.mode !== 'play' || !el) { this.next(); return; }
-    if (st.when && (typeof st.when === 'function' ? !st.when(g) : g.happened[st.when] == null)) { UI.guideHold = false; this.cur = null; this.t = setTimeout(() => this.show(st), 250); return; }   // ждём события смены (блэкаут), время идёт
+    if (st.when && (typeof st.when === 'function' ? !st.when(g) : g.happened[st.when] == null)) { UI.guideHold = false; this.cur = null; this.hide(); this.t = setTimeout(() => this.show(st), 250); return; }   // ждём события смены (блэкаут), время идёт
     this.cur = st; UI.guideHold = !!st.hold; hideTip();
     g.say(st.text, 1);                                         // селектор щёлкает, лампа вызова горит — Палыч говорит
     if (!st.alarm && alarmFresh(g)) { UI.guideHold = false; this.t = setTimeout(() => this.next(), 2500); return; }
@@ -8056,19 +8060,25 @@ const Guide = {
     this.cv.style.background = `radial-gradient(${rx.toFixed(0)}px ${ry.toFixed(0)}px at ${cx.toFixed(0)}px ${cy.toFixed(0)}px, rgba(255,232,190,${F.warm}) 0, rgba(255,232,190,0) ${k - 10}%, rgba(4,5,5,0) ${k}%, rgba(4,5,5,${F.dim}) 100%)`;
     const cv = this.cv; cv.classList.remove('on'); void cv.offsetWidth; cv.classList.add('on');
   },
-  // записка Палыча рядом с объектом: справа, если есть место, иначе слева, снизу или сверху
+  // записка Палыча рядом с объектом: справа, слева, снизу или сверху — где меньше всего закрывает сам объект, полосу слоя игры
+  // и приборы яруса 1 (плейтест П7: у табло задания записка ложилась на паузу и квитирование, у стержней — на цифры мощности)
   note(el, text) {
     const nt = this.nt, r = this.rect, gap = (UI.remPx || 14) * .9, W = innerWidth, H = innerHeight;
     const hint = (Save.data.tears || 0) < FEEL.note.hintN ? '<span class="fc-hint">сорви, как прочтёшь</span>' : '';   // П7: только первые разы
     nt.innerHTML = `<i class="fc-pin" aria-hidden="true"></i><div class="fc-paper"><b class="fc-who">Палыч</b><p>${String(text).replace(/(\d) (%|°C|МПа|МВт|с(?![а-яё]))/g, '$1\u00A0$2')}</p>${hint}</div>`;
-    const st = this.cur; Tear.bind(nt, () => { if (this.cur === st) { clearTimeout(this.t); this.next(); } });
+    const st = this.cur; Tear.bind(nt, () => { if (this.cur === st) { clearTimeout(this.t); this.next(); } else if (!this.cur) this.hide(); });   // сорвали записку шага, который уже ждёт следующего, — гаснет и пятно
     nt.classList.remove('on', 'held'); nt.style.left = '0px'; nt.style.top = '0px';
     const w = nt.offsetWidth, h = nt.offsetHeight;
-    let x, y;
-    if (r.R + gap + w < W - 8) { x = r.R + gap; y = (r.T + r.B) / 2 - h / 2; }
-    else if (r.L - gap - w > 8) { x = r.L - gap - w; y = (r.T + r.B) / 2 - h / 2; }
-    else { x = (r.L + r.R) / 2 - w / 2; y = r.B + gap + h < H - 8 ? r.B + gap : r.T - gap - h; }
-    nt.style.left = Math.round(clamp(x, 8, W - w - 8)) + 'px'; nt.style.top = Math.round(clamp(y, 8, H - h - 8)) + 'px';
+    const my = (r.T + r.B) / 2 - h / 2, mx = (r.L + r.R) / 2 - w / 2, cut = (a, b) => Math.max(0, Math.min(a.R, b.R) - Math.max(a.L, b.L)) * Math.max(0, Math.min(a.B, b.B) - Math.max(a.T, b.T));
+    const keep = ['#topbar', '#b-power .read', '#b-temp', '#b-pres'].map(s => document.querySelector(s))   // прибор внутри объекта показа ему не мешает; закрытые заглушкой — тоже
+      .filter(k => k && k.offsetWidth && !k.closest('.locked') && !(el && el.contains(k))).map(k => { const b = k.getBoundingClientRect(); return { L: b.left, R: b.right, T: b.top, B: b.bottom }; });
+    let best = null;
+    [[r.R + gap, my], [r.L - gap - w, my], [mx, r.B + gap], [mx, r.T - gap - h]].forEach(([x0, y0], i) => {
+      const x = clamp(x0, 8, W - w - 8), y = clamp(y0, 8, H - h - 8), c = { L: x, R: x + w, T: y, B: y + h };
+      const score = cut(c, r) * 2 + keep.reduce((s, k) => s + cut(c, k), 0) + i;   // при равенстве — прежний порядок
+      if (!best || score < best.s) best = { x, y, s: score };
+    });
+    nt.style.left = Math.round(best.x) + 'px'; nt.style.top = Math.round(best.y) + 'px';
     void nt.offsetWidth; nt.classList.add('on');
   },
   hide() { if (this.cv) this.cv.classList.remove('on'); if (this.nt) this.nt.classList.remove('on'); },
