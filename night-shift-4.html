@@ -125,7 +125,7 @@
   --scale-lamp: rgba(255, 222, 160, .5);      /* тёплая лампа за стеклом шкалы: ярче у верхней кромки */
   --scale-shade: rgba(46, 34, 16, .26);      /* края поля шкалы, куда лампа не достаёт */
   --scale-lamp-duty: rgba(255, 232, 186, 1);
-  --win-w: 8.6rem;               /* окно в город: ширина колонки справа от щита */ /* «дежурная» подсветка шкалы прибора текущей цели — чуть ярче */
+  --win-w: 11rem;               /* окно в город: ширина колонки справа от щита */ /* «дежурная» подсветка шкалы прибора текущей цели — чуть ярче */
 
   /* ===== ДВИЖЕНИЕ (STYLE.md, 2.9): лёгкое — быстро, тяжёлое — медленно ===== */
   --t-hover: 100ms;          /* наведение: блик кромки, крышка приподнимается */
@@ -247,7 +247,7 @@ button { font: inherit; color: inherit; }
    лампа «В ЦЕЛИ»: зелёная — условие выполняется, янтарная — в коридоре, но нарушено второе условие (что именно — на стекле) */
 .goal { position: relative; flex: 1 1 auto; min-width: 0; max-width: 72rem; margin: 0 auto; display: flex; align-items: center; gap: .7rem; }
 .goal-h { flex: 0 0 auto; font: 700 .82rem/1 var(--f-engrave); letter-spacing: .14em; text-transform: uppercase; color: var(--engrave-dim); }
-.goal-slip { flex: 1 1 auto; min-width: 12rem; padding: .3rem .65rem .24rem; color: var(--paper-ink); background: var(--tex-paper), var(--paper-2);
+.goal-slip { flex: 1 1 auto; min-width: 8rem; padding: .3rem .65rem .24rem; color: var(--paper-ink); background: var(--tex-paper), var(--paper-2);
   border: .2rem solid var(--iron-alu); border-top-width: .08rem; border-radius: 1px 1px 3px 3px;
   box-shadow: inset 0 .55rem .35rem -.45rem rgba(31,29,26,.3), 0 0 0 1px var(--iron-seam), 0 2px 0 rgba(0,0,0,.4); }
 .goal-label { font: 400 .82rem/1.08 var(--f-type); overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; }
@@ -1696,10 +1696,13 @@ body { -webkit-touch-callout: none; }
   background:
     linear-gradient(180deg, transparent calc(33% - .2rem), #26302B calc(33% - .2rem), #33403A 33%, #1A211D calc(33% + .2rem), transparent calc(33% + .2rem)),
     linear-gradient(180deg, transparent calc(66% - .2rem), #26302B calc(66% - .2rem), #33403A 66%, #1A211D calc(66% + .2rem), transparent calc(66% + .2rem)),
-    radial-gradient(ellipse 70% 7% at 30% 9%, rgba(255,236,196,.16), rgba(255,236,196,0) 70%),
-    radial-gradient(ellipse 60% 6% at 62% 43%, rgba(255,236,196,.1), rgba(255,236,196,0) 70%),
-    linear-gradient(104deg, rgba(255,255,255,0) 30%, rgba(255,255,255,.05) 38%, rgba(255,255,255,0) 46%);
+    linear-gradient(180deg, rgba(255,255,255,.025), rgba(255,255,255,0) 30%);   /* П7: стекло чуть светлее сверху; размытые пятна и косая полоса читались как грязь */
   box-shadow: inset 0 .4rem .5rem rgba(0,0,0,.55), inset .3rem 0 .4rem rgba(0,0,0,.35); }
+/* отражение ламп зала в стекле (П7, ОКНО): ровные слабые блики по форме светильников — длинные трубки с мягкой кромкой */
+#window .win-glass::before, #window .win-glass::after { content: ""; position: absolute; height: .34rem; border-radius: .17rem; pointer-events: none;
+  background: rgba(255,240,212,.075); box-shadow: 0 0 .25rem .05rem rgba(255,240,212,.04); }
+#window .win-glass::before { left: 14%; width: 58%; top: 9%; }
+#window .win-glass::after { left: 34%; width: 50%; top: 41%; opacity: .7; }
 /* дождь по стеклу (гроза в смене блэкаута): косые штрихи за стеклом и капли на нём */
 #win-rain { position: absolute; left: .55rem; top: .55rem; width: calc(100% - 1.1rem); height: calc(100% - 1.1rem); pointer-events: none; display: none; }
 /* заградительный огонь на водонапорной башне: мельче и темнее сигнального красного, мигает медленно, как лампа */
@@ -3437,9 +3440,11 @@ const FEEL = {
     dark: 0.01,            // сети нет — посёлок тёмный
     awake: { evening: 1, late: 0.78, deep: 0.5, morning: 0.66, night: 0.72 },   // доля не спящих по часу ночи; без часов — «ночь»
     maxHz: 8,              // перерисовка холста не чаще, раз в секунду (правило — не чаще 15)
-    pan: 2.2, look: 0.8, horizon: 0.8,   // ширина панорамы (в высотах), куда смотрит окно (водонапорная башня), линия горизонта
+    pan: 2.2, look: 0.808, horizon: 0.76,   // ширина панорамы (в высотах), куда смотрит окно (водонапорная башня), линия горизонта
+    stepMw: 100, hyst: 0.62, minMw: 15, stepMs: 750,   // П7: свет ступенями — каждые 100 МВт квартал волной от станции за 0,75 с; гистерезис — доля ступени
+    kitchens: 0.3,         // П7: на рассвете в домах загораются кухни — доля окон
     curve: 0.5,            // отклик света на выдачу: доля = (МВт / fullMw)^curve — при 100 МВт горит уже треть «бодрствующих» окон
-    zoom: 1.45,            // посёлок крупнее: панорама в столько раз выше окна, лишнее небо сверху срезано
+    zoom: 1.9,            // посёлок крупнее: панорама в столько раз выше окна, лишнее небо сверху срезано
   },
   // журнал смены: запись появляется по порядку — лист, вклейка ленты, штампы по одному, подписи. Время — мс от открытия
   journal: { paste: 260, stamps: 760, stampGap: 430, sign: 260, signGap: 520,
@@ -3540,7 +3545,7 @@ const UI_TIPS = {
   vol: ['Громкость', 'Три регулятора: общая громкость, станция (фон, машины, процессы) и отдельно тревоги с пультом. Сохраняются между сменами.'],
   ack: ['Квитирование', 'Дать знать, что сигнал замечен: мигающие окна загорятся ровно и замолчат. Гореть будут, пока причина не уйдёт.', ['Q']],
   mimic: ['Мнемосхема', 'Путь энергии: реактор греет воду, в парогенераторе вода делает пар, пар крутит турбину, генератор даёт ток городу.'],
-  window: ['Окно', 'Посёлок за станцией. Свет в окнах и на улицах — это мощность, которую станция отдаёт в сеть.'],
+  window: ['Окно', 'Посёлок за станцией: котельная, водонапорная башня, школа, больница. Свет в окнах и на улицах — мощность, которую станция отдаёт в сеть: каждые сто мегаватт — ещё квартал.'],
   goal: ['Задание на смену', 'Слева — что сейчас и что нужно. «Ниже — в цели — выше» показывает, куда ушла величина. Лампы разгораются, пока условие выполняется; вышел из коридора — медленно гаснут. «В цели» зелёная — всё как надо, янтарная — в коридоре, но нарушено второе условие.'],
   pause: ['Пауза', 'Остановить время.', ['Пробел']],
   sound: ['Звук', 'Включить или выключить звуки пульта и тревоги.'],
@@ -5985,7 +5990,7 @@ function fitAnn(el) {
 // надписи в окнах индикаторов и на кнопках не вылезают за рамку (П7, АРТ-ж: «погружены», «× нормы», «Разбавить», «Прикрыть»,
 // «из них остаточное тепло» выходили за край на 5–20 px — ширину окна и кнопки задаёт раскладка, а текст не сжимался).
 // Группа — [окно или кнопка, что уменьшать]; у группы кегль один, как гравировка на парных кнопках
-const FIT_TEXT = [['#b-rods .read', '.unit'], ['#b-xenon .read', '.unit'], ['#b-power .read', '.sub'], ['#b-boron .btn-row .btn', null], ['#b-turb .btn-row .btn', null], ['#b-pres .btn-row .btn', null]];
+const FIT_TEXT = [['.goal-slip', '.goal-label'], ['#b-rods .read', '.unit'], ['#b-xenon .read', '.unit'], ['#b-power .read', '.sub'], ['#b-boron .btn-row .btn', null], ['#b-turb .btn-row .btn', null], ['#b-pres .btn-row .btn', null]];
 function fitFaces() {
   for (const [sel, part] of FIT_TEXT) {
     const list = [...document.querySelectorAll(sel)].filter(el => el.offsetParent), ks = [];
@@ -6959,7 +6964,9 @@ const Win = {
   target(g) {
     const s = g.s, W = FEEL.window;
     if (!s.offsite || this.dark) return { lit: W.dark, streets: 0 };
-    const out = Math.pow(clamp(s.mwe / W.fullMw, 0, 1), W.curve), c = g.level.clock;   // первые мегаватты идут посёлку: свет растёт быстрее выдачи
+    // П7: свет ступенями — каждые W.stepMw мегаватт новый квартал (с гистерезисом: у границы ступени свет не дрожит)
+    const st = W.stepMw, mw = s.mwe < W.minMw ? 0 : s.mwe; if (this.mwStep == null || Math.abs(mw - this.mwStep) > st * W.hyst) this.mwStep = Math.round(mw / st) * st;
+    const out = Math.pow(clamp(this.mwStep / W.fullMw, 0, 1), W.curve), c = g.level.clock;   // первые мегаватты идут посёлку: свет растёт быстрее выдачи
     const h = c ? ((c.start + g.t * c.minPerSec) / 60) % 24 : null;
     const awake = h == null ? W.awake.night : h >= 17 && h < 22 ? W.awake.evening : h >= 22 ? W.awake.late : h < 5 ? W.awake.deep : W.awake.morning;
     return { lit: W.base + (1 - W.base) * out * awake * (1 - (this.shed || 0)), streets: (out > .02 ? .25 + .7 * out : .05) * (1 - .85 * (this.shed || 0)) };   // shed — веерные отключения: пик не удержан
@@ -6971,6 +6978,8 @@ const Win = {
     const tg = this.target(g), q = Math.round(tg.lit * 40) / 40, sq = Math.round(tg.streets * 10) / 10;
     // резкое падение света (АЗ, блэкаут, взрыв) — кварталы гаснут по очереди, а не разом
     if (!this.trans && this.lit >= 0 && q < this.lit - .08) this.trans = { by: 'block', from: { lit: this.lit, streets: this.streets }, t0: Moments.clock, dur: FEEL.moments.scram.blocksOut, k: 0 };
+    // П7: ступень вверх — новый квартал загорается волной от станции; вниз — гаснет в обратном порядке, от дальних домов
+    else if (!this.trans && this.lit >= 0 && Math.abs(q - this.lit) > .004) this.trans = { by: q > this.lit ? 'x' : 'xr', from: { lit: this.lit, streets: this.streets }, t0: Moments.clock, dur: FEEL.window.stepMs, k: 0 };
     if (this.trans) { this.trans.k = Math.min(1, (Moments.clock - this.trans.t0) / this.trans.dur); this.dirty = true; }
     // время ночи: в сменах с часами небо в начале в сумерках, к утру светлеет
     const c = g.level.clock, Wt = FEEL.weather;
@@ -6987,7 +6996,7 @@ const Win = {
     const W = cv.clientWidth, H = cv.clientHeight, c = sceneCanvas(cv, W, H), P = H * FEEL.window.zoom * FEEL.window.pan;
     c.x.scale(c.d, c.d); const off = P * FEEL.window.look - W * .55;
     const Z = FEEL.window.zoom, HV = H * Z, dy = HV - H;
-    c.x.save(); c.x.translate(-off, -dy); Town.paint(c.x, P, HV, { lit: this.lit, streets: this.streets, horizon: FEEL.window.horizon, seed: 2207, dark: true, dawn: Math.max(this.dawn, this.sky), glow: this.glow, flash: this.flash, view: [off - 4, off + W + 4],
+    c.x.save(); c.x.translate(-off, -dy); Town.paint(c.x, P, HV, { lit: this.lit, streets: this.streets, horizon: FEEL.window.horizon, seed: 2207, dark: true, dawn: Math.max(this.dawn, this.sky), kitchens: FEEL.window.kitchens, glow: this.glow, flash: this.flash, view: [off - 4, off + W + 4],
       trans: this.trans ? { by: this.trans.by, k: this.trans.k, lit: this.trans.from.lit, streets: this.trans.from.streets } : null }); c.x.restore();
     const r = $('win-red'), [rx, ry] = Town.redAt || [0, 0];
     if (r) { r.style.left = `calc(.55rem + ${Math.round(rx - off)}px)`; r.style.top = `calc(.55rem + ${Math.round(ry - dy)}px)`; r.style.display = rx - off > 0 && rx - off < W ? '' : 'none'; }
@@ -7105,6 +7114,9 @@ const Town = {
     x.fillStyle = g; x.fillRect(0, 0, W, hz + 2);
     g = x.createRadialGradient(W * .66, hz, 0, W * .66, hz, W * .45); g.addColorStop(0, `rgba(150,96,46,${.22 * lit + .05})`); g.addColorStop(1, 'rgba(150,96,46,0)');
     x.fillStyle = g; x.fillRect(0, 0, W, hz);
+    // П7: над посёлком — засветка от фонарей и окон, растёт с выдачей; видна и в узком окне (там, куда оно смотрит)
+    g = x.createRadialGradient(W * .8, hz, 0, W * .8, hz, H * .95); g.addColorStop(0, `rgba(255,170,90,${(.85 * lit).toFixed(3)})`); g.addColorStop(.4, `rgba(206,124,62,${(.4 * lit).toFixed(3)})`); g.addColorStop(1, 'rgba(150,96,46,0)');   // ns-ok: прозрачность цвета на холсте
+    x.fillStyle = g; x.fillRect(0, 0, W, hz);
     if (dn) { g = x.createRadialGradient(W * .92, hz, 0, W * .92, hz, W * .5); g.addColorStop(0, `rgba(255,178,120,${.32 * dn})`); g.addColorStop(1, 'rgba(255,178,120,0)'); x.fillStyle = g; x.fillRect(0, 0, W, hz); }
     if (o.flash) { g = x.createLinearGradient(0, 0, 0, hz); g.addColorStop(0, `rgba(170,186,236,${.35 * o.flash})`); g.addColorStop(1, `rgba(214,224,255,${.75 * o.flash})`); x.fillStyle = g; x.fillRect(0, 0, W, hz); }   // молния: небо вспыхивает, посёлок — силуэтом
     if (gl) {   // взрыв: зарево и пар ложатся на облака над посёлком
@@ -7134,13 +7146,19 @@ const Town = {
     for (const dy of [0, u * 8]) for (let i = 0; i < pts.length - 1; i++) { const [ax, ay] = pts[i], [bx, by] = pts[i + 1]; x.beginPath(); x.moveTo(ax, ay + dy); x.quadraticCurveTo((ax + bx) / 2, Math.max(ay, by) + u * 14 + dy, bx, by + dy); x.stroke(); }
     // посёлок: пятиэтажки, частные дома, водонапорная башня; окна — тёплый свет ламп накаливания
     let brank = 0;   // порядок текущего дома, когда кварталы гаснут
-    const litAt = px => !T ? lit : (T.by === 'x' ? ordX(px) * .85 + .12 : brank) <= T.k ? lit : T.lit;   // окна — чуть позже фонарей
+    const litAt = px => !T ? lit : (T.by === 'x' ? ordX(px) * .85 + .12 : T.by === 'xr' ? (1 - ordX(px)) * .85 + .12 : brank) <= T.k ? lit : T.lit;   // окна — чуть позже фонарей
+    const kit = (o.kitchens || 0) * dn;   // на рассвете в домах загораются кухни (П7)
     const win = (wx, wy, w, h) => { const r0 = rnd(), r1 = rnd(), r2 = rnd(), r3 = rnd();   // всегда четыре числа: порог окна не зависит от lit
       if (!vis(wx, w)) return;
-      if (r0 < litAt(wx)) { x.fillStyle = r1 < .2 ? 'rgba(210,226,255,.7)' : `rgba(255,${196 + (r2 * 30 | 0)},120,${.65 + r3 * .3})`; x.fillRect(wx, wy, w, h); }
+      const L = litAt(wx);
+      if (r0 < L) { x.fillStyle = `rgba(255,186,96,${(.1 + .08 * r3).toFixed(3)})`; x.fillRect(wx - u * 1.6, wy - u * 1.6, w + u * 3.2, h + u * 3.2);   // П7: тёплый ореол окна ложится на стену (ns-ok: прозрачность цвета на холсте)
+        x.fillStyle = r1 < .14 ? 'rgba(214,228,255,.82)' : `rgba(255,${200 + (r2 * 30 | 0)},118,${.82 + r3 * .18})`; x.fillRect(wx, wy, w, h); }
+      else if (r0 < L + kit) { x.fillStyle = 'rgba(255,236,190,.78)'; x.fillRect(wx, wy, w, h); }
       else if (o.dark) { x.fillStyle = 'rgba(40,46,56,.5)'; x.fillRect(wx, wy, w, h); } };
     let bx = W * .55, bi = 0;
+    const LM = [W * .748, W * .852];   // П7: полоса узнаваемых мест вокруг водонапорной башни (её видит окно)
     while (bx < W * 1.02) {
+      if (bx > LM[0] - u * 40 && bx < LM[1]) { bx = LM[1]; continue; }
       brank = hashR(++bi);
       const tall = rnd() < .55, bw = u * (tall ? 120 + rnd() * 60 : 46 + rnd() * 20), bh = u * (tall ? 92 + rnd() * 10 : 34 + rnd() * 10), by = hz + u * 4 - bh;
       x.fillStyle = tall ? '#0D1015' : '#0F1216'; x.fillRect(bx, by, bw, bh);
@@ -7148,22 +7166,42 @@ const Town = {
       else { x.beginPath(); x.moveTo(bx - u * 4, by); x.lineTo(bx + bw / 2, by - u * 18); x.lineTo(bx + bw + u * 4, by); x.closePath(); x.fill(); win(bx + u * 10, by + u * 12, u * 9, u * 9); win(bx + bw - u * 20, by + u * 12, u * 9, u * 9); }
       bx += bw + u * (6 + rnd() * 18);
     }
+    // узнаваемые места (П7, ОКНО): котельная с паром из трубы, школа, больница (без красного креста — красный сигнальный). Всё вымышленное
+    { brank = hashR(201);
+      const kx = W * .752, kb = hz + u * 4;   // котельная: низкий кирпичный корпус, высокая труба, пар
+      x.fillStyle = '#100F12'; x.fillRect(kx, kb - u * 30, u * 46, u * 30); x.fillRect(kx + u * 30, kb - u * 120, u * 8, u * 90);
+      for (let c = 0; c < 3; c++) win(kx + u * 5 + c * u * 13, kb - u * 20, u * 7, u * 6);
+      if (vis(kx - u * 40, u * 120)) for (let k = 0; k < 6; k++) { const px = kx + u * (34 + k * 9 + k * k * 1.2), py = kb - u * (126 + k * 13), r = u * (7 + k * 4);
+        const pg = x.createRadialGradient(px, py, 0, px, py, r); pg.addColorStop(0, `rgba(${150 + 60 * lit | 0},${146 + 40 * lit | 0},${150 + 20 * lit | 0},${(.2 - k * .025).toFixed(3)})`); pg.addColorStop(1, 'rgba(140,140,150,0)'); x.fillStyle = pg; x.fillRect(px - r, py - r, 2 * r, 2 * r); }   // пар подсвечен посёлком (ns-ok: прозрачность цвета на холсте)
+      brank = hashR(202);
+      const sx = W * .812, sb = hz + u * 4;   // школа: длинная, три этажа, большие окна
+      x.fillStyle = '#0E1116'; x.fillRect(sx, sb - u * 50, u * 92, u * 50); x.fillRect(sx + u * 36, sb - u * 58, u * 20, u * 8);
+      for (let r = 0; r < 3; r++) for (let c = 0; c < 6; c++) win(sx + u * 5 + c * u * 14.5, sb - u * 44 + r * u * 14, u * 10, u * 8);
+      brank = hashR(203);
+      const hx = W * .836, hb = hz + u * 4;   // больница: шесть этажей, светлый коридор по всей высоте
+      x.fillStyle = '#0D1015'; x.fillRect(hx, hb - u * 104, u * 64, u * 104);
+      for (let r = 0; r < 6; r++) { for (let c = 0; c < 4; c++) win(hx + u * 5 + c * u * 15, hb - u * 98 + r * u * 16, u * 7, u * 8);
+        if (vis(hx + u * 28, u * 8) && lit > .1) { x.fillStyle = `rgba(222,236,255,${(.35 + .4 * lit).toFixed(3)})`; x.fillRect(hx + u * 29, hb - u * 98 + r * u * 16, u * 4, u * 8); } }   // коридор горит всю ночь (ns-ok: прозрачность цвета на холсте)
+    }
     const tx = W * .8, ty = hz - u * 60;   // водонапорная башня
     x.fillStyle = '#0C0F13'; x.fillRect(tx - u * 22, ty - u * 40, u * 44, u * 34); x.beginPath(); x.moveTo(tx - u * 26, ty - u * 40); x.lineTo(tx, ty - u * 56); x.lineTo(tx + u * 26, ty - u * 40); x.closePath(); x.fill();
     x.fillRect(tx - u * 14, ty - u * 6, u * 6, u * 66); x.fillRect(tx + u * 8, ty - u * 6, u * 6, u * 66);
     red(tx, ty - u * 58); this.redAt = [tx, ty - u * 58];
     // земля и дорога с фонарями
     g = x.createLinearGradient(0, hz, 0, H); g.addColorStop(0, '#07090B'); g.addColorStop(1, '#030405'); x.fillStyle = g; x.fillRect(0, hz + u * 4, W, H - hz);
+    // П7: снег отражает свет посёлка — тёплый отсвет у домов, растёт с выдачей
+    g = x.createLinearGradient(0, hz + u * 4, 0, H); g.addColorStop(0, `rgba(255,172,96,${(.6 * lit).toFixed(3)})`); g.addColorStop(.5, `rgba(214,140,80,${(.26 * lit).toFixed(3)})`); g.addColorStop(1, `rgba(170,110,70,${(.1 * lit).toFixed(3)})`); x.fillStyle = g; x.fillRect(W * .55, hz + u * 4, W * .47, H - hz);   // ns-ok: прозрачность цвета на холсте
     for (let i = 0; i < 16; i++) {
       const lx = W * (.3 + i * .05), ly = hz + u * (16 + i * 1.5);
-      const sOn = o.streets != null ? o.streets : .85 * (lit + .3), so = !T || (T.by === 'x' ? ordX(lx) : hashR(i + 50)) <= T.k ? sOn : T.streets, la = 1 - .85 * dn;   // на рассвете фонари бледнеют
+      const sOn = o.streets != null ? o.streets : .85 * (lit + .3), so = !T || (T.by === 'x' ? ordX(lx) : T.by === 'xr' ? 1 - ordX(lx) : hashR(i + 50)) <= T.k ? sOn : T.streets, la = 1 - .85 * dn;   // на рассвете фонари бледнеют
       const rl = rnd(); if (rl < so && vis(lx - u * 26, u * 52)) { const lg = x.createRadialGradient(lx, ly, 0, lx, ly, u * 26); lg.addColorStop(0, `rgba(255,170,80,${.5 * la})`); lg.addColorStop(1, 'rgba(255,170,80,0)'); x.fillStyle = lg; x.fillRect(lx - u * 26, ly - u * 26, u * 52, u * 52); x.fillStyle = `rgba(255,194,122,${la})`; x.fillRect(lx - u, ly - u, u * 2, u * 2); }
     }
     // ближняя улица вдоль посёлка: фонари чаще и крупнее — по ним в узком окне видна волна света от станции (П4)
     for (let i = 0; i < 44; i++) {
       const lx = W * (.3 + i * .0175), ly = hz + u * (44 + (i % 3) * 3);
-      const sOn = o.streets != null ? o.streets : .85 * (lit + .3), so = !T || (T.by === 'x' ? ordX(lx) : hashR(i + 90)) <= T.k ? sOn : T.streets, la = 1 - .85 * dn;
-      const rl = rnd(); if (rl < so && vis(lx - u * 22, u * 44)) { const lg = x.createRadialGradient(lx, ly, 0, lx, ly, u * 22); lg.addColorStop(0, `rgba(255,168,76,${.3 * la})`); lg.addColorStop(1, 'rgba(255,168,76,0)'); x.fillStyle = lg; x.fillRect(lx - u * 22, ly - u * 22, u * 44, u * 44); x.fillStyle = `rgba(255,198,128,${la})`; x.fillRect(lx - u * 1.4, ly - u * 1.4, u * 2.8, u * 2.8); }
+      const sOn = o.streets != null ? o.streets : .85 * (lit + .3), so = !T || (T.by === 'x' ? ordX(lx) : T.by === 'xr' ? 1 - ordX(lx) : hashR(i + 90)) <= T.k ? sOn : T.streets, la = 1 - .85 * dn;
+      const rl = rnd(); if (rl < so && vis(lx - u * 22, u * 44)) { const lg = x.createRadialGradient(lx, ly, 0, lx, ly, u * 22); lg.addColorStop(0, `rgba(255,168,76,${.3 * la})`); lg.addColorStop(1, 'rgba(255,168,76,0)'); x.fillStyle = lg; x.fillRect(lx - u * 22, ly - u * 22, u * 44, u * 44); x.fillStyle = `rgba(255,198,128,${la})`; x.fillRect(lx - u * 1.4, ly - u * 1.4, u * 2.8, u * 2.8);
+        x.save(); x.translate(lx, ly + u * 14); x.scale(1, .28); const pg = x.createRadialGradient(0, 0, 0, 0, 0, u * 30); pg.addColorStop(0, `rgba(255,214,160,${(.26 * la).toFixed(3)})`); pg.addColorStop(1, 'rgba(255,214,160,0)'); x.fillStyle = pg; x.fillRect(-u * 30, -u * 30, u * 60, u * 60); x.restore(); }   // П7: пятно света на снегу под фонарём (ns-ok: прозрачность цвета на холсте)
     }
   },
 };
@@ -8659,6 +8697,7 @@ function startLevel(idx, quick, o = {}) {
   $('c-sched').classList.toggle('off', !g.goalCfg.points);   // бланк графика диспетчера — только в сменах с графиком
   $('t-level').textContent = g.level.hidden ? g.level.title : `${g.level.num}. ${g.level.title}`;
   Tex.schedule($('topbar'));   // название и задание другой длины — тени деталей полосы перепекаются
+  UI.annFit = true;            // и кегль бирки задания подгоняется (fitFaces)
   const mt = $('m-text'); mt.textContent = ''; mt.className = 'm-text';
   renderAll(g, 0);
   if (quick) beginPlay();

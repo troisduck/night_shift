@@ -1,0 +1,788 @@
+[
+ {
+  "state": "alarm",
+  "size": "1920x1080",
+  "spots": [
+   {
+    "x": 1850,
+    "y": 902,
+    "score": 106.9,
+    "L": 82.8,
+    "C": 15.7,
+    "el": "div#charts > div.chart > canvas#ch-pressure"
+   },
+   {
+    "x": 530,
+    "y": 550,
+    "score": 105.1,
+    "L": 66.6,
+    "C": 57.2,
+    "el": "div#b-mimic > svg#mimic > g#ap-reactor > path#mm-vwater"
+   },
+   {
+    "x": 1558,
+    "y": 910,
+    "score": 103.8,
+    "L": 83.6,
+    "C": 16.5,
+    "el": "div#charts > div.chart > canvas#ch-pressure"
+   },
+   {
+    "x": 766,
+    "y": 914,
+    "score": 103.5,
+    "L": 84.8,
+    "C": 15.4,
+    "el": "div#charts > div.chart > canvas#ch-mwe"
+   },
+   {
+    "x": 1014,
+    "y": 914,
+    "score": 102.9,
+    "L": 84.8,
+    "C": 15.4,
+    "el": "div#charts > div.chart > canvas#ch-mwe"
+   },
+   {
+    "x": 1306,
+    "y": 898,
+    "score": 96.1,
+    "L": 77.2,
+    "C": 18.2,
+    "el": "div#charts > div.chart > canvas#ch-tout"
+   },
+   {
+    "x": 1854,
+    "y": 378,
+    "score": 96.0,
+    "L": 59.7,
+    "C": 41.0,
+    "el": "div#app > aside#window > canvas#win-town"
+   },
+   {
+    "x": 1218,
+    "y": 646,
+    "score": 95.9,
+    "L": 77.5,
+    "C": 18.7,
+    "el": "div#b-mimic > svg#mimic > rect"
+   },
+   {
+    "x": 1602,
+    "y": 430,
+    "score": 95.5,
+    "L": 72.8,
+    "C": 17.6,
+    "el": "div#b-grid > canvas#c-sched"
+   },
+   {
+    "x": 662,
+    "y": 134,
+    "score": 94.1,
+    "L": 57.6,
+    "C": 39.7,
+    "el": "section#annunciator > div#ann-plow  «Давление низкое»"
+   },
+   {
+    "x": 1242,
+    "y": 134,
+    "score": 93.1,
+    "L": 57.6,
+    "C": 37.8,
+    "el": "section#annunciator > div#ann-grid  «Отклонение от задания»"
+   },
+   {
+    "x": 778,
+    "y": 518,
+    "score": 90.6,
+    "L": 73.2,
+    "C": 17.0,
+    "el": "div#b-mimic > svg#mimic > rect"
+   },
+   {
+    "x": 190,
+    "y": 134,
+    "score": 90.4,
+    "L": 57.4,
+    "C": 37.3,
+    "el": "section#annunciator > div#ann-power  «Мощность выше нормы»"
+   },
+   {
+    "x": 1490,
+    "y": 134,
+    "score": 89.8,
+    "L": 55.9,
+    "C": 37.0,
+    "el": "section#annunciator > div#ann-xenon  «Отравление ксеноном»"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ },
+ {
+  "state": "play9",
+  "size": "1920x1080",
+  "spots": [
+   {
+    "x": 1842,
+    "y": 898,
+    "score": 107.0,
+    "L": 82.5,
+    "C": 15.7,
+    "el": "div#charts > div.chart > canvas#ch-pressure"
+   },
+   {
+    "x": 522,
+    "y": 550,
+    "score": 105.8,
+    "L": 66.2,
+    "C": 57.6,
+    "el": "div#b-mimic > svg#mimic > g#ap-reactor > path#mm-vwater"
+   },
+   {
+    "x": 1562,
+    "y": 902,
+    "score": 104.9,
+    "L": 83.4,
+    "C": 15.8,
+    "el": "div#charts > div.chart > canvas#ch-pressure"
+   },
+   {
+    "x": 762,
+    "y": 914,
+    "score": 103.6,
+    "L": 84.6,
+    "C": 15.3,
+    "el": "div#charts > div.chart > canvas#ch-mwe"
+   },
+   {
+    "x": 1010,
+    "y": 914,
+    "score": 102.9,
+    "L": 84.5,
+    "C": 15.4,
+    "el": "div#charts > div.chart > canvas#ch-mwe"
+   },
+   {
+    "x": 1226,
+    "y": 646,
+    "score": 97.4,
+    "L": 77.2,
+    "C": 18.9,
+    "el": "div#b-mimic > svg#mimic > rect"
+   },
+   {
+    "x": 1306,
+    "y": 898,
+    "score": 97.1,
+    "L": 77.2,
+    "C": 18.2,
+    "el": "div#charts > div.chart > canvas#ch-tout"
+   },
+   {
+    "x": 1854,
+    "y": 378,
+    "score": 95.5,
+    "L": 59.2,
+    "C": 40.7,
+    "el": "div#app > aside#window > canvas#win-town"
+   },
+   {
+    "x": 1474,
+    "y": 414,
+    "score": 94.1,
+    "L": 73.3,
+    "C": 16.6,
+    "el": "div#b-grid > canvas#c-sched"
+   },
+   {
+    "x": 770,
+    "y": 526,
+    "score": 90.7,
+    "L": 74.1,
+    "C": 16.5,
+    "el": "div#b-mimic > svg#mimic > rect"
+   },
+   {
+    "x": 502,
+    "y": 50,
+    "score": 84.0,
+    "L": 60.9,
+    "C": 13.7,
+    "el": "header#topbar > div#goal > div.goal-slip > div#goal-label  «Следуй графику диспетчера до 08:00»"
+   },
+   {
+    "x": 426,
+    "y": 958,
+    "score": 82.6,
+    "L": 63.8,
+    "C": 16.1,
+    "el": "div#m-text  «Смена твоя. Ночью ксенон будет копиться »"
+   },
+   {
+    "x": 82,
+    "y": 330,
+    "score": 79.2,
+    "L": 54.0,
+    "C": 22.1,
+    "el": "div#rv-box > svg#rodviz > g#rv-zone-band > rect"
+   },
+   {
+    "x": 66,
+    "y": 874,
+    "score": 75.0,
+    "L": 56.4,
+    "C": 11.2,
+    "el": "div#mentor > div.m-side > svg.face > path"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ },
+ {
+  "state": "alarm",
+  "size": "1366x768",
+  "spots": [
+   {
+    "x": 374,
+    "y": 386,
+    "score": 110.0,
+    "L": 68.1,
+    "C": 61.2,
+    "el": "div#b-mimic > svg#mimic > g#ap-reactor > path#mm-vwater"
+   },
+   {
+    "x": 1306,
+    "y": 638,
+    "score": 107.6,
+    "L": 83.4,
+    "C": 15.4,
+    "el": "div#charts > div.chart > canvas#ch-pressure"
+   },
+   {
+    "x": 1102,
+    "y": 642,
+    "score": 106.6,
+    "L": 84.9,
+    "C": 15.1,
+    "el": "div#charts > div.chart > canvas#ch-pressure"
+   },
+   {
+    "x": 510,
+    "y": 722,
+    "score": 104.1,
+    "L": 83.3,
+    "C": 15.0,
+    "el": "div#charts > div.chart > canvas#ch-mwe"
+   },
+   {
+    "x": 1314,
+    "y": 270,
+    "score": 102.1,
+    "L": 62.8,
+    "C": 43.0,
+    "el": "div#app > aside#window > canvas#win-town"
+   },
+   {
+    "x": 722,
+    "y": 642,
+    "score": 101.6,
+    "L": 83.5,
+    "C": 14.7,
+    "el": "div#charts > div.chart > canvas#ch-mwe"
+   },
+   {
+    "x": 878,
+    "y": 94,
+    "score": 98.6,
+    "L": 60.4,
+    "C": 38.2,
+    "el": "section#annunciator > div#ann-grid  «Отклонение от задания»"
+   },
+   {
+    "x": 462,
+    "y": 94,
+    "score": 97.8,
+    "L": 60.2,
+    "C": 39.3,
+    "el": "section#annunciator > div#ann-plow  «Давление низкое»"
+   },
+   {
+    "x": 1054,
+    "y": 94,
+    "score": 97.0,
+    "L": 60.3,
+    "C": 37.5,
+    "el": "section#annunciator > div#ann-xenon  «Отравление ксеноном»"
+   },
+   {
+    "x": 866,
+    "y": 446,
+    "score": 96.8,
+    "L": 78.0,
+    "C": 18.8,
+    "el": "div#b-mimic > svg#mimic > rect"
+   },
+   {
+    "x": 898,
+    "y": 634,
+    "score": 96.2,
+    "L": 77.3,
+    "C": 17.0,
+    "el": "div#charts > div.chart > canvas#ch-tout"
+   },
+   {
+    "x": 142,
+    "y": 94,
+    "score": 96.1,
+    "L": 60.3,
+    "C": 37.9,
+    "el": "section#annunciator > div#ann-power  «Мощность выше нормы»"
+   },
+   {
+    "x": 1134,
+    "y": 302,
+    "score": 94.8,
+    "L": 72.9,
+    "C": 17.1,
+    "el": "div#b-grid > canvas#c-sched"
+   },
+   {
+    "x": 550,
+    "y": 370,
+    "score": 92.7,
+    "L": 74.2,
+    "C": 17.8,
+    "el": "div#b-mimic > svg#mimic > rect"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ },
+ {
+  "state": "play9",
+  "size": "1366x768",
+  "spots": [
+   {
+    "x": 378,
+    "y": 386,
+    "score": 110.1,
+    "L": 68.6,
+    "C": 59.8,
+    "el": "div#b-mimic > svg#mimic > g#ap-reactor > path#mm-vwater"
+   },
+   {
+    "x": 1310,
+    "y": 638,
+    "score": 107.9,
+    "L": 83.1,
+    "C": 15.4,
+    "el": "div#charts > div.chart > canvas#ch-pressure"
+   },
+   {
+    "x": 1102,
+    "y": 642,
+    "score": 105.9,
+    "L": 83.8,
+    "C": 15.7,
+    "el": "div#charts > div.chart > canvas#ch-pressure"
+   },
+   {
+    "x": 510,
+    "y": 722,
+    "score": 103.9,
+    "L": 83.0,
+    "C": 15.0,
+    "el": "div#charts > div.chart > canvas#ch-mwe"
+   },
+   {
+    "x": 714,
+    "y": 642,
+    "score": 101.7,
+    "L": 83.4,
+    "C": 14.7,
+    "el": "div#charts > div.chart > canvas#ch-mwe"
+   },
+   {
+    "x": 1314,
+    "y": 270,
+    "score": 101.5,
+    "L": 62.3,
+    "C": 43.2,
+    "el": "div#app > aside#window > canvas#win-town"
+   },
+   {
+    "x": 870,
+    "y": 462,
+    "score": 97.4,
+    "L": 77.6,
+    "C": 18.9,
+    "el": "div#b-mimic > svg#mimic > rect"
+   },
+   {
+    "x": 890,
+    "y": 638,
+    "score": 95.9,
+    "L": 76.6,
+    "C": 18.5,
+    "el": "div#charts > div.chart > canvas#ch-tout"
+   },
+   {
+    "x": 1054,
+    "y": 294,
+    "score": 95.3,
+    "L": 74.1,
+    "C": 16.6,
+    "el": "div#b-grid > canvas#c-sched"
+   },
+   {
+    "x": 366,
+    "y": 34,
+    "score": 92.2,
+    "L": 66.2,
+    "C": 14.6,
+    "el": "header#topbar > div#goal > div.goal-slip > div#goal-label  «Следуй графику диспетчера до 08:00»"
+   },
+   {
+    "x": 554,
+    "y": 374,
+    "score": 91.4,
+    "L": 74.5,
+    "C": 16.6,
+    "el": "div#b-mimic > svg#mimic > rect"
+   },
+   {
+    "x": 62,
+    "y": 230,
+    "score": 85.5,
+    "L": 58.0,
+    "C": 23.1,
+    "el": "div#rv-box > svg#rodviz > g#rv-zone-band > line#rv-z0"
+   },
+   {
+    "x": 330,
+    "y": 682,
+    "score": 84.0,
+    "L": 64.6,
+    "C": 16.7,
+    "el": "div#m-text  «Смена твоя. Ночью ксенон будет копиться »"
+   },
+   {
+    "x": 146,
+    "y": 686,
+    "score": 82.3,
+    "L": 63.5,
+    "C": 16.2,
+    "el": "div#m-text  «Смена твоя. Ночью ксенон будет копиться »"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ },
+ {
+  "state": "alarm",
+  "size": "1024x768",
+  "spots": [
+   {
+    "x": 974,
+    "y": 674,
+    "score": 103.3,
+    "L": 80.9,
+    "C": 16.4,
+    "el": "div#charts > div.chart > canvas#ch-pressure"
+   },
+   {
+    "x": 278,
+    "y": 434,
+    "score": 102.7,
+    "L": 66.1,
+    "C": 54.0,
+    "el": "div#b-mimic > svg#mimic > g#ap-reactor > path#mm-vwater"
+   },
+   {
+    "x": 530,
+    "y": 678,
+    "score": 102.5,
+    "L": 83.6,
+    "C": 15.3,
+    "el": "div#charts > div.chart > canvas#ch-mwe"
+   },
+   {
+    "x": 394,
+    "y": 682,
+    "score": 101.4,
+    "L": 81.9,
+    "C": 14.8,
+    "el": "div#charts > div.chart > canvas#ch-mwe"
+   },
+   {
+    "x": 834,
+    "y": 678,
+    "score": 100.2,
+    "L": 80.9,
+    "C": 16.4,
+    "el": "div#charts > div.chart > canvas#ch-pressure"
+   },
+   {
+    "x": 990,
+    "y": 286,
+    "score": 97.8,
+    "L": 60.4,
+    "C": 41.2,
+    "el": "div#app > aside#window > canvas#win-town"
+   },
+   {
+    "x": 646,
+    "y": 490,
+    "score": 95.3,
+    "L": 77.6,
+    "C": 18.3,
+    "el": "div#b-mimic > svg#mimic > rect"
+   },
+   {
+    "x": 350,
+    "y": 74,
+    "score": 94.8,
+    "L": 58.0,
+    "C": 41.3,
+    "el": "section#annunciator > div#ann-plow  «Давление низкое»"
+   },
+   {
+    "x": 854,
+    "y": 414,
+    "score": 94.6,
+    "L": 74.6,
+    "C": 17.8,
+    "el": "div#b-grid > canvas#c-sched"
+   },
+   {
+    "x": 662,
+    "y": 74,
+    "score": 94.3,
+    "L": 58.1,
+    "C": 39.9,
+    "el": "section#annunciator > div#ann-grid  «Отклонение от задания»"
+   },
+   {
+    "x": 846,
+    "y": 238,
+    "score": 93.3,
+    "L": 75.7,
+    "C": 17.7,
+    "el": "div#b-grid > canvas#c-sched"
+   },
+   {
+    "x": 510,
+    "y": 522,
+    "score": 93.0,
+    "L": 76.8,
+    "C": 18.3,
+    "el": "div#b-mimic > svg#mimic > rect"
+   },
+   {
+    "x": 698,
+    "y": 674,
+    "score": 92.6,
+    "L": 74.3,
+    "C": 18.3,
+    "el": "div#charts > div.chart > canvas#ch-tout"
+   },
+   {
+    "x": 794,
+    "y": 74,
+    "score": 90.5,
+    "L": 56.1,
+    "C": 38.1,
+    "el": "section#annunciator > div#ann-xenon  «Отравление ксеноном»"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ },
+ {
+  "state": "play9",
+  "size": "1024x768",
+  "spots": [
+   {
+    "x": 966,
+    "y": 674,
+    "score": 103.1,
+    "L": 80.9,
+    "C": 16.4,
+    "el": "div#charts > div.chart > canvas#ch-pressure"
+   },
+   {
+    "x": 278,
+    "y": 434,
+    "score": 102.8,
+    "L": 66.1,
+    "C": 54.0,
+    "el": "div#b-mimic > svg#mimic > g#ap-reactor > path#mm-vwater"
+   },
+   {
+    "x": 530,
+    "y": 678,
+    "score": 102.5,
+    "L": 83.3,
+    "C": 15.3,
+    "el": "div#charts > div.chart > canvas#ch-mwe"
+   },
+   {
+    "x": 394,
+    "y": 686,
+    "score": 101.4,
+    "L": 81.9,
+    "C": 14.8,
+    "el": "div#charts > div.chart > canvas#ch-mwe"
+   },
+   {
+    "x": 830,
+    "y": 674,
+    "score": 101.0,
+    "L": 80.3,
+    "C": 15.7,
+    "el": "div#charts > div.chart > canvas#ch-pressure"
+   },
+   {
+    "x": 990,
+    "y": 282,
+    "score": 97.1,
+    "L": 60.0,
+    "C": 41.3,
+    "el": "div#app > aside#window > canvas#win-town"
+   },
+   {
+    "x": 654,
+    "y": 494,
+    "score": 96.5,
+    "L": 76.9,
+    "C": 18.9,
+    "el": "div#b-mimic > svg#mimic > rect"
+   },
+   {
+    "x": 518,
+    "y": 530,
+    "score": 93.2,
+    "L": 76.4,
+    "C": 18.3,
+    "el": "div#b-mimic > svg#mimic > rect"
+   },
+   {
+    "x": 662,
+    "y": 674,
+    "score": 93.1,
+    "L": 73.7,
+    "C": 19.6,
+    "el": "div#charts > div.chart > canvas#ch-tout"
+   },
+   {
+    "x": 790,
+    "y": 250,
+    "score": 91.8,
+    "L": 76.1,
+    "C": 17.3,
+    "el": "div#b-grid > canvas#c-sched"
+   },
+   {
+    "x": 958,
+    "y": 146,
+    "score": 82.0,
+    "L": 56.5,
+    "C": 33.5,
+    "el": "div#app > aside#window > canvas#win-town"
+   },
+   {
+    "x": 254,
+    "y": 702,
+    "score": 81.7,
+    "L": 62.7,
+    "C": 16.3,
+    "el": "div#m-text  «Смена твоя. Ночью ксенон будет копиться »"
+   },
+   {
+    "x": 46,
+    "y": 222,
+    "score": 80.3,
+    "L": 56.0,
+    "C": 21.7,
+    "el": "div#rv-box > svg#rodviz > g#rv-rods > rect"
+   },
+   {
+    "x": 118,
+    "y": 702,
+    "score": 80.2,
+    "L": 62.0,
+    "C": 16.3,
+    "el": "div#m-text  «Смена твоя. Ночью ксенон будет копиться »"
+   }
+  ],
+  "errors": [],
+  "fonts": [
+   "NS Hand 400",
+   "NS Mono 400",
+   "NS Narrow 400",
+   "NS Narrow 700",
+   "NS Plate 700",
+   "NS Sans 400"
+  ],
+  "scroll": {
+   "x": false,
+   "y": false
+  }
+ }
+]
