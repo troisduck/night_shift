@@ -1716,7 +1716,7 @@ body { -webkit-touch-callout: none; }
 @keyframes winRed { 0%, 38% { opacity: 1; } 50%, 88% { opacity: .12; } 100% { opacity: 1; } }
 
 /* ===== ТАБЕЛЬНЫЕ ЧАСЫ (П7, 6.3; состояние punch): стена у выхода из зала выезжает поверх щита. Одна лампа над часами,
-   карточка игрока — в пятне фокус-света. Карточку тянут в щель; клик — вынуть, клик по щели — пробить; Enter */
+   карточка игрока — в пятне фокус-света. Карточку тянут в щель рукой (после плейтеста автора — только перетаскиванием) */
 .pc { position: fixed; inset: 0; z-index: 44; overflow: hidden; transform: translateX(100%); transition: transform var(--t-pc, 520ms) var(--ease-paper); }
 .pc.on { transform: none; }
 .pc:not(.first) { --t-pc: 300ms; }
@@ -1775,6 +1775,26 @@ body { -webkit-touch-callout: none; }
 .pc-keys { position: absolute; left: 50%; bottom: 1.4rem; transform: translateX(-50%); display: flex; align-items: center; gap: .4rem; padding: .32rem .6rem; border-radius: 3px;
   background: #161A17; box-shadow: 0 0 0 1px #2F3631; font: 400 .92rem/1 var(--f-text); color: #D9D3C3; white-space: nowrap; pointer-events: none; }
 .pc .fc-note { z-index: 7; }
+/* П7, после плейтеста автора: карточку пробили — планшет со сводкой появляется поверх сцены часов (стена остаётся за ним),
+   пробитую карточку прикладывают к планшету слева (.pl-card); кнопки планшета — когда карточка приложена */
+.pc.done .pc-keys { opacity: 0; transition: opacity .2s linear; }
+.pc-fly { position: fixed; z-index: 46; margin: 0; pointer-events: none; transform-origin: 50% 50%; }
+.pc-clock.near .pc-slot i { box-shadow: inset 0 .22rem .25rem rgba(0,0,0,.95), 0 .14rem 0 rgba(255,250,236,.55), 0 -.12rem 0 #39402F, 0 0 0 .2rem rgba(255,228,180,.35); }
+.overlay.over-punch { z-index: 45; background: rgba(13,15,13,.45); }
+#m-result.wait-card .mr-actions { visibility: hidden; }
+.pl-card { position: absolute; z-index: 4; left: -6.6rem; top: 9rem; width: 7.2rem; height: 10.4rem; pointer-events: none; visibility: hidden; transform: rotate(-4deg) scale(1.2); }
+.pl-card.on { visibility: visible; }
+.pl-card .pc-face { box-shadow: 0 .4rem .7rem rgba(0,0,0,.55); }
+.pl-card::after { content: ""; position: absolute; z-index: 1; right: -.5rem; top: 1.2rem; width: 1.6rem; height: .7rem; border-radius: .35rem;   /* скрепка держит карточку на доске */
+  border: .16rem solid #A9ADA5; border-left-color: transparent; box-shadow: 0 1px 1px rgba(0,0,0,.5); }
+/* пробитые строки: часы пробивают карточку насквозь — по отверстию у каждого края строки */
+.pc-t tr.holed td:first-child, .pc-t tr.holed td:last-child { position: relative; }
+.pc-t tr.holed td:first-child::before, .pc-t tr.holed td:last-child::after { content: ""; position: absolute; top: 50%; width: .24rem; height: .24rem; margin-top: -.12rem; border-radius: 50%;
+  background: #0D0C0A; box-shadow: 0 .04rem 0 rgba(255,248,226,.55), inset 0 .05rem .06rem rgba(0,0,0,.9); }
+.pc-t tr.holed td:first-child::before { left: -.3rem; }
+.pc-t tr.holed td:last-child::after { right: -.3rem; }
+.pc-t tr.holed.fresh td:first-child::before, .pc-t tr.holed.fresh td:last-child::after { animation: pcHole .18s ease-out both; }
+@keyframes pcHole { from { transform: scale(.2); } }
 @media (max-width: 760px), (max-aspect-ratio: 1/1) { .pc-stage { transform: scale(.62); } }
 @media (prefers-reduced-motion: reduce) { .pc, .pc-face, .pc-clock { transition: none; } .pc-card.nudge .pc-face { animation: none; } }
 
@@ -6364,7 +6384,7 @@ function showModal(id) {
   document.querySelectorAll('.modal').forEach(m => m.classList.toggle('show', m.id === id));
   const first = $(id).querySelector('.btn.primary, .lvl:not(:disabled)'); if (first) setTimeout(() => first.focus({ preventScroll: true }), 30);
 }
-function hideModal() { $('overlay').hidden = true; UI.modal = null; document.querySelectorAll('.modal').forEach(m => m.classList.remove('show')); }
+function hideModal() { $('overlay').hidden = true; $('overlay').classList.remove('over-punch'); UI.modal = null; document.querySelectorAll('.modal').forEach(m => m.classList.remove('show')); }
 
 // выбор смены — пульт «График смен» (сцена shifts); старое меню-журнал убрано
 function showMenu() { Guide.stop(true); Reveal.finish(); Scenes.go('shifts'); }
@@ -6447,7 +6467,7 @@ const Punch = {
   cardHTML(rows, cur) {
     const R = FEEL.punch.rows, list = rows.slice(-(R - 1)).concat([cur]); while (list.length < R) list.push(null);
     const tr = list.map(r => !r ? '<tr><td></td><td></td><td></td><td></td></tr>'
-      : `<tr${r === cur ? ' class="cur"' : ''}><td>${r.d}</td><td>${r.n}</td><td>${r.in}</td><td class="out">${r === cur ? '' : r.out + (r.flag ? `<small>${r.flag}</small>` : '')}</td></tr>`).join('');
+      : `<tr class="${r === cur ? 'cur' : r.out ? 'holed' : ''}"><td>${r.d}</td><td>${r.n}</td><td>${r.in}</td><td class="out">${r === cur ? '' : r.out + (r.flag ? `<small>${r.flag}</small>` : '')}</td></tr>`).join('');
     return `<div class="pc-face"><div class="pc-ch"><b>Карточка учёта</b><span>таб. № ${TAB_NO} · БЩУ-1</span></div>${signSVG(Save.data.sign, 120, 30, 'pc-sig')}`
       + `<table class="pc-t"><tr><th>число</th><th>смена</th><th>приход</th><th>уход</th></tr>${tr}</table></div>`;
   },
@@ -6461,7 +6481,8 @@ const Punch = {
   },
   start(g, done) {
     const P = FEEL.punch, first = !Save.data.punchSeen, c = shiftClock(g);
-    this.g = g; this.done = done; this.first = first; this.cur = this.rowOf(g); this.st = 'wait'; this.on = true;
+    this.g = g; this.done = done; this.first = first; this.cur = this.rowOf(g); this.st = 'wait'; this.on = true; this.last = null;
+    this.side = !matchMedia('(max-width: 760px), (max-aspect-ratio: 1/1)').matches;   // планшет поверх сцены, карточку — к нему; на узком экране — как раньше
     UI.mode = 'punch'; Snd.forceMode = null;
     let rack = ''; for (let i = 0; i < 8; i++) rack += `<i class="pc-pk${i === P.pocket ? ' me' : ''}"><b></b></i>`;
     const root = document.createElement('div'); root.id = 'punch'; root.className = 'pc' + (first ? ' first' : '');
@@ -6470,12 +6491,11 @@ const Punch = {
       + `<div class="pc-rack" aria-hidden="true">${rack}</div>`
       + `<div class="pc-card" id="pc-card" role="button" tabindex="0" aria-label="Карточка учёта — пробить в часах">${this.cardHTML(Save.data.timecard, this.cur)}</div>`
       + `<div class="pc-fronts" aria-hidden="true">${rack.replace(/pc-pk/g, 'pc-pf')}</div></div>`
-      + `<div class="pc-keys">карточку — в щель часов <kbd class="kc">Enter</kbd></div>`;   // ns-ok: подпись клавиши — латиница только в клавишах
+      + `<div class="pc-keys">перетащи карточку в щель часов</div>`;
     document.body.appendChild(root); this.el = root;
     this.paint();
     const card = $('pc-card'); this.card = card; this.home();
     card.addEventListener('pointerdown', e => this.grab(e));
-    $('pc-slot').parentElement.addEventListener('pointerdown', e => { if (this.st === 'picked') { e.preventDefault(); this.insert(); } });
     root.addEventListener('pointerdown', e => { if (this.st === 'wait' && !e.target.closest('.pc-card')) this.nudge(); });   // мимо карточки — карточка вздрагивает: жест подсказывает жест
     void root.offsetWidth; root.classList.add('on');
     Snd.cue('folder');
@@ -6489,22 +6509,23 @@ const Punch = {
   set(dx, dy, s = 1) { this.dx = dx; this.dy = dy; this.card.style.transform = `translate(${dx.toFixed(1)}px, ${dy.toFixed(1)}px) scale(${s})`; },
   nudge() { const c = this.card; c.classList.remove('nudge'); void c.offsetWidth; c.classList.add('nudge'); Snd.cue('cardOut', { v: .4 }); },
   grab(e) {
-    if (this.st !== 'wait' && this.st !== 'picked') return; e.preventDefault(); e.stopPropagation();
+    if (this.st !== 'wait') return; e.preventDefault(); e.stopPropagation();
     const c = this.card, x0 = e.clientX, y0 = e.clientY, bx = this.dx, by = this.dy; let moved = false;
     try { c.setPointerCapture(e.pointerId); } catch (_) { /* — */ }
     c.classList.add('lift', 'drag'); Snd.cue('cardOut'); this.hideNote();
-    const mv = ev => { const dx = ev.clientX - x0, dy = ev.clientY - y0; if (Math.hypot(dx, dy) > 6) moved = true; if (moved) this.set(bx + dx, by + dy); };
+    const clk = this.el.querySelector('.pc-clock');
+    const mv = ev => { const dx = ev.clientX - x0, dy = ev.clientY - y0; if (Math.hypot(dx, dy) > 6) moved = true; if (moved) { this.set(bx + dx, by + dy); clk.classList.toggle('near', this.nearSlot()); } };
     const up = () => {
-      c.removeEventListener('pointermove', mv); c.removeEventListener('pointerup', up); c.removeEventListener('pointercancel', up); c.classList.remove('drag');
-      if (!moved) { this.st = 'picked'; this.set(0, -(UI.remPx || 14) * 1.2); return; }   // клик: карточка вынута, теперь — по щели
-      if (this.nearSlot()) this.insert(); else this.back();
+      c.removeEventListener('pointermove', mv); c.removeEventListener('pointerup', up); c.removeEventListener('pointercancel', up); c.classList.remove('drag'); clk.classList.remove('near');
+      if (moved && this.nearSlot()) this.insert(); else this.back();   // только рукой: донёс до щели — пробил; клик или мимо — карточка возвращается в кармашек
     };
     c.addEventListener('pointermove', mv); c.addEventListener('pointerup', up); c.addEventListener('pointercancel', up);
   },
-  nearSlot() { const s = $('pc-slot').getBoundingClientRect(), c = this.card.getBoundingClientRect(), cx = c.left + c.width / 2;
-    return Math.abs(cx - (s.left + s.width / 2)) < s.width * .7 && c.bottom > s.top - c.height * .6 && c.top < s.bottom; },
+  nearSlot() {   // щедро: низ карточки над верхней половиной корпуса часов, середина — над часами
+    const k = this.el.querySelector('.pc-clock').getBoundingClientRect(), s = $('pc-slot').getBoundingClientRect(), c = this.card.getBoundingClientRect(), cx = c.left + c.width / 2;
+    return cx > k.left && cx < k.right && c.bottom > s.top - c.height * .5 && c.bottom < k.top + k.height * .55; },
   async back() { this.st = 'busy'; const x0 = this.dx, y0 = this.dy; Snd.cue('cardOut', { v: .6 }); await tween(260, k => this.set(x0 * (1 - k), y0 * (1 - k))); this.home(); this.st = 'wait'; },
-  key(e) { if (!this.on) return; if (e.key === 'Enter' || e.code === 'Space') { e.preventDefault(); if (this.st === 'wait' || this.st === 'picked') this.insert(); } },
+  key(e) { if (!this.on) return; if (e.key === 'Enter' || e.code === 'Space') e.preventDefault(); },   // карточку пробивают только рукой (решение автора)
   async insert() {
     if (this.st === 'busy' || this.st === 'done') return; this.st = 'busy'; this.hideNote();
     const P = FEEL.punch, rep = !this.first, c = this.card, s = $('pc-slot').getBoundingClientRect();
@@ -6519,10 +6540,12 @@ const Punch = {
     Snd.cue('punch'); haptic(30);
     this.el.querySelector('.pc-clock').classList.add('hit'); setTimeout(() => this.el && this.el.querySelector('.pc-clock').classList.remove('hit'), 160);
     const out = c.querySelector('tr.cur .out'); if (out) { out.innerHTML = (this.cur.out || '') + (this.cur.flag ? `<small>${this.cur.flag}</small>` : ''); out.classList.add('ink'); }
+    const tr = c.querySelector('tr.cur'); if (tr) tr.classList.add('holed', 'fresh');   // отверстия пробиты в самой карточке
     await wait(rep ? P.holdRep : P.hold);
     Snd.cue('cardOut', { v: .7 });
     await tween(rep ? P.inRep : P.in, k => { this.set(tx, ty + deep * (1 - k)); c.style.clipPath = `inset(0 0 ${(deep * (1 - k) + 1).toFixed(1)}px 0)`; });
     c.style.clipPath = '';
+    if (this.side) { await this.attach(tx, ty, rep); return; }
     // карточку подносят к глазам: видно время ухода
     const st = this.el.querySelector('.pc-stage').getBoundingClientRect(), r1 = c.getBoundingClientRect(), S = P.showScale;
     const sx = st.left + st.width * .62 - (r1.left + r1.width / 2) + tx, sy = st.top + st.height * .5 - (r1.top + r1.height / 2) + ty + deep * 0;
@@ -6530,10 +6553,32 @@ const Punch = {
     await wait(rep ? P.readRep : P.read);
     this.finish();
   },
+  // карточку пробили — поверх сцены появляется планшет, карточку прикладывают к нему слева: она летит поверх затемнения и остаётся под скрепкой
+  async attach(tx, ty, rep) {
+    const P = FEEL.punch, c = this.card; this.done = null;   // планшет показывает сама сцена, а не колбэк после неё
+    const r1 = c.getBoundingClientRect(); c.style.visibility = 'hidden';
+    const fly = document.createElement('div'); fly.className = 'pc-fly'; fly.setAttribute('aria-hidden', 'true'); fly.innerHTML = c.innerHTML;
+    const w = c.offsetWidth, h = c.offsetHeight; Object.assign(fly.style, { left: r1.left + r1.width / 2 - w / 2 + 'px', top: r1.top + r1.height / 2 - h / 2 + 'px', width: w + 'px', height: h + 'px' });
+    document.body.appendChild(fly);
+    showResult(this.g, true);                       // планшет выходит поверх сцены и начинает заполняться
+    await wait(rep ? 120 : 260);
+    const slot = $('m-result').querySelector('.pl-card'); slot.innerHTML = c.innerHTML;
+    const r2 = slot.getBoundingClientRect(), S0 = r1.width / w, S1 = r2.width / w;   // .pl-card повёрнут и увеличен — его рамка чуть шире карточки
+    const dx = (r2.left + r2.width / 2) - (r1.left + r1.width / 2), dy = (r2.top + r2.height / 2) - (r1.top + r1.height / 2);
+    Snd.cue('paper');
+    await tween(rep ? P.toShowRep : P.toShow, k => { fly.style.transform = `translate(${(dx * k).toFixed(1)}px, ${(dy * k).toFixed(1)}px) rotate(${(-4 * k).toFixed(2)}deg) scale(${(S0 + (S1 / 1.08 - S0) * k).toFixed(3)})`; });
+    slot.classList.add('on'); fly.remove(); Snd.cue('cardIn', { v: .5 });
+    this.finish();
+  },
   finish() {
     if (this.st === 'done') return; this.st = 'done';
     const tc = Save.data.timecard; tc.push(this.cur); if (tc.length > 60) tc.splice(0, tc.length - 60);
     Save.data.punchSeen = true; Save.save(); this.last = this.cur;
+    if (this.el) this.el.classList.add('done');
+    if (this.side) {   // сцена остаётся: планшет рядом, кнопки открываются; сцену убирает «Следующая смена», «Ещё раз» или «К сменам»
+      UI.mode = 'result'; const m = $('m-result'); if (m) { m.classList.remove('wait-card'); const b = m.querySelector('.btn.primary'); if (b) b.focus({ preventScroll: true }); }
+      return;
+    }
     const el = this.el; el.classList.add('out'); Snd.cue('paper');
     setTimeout(() => { el.remove(); }, reducedMotion() ? 0 : FEEL.punch.slide);
     this.on = false; this.el = null; this.card = null;
@@ -6550,7 +6595,7 @@ const Punch = {
   },
   hideNote() { if (this.noteEl) { this.noteEl.classList.remove('on'); this.noteEl = null; } },
   resize() { if (this.el) this.paint(); },
-  abort() { if (this.el) this.el.remove(); this.el = null; this.on = false; this.st = ''; this.done = null; },
+  abort() { if (this.el) this.el.remove(); this.el = null; this.on = false; this.st = ''; this.done = null; this.card = null; },
 };
 // ручка выписывает сохранённую подпись (П7, раздел 10): кончик идёт по пути подписи с той же скоростью, что паста (анимация штриха — линейная)
 function penWrite(svg, ms) {
@@ -6592,15 +6637,15 @@ function starFact(g, d) {
    заполненный машинописью и рукой Палыча. Строки появляются по порядку, каждая со своим звуком: машинка, штамп, бумага, ручка.
    Клик по листу — всё сразу. «Смену сдал» — клик по строке: ручка выписывает подпись игрока; нажал «Следующая смена», не подписав, —
    подпись ставится сама за 0,4 с. Кнопки — под планшетом справа, главная — крайняя правая (Enter) */
-function showResult(g) {
-  UI.mode = 'result'; UI.running = false; Guide.stop(true); Moments.offSkip(); Snd.forceMode = null;
+function showResult(g, inPunch) {
+  if (!inPunch) UI.mode = 'result'; UI.running = false; Guide.stop(true); Moments.offSkip(); Snd.forceMode = null;   // в сцене часов режим — punch, пока карточку не пробили
   const r = g.result, lv = g.level, idx = g.idx, blast = !!g.s.damaged, rep = !!Save.data.plankSeen;
   if (r.success && r.nStars > Save.stars(idx)) { Save.data.stars[lv.id] = r.nStars; Save.save(); }
   const nx = idx + 1, hasNext = r.success && nx < LEVELS.length && Save.playable(nx);
   const d = new Date(), date = `«${d.getDate()}»&nbsp;${MONTHS_GEN[d.getMonth()]}&nbsp;${d.getFullYear()}&nbsp;г.`;
   const row = Punch.last || Punch.rowOf(g), shown = new Set();
-  let h = '<div class="pl-board"><div class="pl-clip" aria-hidden="true"><i></i><i></i></div><div class="pl-sheet">';
-  h += `<div class="pl-head"><span class="pl-form">Форма БЩУ-7</span><h2>${blast ? 'Акт' : 'Сводка за смену'}</h2><span class="pl-form">№ ${String(Save.data.timecard.length).padStart(3, '0')}</span></div>`;
+  let h = `<div class="pl-board"><div class="pl-clip" aria-hidden="true"><i></i><i></i></div>${inPunch ? '<div class="pl-card pc-card-copy" aria-hidden="true"></div>' : ''}<div class="pl-sheet">`;
+  h += `<div class="pl-head"><span class="pl-form">Форма БЩУ-7</span><h2>${blast ? 'Акт' : 'Сводка за смену'}</h2><span class="pl-form">№ ${String(Save.data.timecard.length + (inPunch ? 1 : 0)).padStart(3, '0')}</span></div>`;
   h += `<div class="pl-meta pl-l" data-s="typer">Энергоблок № 1, БЩУ-1 · ${date} · ${lv.hidden ? 'режим «Без страховки»' : `смена ${lv.num} «${lv.title}»`} · с ${row.in} по ${row.out || '—'}</div>`;
   h += `<div class="pl-f pl-l" data-s="typer"><b>Задание</b><span class="ty">${lv.goal.label}</span></div>`;
   if (!blast) {
@@ -6627,7 +6672,8 @@ function showResult(g) {
   h += `<div class="mr-actions"><button class="btn big" id="mr-menu">К сменам</button><button class="btn big${hasNext ? '' : ' primary'}" id="mr-retry">Ещё раз</button>`;
   if (hasNext) h += `<button class="btn primary big" id="mr-next">${LEVELS[nx].hidden ? 'Без страховки' : 'Следующая смена'}</button>`;
   h += '</div>';
-  const m = $('m-result'); m.className = 'modal plank'; m.innerHTML = h;
+  const m = $('m-result'); m.className = 'modal plank' + (inPunch ? ' side wait-card' : ''); m.innerHTML = h;
+  $('overlay').classList.toggle('over-punch', !!inPunch);
   const me = m.querySelector('.jr-me'), boss = m.querySelector('.jr-boss');
   m.querySelectorAll('.sig path').forEach(p => { try { p.style.setProperty('--len', Math.ceil(p.getTotalLength() + 4)); } catch (e) { /* — */ } });
   let signed = false;
@@ -6639,7 +6685,7 @@ function showResult(g) {
   const go = fn => () => { Snd.ui(); if (!signed) { sign(true); setTimeout(fn, reducedMotion() ? 0 : 420); } else fn(); };   // подпись не блокирует
   if (hasNext) $('mr-next').addEventListener('click', go(() => startLevel(nx, false)));
   $('mr-retry').addEventListener('click', go(() => startLevel(idx, true)));
-  $('mr-menu').addEventListener('click', () => { Snd.ui(); showMenu(); });
+  $('mr-menu').addEventListener('click', () => { Snd.ui(); Punch.abort(); showMenu(); });
   showModal('m-result');
   requestAnimationFrame(() => drawRun($('mr-canvas'), g));
   // заполнение по строкам: машинка, штамп, бумага, ручка. Клик по листу — всё сразу. Повтор — быстрее
