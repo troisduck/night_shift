@@ -431,7 +431,7 @@ button { font: inherit; color: inherit; }
 .sc-target { position: absolute; top: -.02rem; height: .42rem; border: .14rem solid var(--ink-ok); border-bottom: 0; border-radius: 1px 1px 0 0; background: rgba(46,158,71,.12); display: none; }
 /* стрелка: тёмная на подсвеченной шкале, толще, с заострённым концом и тенью от ключевого света (вниз-вправо) */
 /* стрелка закреплена на ободе сверху и висит вниз: остриё — на шкале (плейтест П6: «стрелка прикреплена физически, должна быть перевёрнутой»); на креплении — заклёпка */
-.sc-needle { translate: var(--trem, 0px) 0; position: absolute; top: -.12rem; width: .26rem; height: 1.02rem; margin-left: -.13rem; background: var(--engrave-ink); border-radius: .06rem .06rem 0 0;
+.sc-needle { position: absolute; top: -.12rem; width: .26rem; height: 1.02rem; margin-left: -.13rem; background: var(--engrave-ink); border-radius: .06rem .06rem 0 0;
   box-shadow: .1rem .08rem 0 rgba(31,29,26,.28); }
 .sc-needle::before { content: ""; position: absolute; left: 0; top: 100%; border-left: .13rem solid transparent; border-right: .13rem solid transparent; border-top: .22rem solid var(--engrave-ink); }
 .sc-needle::after { content: ""; position: absolute; left: 50%; top: -.04rem; width: .4rem; height: .4rem; margin-left: -.2rem; border-radius: 50%;
@@ -3429,9 +3429,10 @@ const FEEL = {
     wake: 650,                      // приборы просыпаются: цифры загораются за столько мс
   },
   // фокус-свет (STYLE.md 2.8): зал приглушается, на объект падает пятно, рядом записка Палыча
-  // тело станции (П7, 9.2; STYLE.md 2.11 «машина взяла нагрузку»): дрожь стрелок, px (наибольшая), частоты, Гц; вклад насосов и турбины;
-  // толчок, когда машина взяла нагрузку (травма) и через сколько мс после ключа насоса. Ослабляется настройкой тряски, при reduced-motion — нет
-  body: { on: true, needle: 0.7, hz: [13, 21], pumps: 0.7, turbine: 0.5, jolt: 0.08, joltMs: 380 },
+  // тело станции (П7, 9.2; STYLE.md 2.11 «машина взяла нагрузку»): дрожь пера самописца, px (наибольшая; стрелки приборов стоят спокойно —
+  // решение автора после плейтеста П7), вклад насосов и турбины; толчок, когда машина взяла нагрузку (травма) и через сколько мс после ключа насоса.
+  // Ослабляется настройкой тряски, при reduced-motion — нет
+  body: { on: true, pen: 1.3, pumps: 0.7, turbine: 0.5, jolt: 0.08, joltMs: 380 },
   // отклик неработающего (П7, раздел 9): мс между стуками по одному предмету, ширина панорамы, громкость (разброс), пылинок с кромки, после скольких стуков Палыч отвечает
   touch: { gap: 120, pan: 0.8, v: [0.75, 1.05], dust: 5, persist: 5 },
   // записка Палыча (П7, раздел 7): срывают рывком. rem — доли кегля; скорости — px/с
@@ -3659,9 +3660,6 @@ class Scale {
     if (Math.abs(p - this.x) < 0.02 && Math.abs(this.vx) < 0.2) { this.x = p; this.vx = 0; this.zt = N.zeta; }
     const nx = clamp(this.x, -1.5, 101.5).toFixed(2);   // перелёт — чуть за край поля, как упор стрелки
     if (nx !== this._nx) { this._nx = nx; this.nEl.style.left = nx + '%'; }
-    // тело станции (П7, 9.2): стрелка мелко дрожит от работы насосов и турбины — по их оборотам (UI.tremor), меньше пикселя
-    const tr = UI.tremor ? FEEL.body.needle * UI.tremor * (Math.sin(now * FEEL.body.hz[0] / 159 + (this.ph || (this.ph = Math.random() * 6))) * .6 + Math.sin(now * FEEL.body.hz[1] / 159 + this.ph * 1.7) * .4) : 0;
-    const ts = tr.toFixed(2); if (ts !== this._tr) { this._tr = ts; this.nEl.style.setProperty('--trem', ts + 'px'); }
     if (cls !== this.cls) { this.el.dataset.s = cls || 'neu'; this.cls = cls; }
   }
 }
@@ -5942,7 +5940,7 @@ function renderDesk(g) {
   else if (s.rho < -3) { const hl = Math.LN2 * CONFIG.kinetics.K / -s.rho; rt = s.P < 1e-4 ? 'не разгоняется' : hl > 600 ? 'медленно падает' : `падает: ½ за ${Math.round(hl)} с`; rc = 'info'; }
   else { rt = 'ровно'; rc = 'ok'; }
   setText($('r-rate'), rt, quiet(rc)); SC.rate.set(clamp(s.rho, -RHO_MAX, RHO_MAX), rc);
-  // тело станции (П7, 9.2): дрожь стрелок — от потока насосов и выдачи турбины; в покое, на паузе и без тряски её нет
+  // тело станции (П7, 9.2): дрожь пера самописца — от потока насосов и выдачи турбины; в покое, на паузе и без тряски её нет
   { const B = FEEL.body, k = B.on && UI.mode === 'play' && !UI.paused && !reducedMotion() ? Shake.k() : 0;
     UI.tremor = k ? clamp(s.flow * B.pumps + (s.turbineOnline ? s.mwe / 1000 * B.turbine : 0), 0, 1) * k : 0; }
   // стержни
@@ -6243,8 +6241,14 @@ function drawTrend(key, g) {
     }
   }
   if (data.length > 1) {
-    ctx.strokeStyle = d.color; ctx.lineWidth = 2.8 * dpr; ctx.lineJoin = 'round'; ctx.lineCap = 'round';
-    pathLine(ctx, data.map(p => [p.t, val(p)]), X, Y); ctx.stroke();
+    // перо дрожит от работы машин (П7, после плейтеста автора — вместо дрожи стрелок): каждая точка запоминает дрожь в момент записи,
+    // поэтому уже написанная линия не шевелится; сами данные смены не трогаются — это только след пера
+    const J = UI.penJit || (UI.penJit = new WeakMap()), A = FEEL.body.pen * dpr;
+    ctx.strokeStyle = d.color; ctx.lineWidth = 2.8 * dpr; ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.beginPath();
+    data.forEach((p, i) => { let a = J.get(p); if (a == null) { a = UI.tremor || 0; J.set(p, a); }
+      const n = a ? A * a * (Math.sin(p.t * 23.7) * .5 + Math.sin(p.t * 57.3 + 1.3) * .3 + ((Math.abs(Math.sin(p.t * 91.7) * 4375.85) % 1) - .5) * .4) : 0;
+      const x = X(p.t), y = Y(val(p)) + n; i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); });
+    ctx.stroke();
   }
   ctx.restore();
   // перо самописца в точке «сейчас»
@@ -7021,7 +7025,7 @@ window.addEventListener('blur', () => { if (keyRod) { releaseKeys(); if (UI.game
 const Win = {
   lit: -1, t: 0, trans: null, dawn: 0, glow: 0, dark: false, flash: 0, sky: 0,
   // большие моменты (П4): переход света по порядку — волной от станции (by: 'x') или по кварталам (by: 'block'); рассвет; зарево
-  moment() { this.trans = null; this.dawn = 0; this.glow = 0; this.dark = false; this.flash = 0; this.sky = 0; this.shed = 0; this.dirty = true; this.vis = null; },
+  moment() { this.trans = null; this.dawn = 0; this.glow = 0; this.dark = false; this.flash = 0; this.sky = 0; this.shed = 0; this.dirty = true; this.vis = null; this.sz = null; },
   wave(ms) { this.trans = { by: 'x', from: { lit: this.lit < 0 ? FEEL.window.base : this.lit, streets: this.streets == null ? .05 : this.streets }, t0: Moments.clock, dur: ms, k: 0 }; },
   dawnTo(k) { if (Math.abs(k - this.dawn) > .004 || (k === 1 && this.dawn !== 1)) { this.dawn = k; this.dirty = true; } },
   blast() { this.dark = true; this.dirty = true; Moments.add(t => { this.glow = Math.min(1, t / FEEL.moments.blast.glow); this.dirty = true; return this.glow >= 1; }); },
@@ -7058,7 +7062,10 @@ const Win = {
   },
   // панорама посёлка шире окна; в окно попадает кусок с водонапорной башней и домами
   paint(cv) {
-    const W = cv.clientWidth, H = cv.clientHeight, c = sceneCanvas(cv, W, H), P = H * FEEL.window.zoom * FEEL.window.pan;
+    // размер окна — по раме, а не по прошлому холсту: sceneCanvas пишет ширину в style, и без сброса холст навсегда оставался
+    // прежнего размера — после смены размера или масштаба справа и снизу в окне были пустые полосы (скриншот автора, П7)
+    if (!this.sz) { cv.style.width = ''; cv.style.height = ''; this.sz = [cv.clientWidth, cv.clientHeight]; }
+    const [W, H] = this.sz, c = sceneCanvas(cv, W, H), P = H * FEEL.window.zoom * FEEL.window.pan;
     c.x.scale(c.d, c.d); const off = P * FEEL.window.look - W * .55;
     const Z = FEEL.window.zoom, HV = H * Z, dy = HV - H;
     c.x.save(); c.x.translate(-off, -dy); Town.paint(c.x, P, HV, { lit: this.lit, streets: this.streets, horizon: FEEL.window.horizon, seed: 2207, dark: true, dawn: Math.max(this.dawn, this.sky), kitchens: FEEL.window.kitchens, glow: this.glow, flash: this.flash, view: [off - 4, off + W + 4],
@@ -7066,7 +7073,7 @@ const Win = {
     const r = $('win-red'), [rx, ry] = Town.redAt || [0, 0];
     if (r) { r.style.left = `calc(.55rem + ${Math.round(rx - off)}px)`; r.style.top = `calc(.55rem + ${Math.round(ry - dy)}px)`; r.style.display = rx - off > 0 && rx - off < W ? '' : 'none'; }
   },
-  resize() { this.dirty = true; this.t = 0; this.vis = null; },
+  resize() { this.dirty = true; this.t = 0; this.vis = null; this.sz = null; },
 };
 
 /* =====================================================================
@@ -7415,9 +7422,10 @@ const SCENES = {
         q[4] = this.width(); this.cur.push(q); this.len += dist; p = q;
         this.tilt = (this.tilt || 0) * .85 + clamp(Math.atan2(dy, dx) * 180 / Math.PI * .08, -6, 6) * .15;   // наклон чуть идёт за росчерком, с инерцией
         if (this.inZone(a) && this.inZone(q)) this.zlen += dist;   // в подпись идёт только написанное у строки подписи
+        this.curve(this.cur);   // кривая — для каждой новой точки: раньше рисовалась только последняя из пачки, и на быстрой мыши линия рвалась (автор, П7)
       }
       if (!p) return;
-      this.curve(this.cur); this.tail(this.cur);
+      this.tail(this.cur);
       if (p[2] - this.lastSnd > 38) { this.lastSnd = p[2]; Snd.cue('pen', { v: Math.min(1, this.vs / 1.6) }); }
       const ok = this.root.querySelector('.sg-ok'), er = this.root.querySelector('.sg-erase');
       if (this.zlen > this.sigW * .12 && ok.classList.contains('inert')) { ok.classList.remove('inert'); ok.classList.add('lit'); ok.removeAttribute('aria-disabled'); }
