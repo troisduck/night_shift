@@ -6935,6 +6935,12 @@ function bindControls() {
 
 const KEY_ROD = { ArrowUp: 1, KeyW: 1, ArrowDown: -1, KeyS: -1 };
 const KEY_VALVE = { ArrowRight: 1, KeyD: 1, ArrowLeft: -1, KeyA: -1 };
+// пока висит записка Палыча, Enter и Пробел глушатся раньше всех: иначе они нажимали кнопку в фокусе («Принять смену», «Вверх»)
+// и шаг показа закрывался вместе с запиской. Записку срывают рукой (решение автора после плейтеста П7)
+['keydown', 'keyup'].forEach(t => window.addEventListener(t, e => {
+  if (!(Guide.nt && Guide.nt.classList.contains('on')) || UI.mode !== 'play') return;
+  if (e.code === 'Enter' || e.code === 'NumpadEnter' || e.code === 'Space') { e.preventDefault(); e.stopImmediatePropagation(); }
+}, true));
 document.addEventListener('keydown', e => {
   Snd.init();
   if (Scenes.cur) { if (Scenes.cur.key) Scenes.cur.key(e); return; }   // сцена входа: свои клавиши, пульт не слушает
