@@ -2268,7 +2268,7 @@ const TIPS = {
                   cond: g => g.s.Pth > g.s.allow - 0.01 && g.s.nRun < 2 },
   pumpOnEffect: { text: 'tip.pumpOnEffect',
                   cond: g => g.pumpsTurnedOn > 0 && g.sincePumpOn > 6 && g.sincePumpOn < 20 },
-  pumpLimit:    { text: g => t('tip.pumpLimit', { n: g.s.nRun, allow: Math.round(g.s.allow * 100), sec: Math.max(1, Math.round(CONFIG.pumps.limitTime - g.s.overT)) }),
+  pumpLimit:    { text: g => t('tip.pumpLimit', { pumps: pumpsWord(g.s.nRun), allow: Math.round(g.s.allow * 100), sec: Math.max(1, Math.round(CONFIG.pumps.limitTime - g.s.overT)) }),
                   cond: g => g.s.overT > 0.5, prio: 3 },
   dumpInfo:     { text: 'tip.dumpInfo',
                   cond: g => g.t > 8 && g.s.v < 3 },
@@ -2758,7 +2758,7 @@ class Game {
     if (!this.rodStart) return;
     const st = this.rodStart; this.rodStart = null;
     const dh = Math.abs(this.s.h - st.h) + CONFIG.rods.minPulse * 0.5;
-    this.addLog(t('log.rods', { dir: st.dir > 0 ? '▲' : '▼', dh: dh.toFixed(1) }));
+    this.addLog(t('log.rods', { dir: st.dir > 0 ? '▲' : '▼', dh: fmtNum(dh, 1) }));
     this.sinceRod = 0; this.pAtRodStop = this.s.Pth; this.rodHoldTime = 0;
   }
   togglePump(i) {
@@ -2787,7 +2787,7 @@ class Game {
     // ns-ok: внутреннее округление уставки (чтобы шаги бора не копили ошибку), на экран не выводится
     this.s.cBset = clamp(+(this.s.cBset + dir * (repeat ? B.repeat : B.step)).toFixed(3), B.min, B.max);
     this.boronUsed = true;
-    this.coalesceLog('boron', t('log.boron', { b: this.s.cBset.toFixed(2) }));
+    this.coalesceLog('boron', t('log.boron', { b: fmtNum(this.s.cBset, 2) }));
   }
   setHeater(on) { if (this.done) return; this.s.heater = on; if (on) this.s.spray = false; this.addLog(t(on ? 'log.heaterOn' : 'log.heaterOff')); }
   setSpray(on) { if (this.done) return; this.s.spray = on; if (on) this.s.heater = false; this.addLog(t(on ? 'log.sprayOn' : 'log.sprayOff')); }
@@ -3224,7 +3224,7 @@ const STRINGS = {
     'tip.xenonNight': 'Мощность снизили — ксенон начал копиться, реактор «ленится». Подними стержни или разбавь бор, чтобы температура не уходила вниз.',
     'tip.noSafety': 'Напоминаю: автоматика выключена. Если запахло жареным — АЗ под крышкой справа.',
     'tip.rateWarn': 'Тише! Мощность удваивается каждые {n} с. Опусти стержни чуть-чуть.',
-    'tip.pumpLimit': 'Насосов {n} — это не больше {allow}% мощности. Снижай: стержни вниз и клапан турбины прикрыть! Защита сработает через {sec} с.',
+    'tip.pumpLimit': '{pumps} — это не больше {allow}% мощности. Снижай: стержни вниз и клапан турбины прикрыть! Защита сработает через {sec} с.',
     'tip.tripVsDemand': 'Диспетчер в курсе отказа: задание снижено до {mw} МВт. Сначала безопасность.',
     'tip.rodsZone': 'Стержни на {h}% — слишком глубоко. Добавь бор (кнопка «Добавить» у борной кислоты) и понемногу поднимай стержни: бор ослабит реакцию, стержни вернут её.',
     'tip.demandUp': 'Диспетчер: нагрузка растёт, к {time} нужно {mw} МВт. Приоткрывай клапан заранее.',
@@ -3401,8 +3401,8 @@ const STRINGS = {
     'ex.xenonDecay': 'Ксенон распадается, и реакция понемногу усиливается сама. Придерживай мощность стержнями.',
     'ex.mwe.low': 'Генератор даёт {mw} МВт, а сети нужно {need}. Приоткрой клапан турбины — реактор пойдёт следом.',
     'ex.mwe.high': 'Генератор даёт {mw} МВт, а сети нужно {need}. Прикрой клапан турбины — реактор пойдёт следом.',
-    'ex.rods.deep': 'Стержни на {h}% — вне рабочей зоны. бор «Добавить» и стержни вверх — понемногу, по очереди.',
-    'ex.rods.high': 'Стержни на {h}% — вне рабочей зоны. бор «Разбавить» и стержни вниз — понемногу, по очереди.',
+    'ex.rods.deep': 'Стержни на {h}% — вне рабочей зоны. Бор «Добавить» и стержни вверх — понемногу, по очереди.',
+    'ex.rods.high': 'Стержни на {h}% — вне рабочей зоны. Бор «Разбавить» и стержни вниз — понемногу, по очереди.',
     'ex.power.inTarget': 'Мощность {p}% — в цели, {trend}. {advice}',
     'ex.power.off': 'Мощность {p}%, {trend}. {advice}',
     'ex.power': 'Мощность реактора {p}%, {trend}.',
@@ -3415,7 +3415,7 @@ const STRINGS = {
     'ex.adv.lower': 'Опусти стержни немного и подожди.',
     'ex.follow': 'Стержни не трогали — значит, реактор подстраивается под турбину: холодная вода усиливает реакцию.',
     'ex.ok.temp': 'Вода {T} °C, давление {p} МПа — всё в норме. Так держать.',
-    'ex.ok': 'Вода давление {p} МПа — всё в норме. Так держать.',
+    'ex.ok': 'Давление {p} МПа — всё в норме. Так держать.',
     // ---------- Подсказки при наведении ----------
     'ui.power': 'Мощность реактора',
     'ui.power.text': 'Сколько тепла даёт реактор: 100% — это 3000 МВт. Как газ на плите: его держат ровно, а не крутят туда-сюда. Зелёная зона — сколько унесут насосы.',

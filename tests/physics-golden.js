@@ -6,6 +6,7 @@
      node tests/physics-golden.js            сравнить с эталоном
      node tests/physics-golden.js --write    снять эталон заново (только по решению автора)
      node tests/physics-golden.js --file другой.html
+     node tests/physics-golden.js --notes 500   показать больше отличий текста (по умолчанию 40)
 
    Физика (числа состояния, конец смены, звёзды) сравнивается строго — расхождение = ошибка.
    Тексты (реплики, журнал действий, итоги, «Вызов») снимаются по-русски и сравниваются отчётом:
@@ -17,6 +18,7 @@ const args = process.argv.slice(2);
 const WRITE = args.includes('--write');
 const fileArg = args.indexOf('--file');
 const FILE = path.resolve(__dirname, '..', fileArg >= 0 ? args[fileArg + 1] : 'night-shift-4.html');
+const notesArg = args.indexOf('--notes'), NOTES = notesArg >= 0 ? +args[notesArg + 1] : 40;   // сколько отличий текста показать
 const GOLD = path.join(__dirname, 'golden-pre-translation.json');
 
 // логика без DOM: от начала скрипта до комментария с маркером «ИНТЕРФЕЙС»
@@ -124,10 +126,10 @@ for (const k of Object.keys(gold)) {
   for (const part of ['msgs', 'expl', 'log']) {
     const n = Math.max(a[part].length, b[part].length);
     for (let i = 0; i < n; i++) if (JSON.stringify(a[part][i]) !== JSON.stringify(b[part][i])) {
-      txt++; if (txt <= 40) notes.push(`  ~ ${k} ${part}[${i}]\n      было: ${JSON.stringify(a[part][i])}\n      стало: ${JSON.stringify(b[part][i])}`);
+      txt++; if (txt <= NOTES) notes.push(`  ~ ${k} ${part}[${i}]\n      было: ${JSON.stringify(a[part][i])}\n      стало: ${JSON.stringify(b[part][i])}`);
     }
   }
-  if (JSON.stringify(a.result) !== JSON.stringify(b.result)) { txt++; if (txt <= 40) notes.push(`  ~ ${k} итоги\n      было: ${JSON.stringify(a.result)}\n      стало: ${JSON.stringify(b.result)}`); }
+  if (JSON.stringify(a.result) !== JSON.stringify(b.result)) { txt++; if (txt <= NOTES) notes.push(`  ~ ${k} итоги\n      было: ${JSON.stringify(a.result)}\n      стало: ${JSON.stringify(b.result)}`); }
 }
 console.log(notes.join('\n'));
 console.log(`\nфизика: ${bad ? '✗ ' + bad + ' расхождений' : '✓ совпадает'} (${Object.keys(gold).length} прогонов) · тексты: ${txt ? txt + ' отличий (отчётом)' : 'совпадают'}`);
