@@ -7,6 +7,7 @@
      node tests/physics-golden.js --write    снять эталон заново (только по решению автора)
      node tests/physics-golden.js --file другой.html
      node tests/physics-golden.js --notes 500   показать больше отличий текста (по умолчанию 40)
+     node tests/physics-golden.js --lang en     все тексты прогонов по-английски — прочитать подряд, кириллица — ошибка
 
    Физика (числа состояния, конец смены, звёзды) сравнивается строго — расхождение = ошибка.
    Тексты (реплики, журнал действий, итоги, «Вызов») снимаются по-русски и сравниваются отчётом:
@@ -19,6 +20,7 @@ const WRITE = args.includes('--write');
 const fileArg = args.indexOf('--file');
 const FILE = path.resolve(__dirname, '..', fileArg >= 0 ? args[fileArg + 1] : 'night-shift-4.html');
 const notesArg = args.indexOf('--notes'), NOTES = notesArg >= 0 ? +args[notesArg + 1] : 40;   // сколько отличий текста показать
+const langArg = args.indexOf('--lang'), LANG = langArg >= 0 ? args[langArg + 1] : null;        // --lang en: все тексты прогонов на этом языке — без сравнения
 const GOLD = path.join(__dirname, 'golden-pre-translation.json');
 
 // логика без DOM: от начала скрипта до комментария с маркером «ИНТЕРФЕЙС»
@@ -34,7 +36,7 @@ function loadLogic(seed) {
   const mod = { exports: {} };
   vm.runInNewContext(src.slice(a, b), { module: mod, Math: M, console });
   const L = mod.exports;
-  if (typeof L.setLang === 'function') L.setLang('ru');   // тексты эталона — по-русски
+  if (typeof L.setLang === 'function') L.setLang(LANG || 'ru');   // тексты эталона — по-русски
   return L;
 }
 
@@ -111,6 +113,18 @@ function all() {
 }
 
 const cur = all();
+if (LANG) {   // все реплики, «Вызов», журнал и итоги прогонов на выбранном языке — прочитать подряд; кириллица — ошибка
+  const seen = new Map();
+  for (const [k, r] of Object.entries(cur)) {
+    const add = (kind, x) => { if (x && !seen.has(x)) seen.set(x, `${k} · ${kind}`); };
+    r.texts.msgs.forEach(m => add('реплика', m[3])); r.texts.expl.forEach(e => add('«Вызов»', e[1])); r.texts.log.forEach(l => add('журнал', l[2]));
+    if (r.texts.result) { add('итог', r.texts.result.title); r.texts.result.lines.forEach(x => add('итог', x)); r.texts.result.stars.forEach(s => { add('звезда', s[0]); add('звезда', s[1]); }); }
+  }
+  let cyr = 0;
+  for (const [x, where] of seen) { const c = /[А-Яа-яЁё]/.test(x); if (c) cyr++; console.log(`${c ? '✗ ' : ''}[${where}] ${x}`); }
+  console.log(`\nразных текстов: ${seen.size} · с кириллицей: ${cyr}`);
+  process.exit(cyr ? 1 : 0);
+}
 if (WRITE) {
   fs.writeFileSync(GOLD, JSON.stringify(cur));
   console.log(`эталон записан: ${path.relative(process.cwd(), GOLD)}, прогонов ${Object.keys(cur).length}`);

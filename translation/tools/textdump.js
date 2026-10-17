@@ -34,8 +34,10 @@ if (opt('diff') != null) {
 }
 if (opt('cyr') != null) {
   const a = JSON.parse(fs.readFileSync(path.join(opt('cyr'), 'texts.json'), 'utf8'));
+  // название языка в выборе языка — на нём самом (задание: «подпись каждого варианта — на его языке»)
+  const allow = new Set(['Русский']);
   let n = 0;
-  for (const [k, list] of Object.entries(a)) for (const x of list) if (/[А-Яа-яЁё]/.test(x)) { n++; console.log(`${k}: ${x}`); }
+  for (const [k, list] of Object.entries(a)) for (const x of list) if (/[А-Яа-яЁё]/.test(x) && !allow.has(x)) { n++; console.log(`${k}: ${x}`); }
   console.log(n ? `\nстрок с кириллицей: ${n}` : 'кириллицы нет ни на одном экране');
   process.exit(n ? 1 : 0);
 }
