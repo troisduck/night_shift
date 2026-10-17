@@ -73,14 +73,18 @@ def main():
         t_panel = time.time() - t0[0]; at_panel = {"first": clicks["first"]}
         note(f"ДО ПУЛЬТА (первый запуск): {clicks['first']} кликов, {t_panel:.0f} с")
         pg.wait_for_selector(".fc-note.on", timeout=4000); pg.wait_for_timeout(450); shot("08-focus-power")
-        click("#b-power .blk-h", "first")
-        pg.wait_for_timeout(500); shot("09-focus-rods")
+        pg.keyboard.press("Enter")   # П7: записку срывают (Enter — то же, что рывок рукой); клик по залу её не убирает
+        pg.wait_for_timeout(700); shot("08b-focus-goal")
+        pg.keyboard.press("Enter")
+        pg.wait_for_timeout(700); shot("09-focus-rods")
         click("#btn-up", "first", hold=220)
         pg.wait_for_timeout(1300); shot("10-focus-rate")
         pg.wait_for_timeout(2000)
         # смена: досрочно сдаём (звёзды по журналу игры) — проверяем журнал
         pg.evaluate("UI.game.finish(true)")
-        pg.wait_for_selector("#m-result.show", timeout=5000); pg.wait_for_timeout(500); shot("11-journal-open")
+        pg.wait_for_selector("#punch.on", timeout=8000); pg.wait_for_timeout(500); shot("10b-punch")   # П7: табельные часы — карточку пробивают
+        pg.keyboard.press("Enter")
+        pg.wait_for_selector("#m-result.show", timeout=8000); pg.wait_for_timeout(500); shot("11-journal-open")
         pg.wait_for_timeout(2600); shot("12-journal-done")
         click("#mr-next", "first")
         pg.wait_for_selector("#mb-go", state="visible", timeout=4000); pg.wait_for_timeout(300); shot("13-brief2")

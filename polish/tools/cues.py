@@ -18,7 +18,7 @@ JS = """async ([names, rep, gap]) => {
   const eng = NightShiftAudio.create(ctx, { volume: { master: 0.8, station: 0, alarms: 1 }, seed: 20261015 });
   if (eng.setMode) eng.setMode('play');
   let t = 0.3; const marks = [];
-  for (const n of names) for (let i = 0; i < rep; i++) { eng.cue(n, t, {}); marks.push([n, t]); t += gap; }
+  for (const nn of names) for (let i = 0; i < rep; i++) { const [n, m] = nn.split(':'); eng.cue(n, t, m ? { m } : {}); marks.push([nn, t]); t += gap; }   // имя:материал — для knock (П7)
   const buf = await ctx.startRendering();
   const L = buf.getChannelData(0), R = buf.getChannelData(1);
   const pcm = new Int16Array(L.length * 2);

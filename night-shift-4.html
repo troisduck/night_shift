@@ -431,7 +431,7 @@ button { font: inherit; color: inherit; }
 .sc-target { position: absolute; top: -.02rem; height: .42rem; border: .14rem solid var(--ink-ok); border-bottom: 0; border-radius: 1px 1px 0 0; background: rgba(46,158,71,.12); display: none; }
 /* стрелка: тёмная на подсвеченной шкале, толще, с заострённым концом и тенью от ключевого света (вниз-вправо) */
 /* стрелка закреплена на ободе сверху и висит вниз: остриё — на шкале (плейтест П6: «стрелка прикреплена физически, должна быть перевёрнутой»); на креплении — заклёпка */
-.sc-needle { position: absolute; top: -.12rem; width: .26rem; height: 1.02rem; margin-left: -.13rem; background: var(--engrave-ink); border-radius: .06rem .06rem 0 0;
+.sc-needle { translate: var(--trem, 0px) 0; position: absolute; top: -.12rem; width: .26rem; height: 1.02rem; margin-left: -.13rem; background: var(--engrave-ink); border-radius: .06rem .06rem 0 0;
   box-shadow: .1rem .08rem 0 rgba(31,29,26,.28); }
 .sc-needle::before { content: ""; position: absolute; left: 0; top: 100%; border-left: .13rem solid transparent; border-right: .13rem solid transparent; border-top: .22rem solid var(--engrave-ink); }
 .sc-needle::after { content: ""; position: absolute; left: 50%; top: -.04rem; width: .4rem; height: .4rem; margin-left: -.2rem; border-radius: 50%;
@@ -1267,7 +1267,7 @@ body { background: radial-gradient(ellipse 75% 70% at 46% 60%, rgba(0,0,0,0) 30%
 /* заставки: чёрный экран, одна мысль, тишина */
 .sp-card { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.1rem; opacity: 0; transition: opacity 480ms var(--ease-paper); pointer-events: none; }
 .sp-card.on { opacity: 1; }
-.sp-dedic { font: 400 1.25rem/1 var(--f-text); letter-spacing: .06em; color: #B9B4A6; }
+.sp-dedic { font: 400 1.25rem/1 var(--f-text); letter-spacing: .06em; color: #B9B4A6; }   /* ns-ok: T-latin — посвящение «for m10» на заставке, исключение из CLAUDE.md */
 .sp-title { font: 700 4.6rem/1 var(--f-engrave); letter-spacing: .14em; text-transform: uppercase; color: #E6E0CC; text-shadow: 0 .1rem 0 rgba(0,0,0,.6); }
 .sp-sub { font: 400 1.05rem/1 var(--f-text); letter-spacing: .08em; color: #8E897C; }
 /* дверь: мир (фон-холст и сцена в проектных координатах 1600×900) */
@@ -1324,15 +1324,18 @@ body { background: radial-gradient(ellipse 75% 70% at 46% 60%, rgba(0,0,0,0) 30%
 .gl-links.gl-right { left: auto; right: 1.1rem; }
 /* первый отдел: стол под лампой, бланк, подпись, штамп, папка */
 .sg-desk { position: absolute; left: 0; top: 0; display: block; }
-.sg-pen { position: absolute; left: calc(50% + min(22rem, 40vw)); top: 58%; width: 10.5rem; height: 1.1rem; transform-origin: 0 50%; transform: rotate(-24deg); z-index: 5; pointer-events: none; }
-.sg-pen svg { display: block; width: 100%; height: 100%; overflow: visible; }
-.sg-pen .pn-sh { opacity: .55; transform: translate(.5rem, .9rem); transition: transform 80ms; }       /* тень ручки на бумаге: вниз и вправо, как от лампы */
-/* ручку взяли: она идёт за указателем (кончик — в точке указателя), системного курсора над бланком нет */
-.scene.pen-up .sg-pen { position: fixed; left: 0; top: 0; margin-top: -.55rem; transform: translate(var(--px), var(--py)) rotate(-38deg); }
-.scene.pen-up.pen-down .sg-pen .pn-sh { transform: translate(.18rem, .3rem); }   /* прижали к бумаге — тень подошла к кончику */
+.pen { width: 15.6rem; height: calc(15.6rem * 26 / 240); pointer-events: none; }   /* П7: в 1,5 раза крупнее, пропорции точные */
+.pen svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.pen .pn-sh { opacity: .5; transform: translate(.7rem, 1.25rem); transition: transform 90ms ease-out; }   /* тень ручки: вниз и вправо, как от лампы; в отрыве — дальше */
+.sg-pen { position: absolute; left: calc(50% + min(22rem, 40vw)); top: 58%; transform-origin: 0 50%; transform: rotate(-24deg); z-index: 5; }
+/* ручку взяли: кончик (точка 0, середина высоты) — ровно в точке указателя; наклон чуть следует росчерку (--tilt, с инерцией); системного курсора нет */
+.scene.pen-up .sg-pen { position: fixed; left: 0; top: 0; transform-origin: 0 0; transform: translate(var(--px), var(--py)) rotate(calc(-38deg + var(--tilt, 0deg))) translateY(-50%); }
+.scene.pen-up.pen-down .sg-pen .pn-sh { transform: translate(.2rem, .34rem); }   /* прижали к бумаге — тень сошлась к кончику */
+.sg-live { position: absolute; z-index: 2; pointer-events: none; }   /* хвост штриха до кончика — пока пишут */
 .sg-doc { touch-action: none; }
 .scene.pen-up .sg-doc { cursor: none; }
 .sg-ink { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; }
+.sg-doc .sg-live { inset: 0; width: 100%; height: 100%; }
 .sg-papers { position: absolute; left: 50%; top: 48%; width: min(40rem, 86vw); transform: translate(-50%, -50%); transition: transform 600ms var(--ease-paper), opacity 500ms; }
 .sg-doc, .sg-doc2 { position: relative; color: var(--paper-ink); background: var(--tex-paper), #ECE3CB; border-radius: 1px; box-shadow: 0 .6rem 1.4rem rgba(0,0,0,.6), 0 0 0 1px rgba(40,30,18,.22); }
 .sg-doc { padding: 1.5rem 2rem 1.3rem; transform: rotate(-.7deg); z-index: 2; }
@@ -1539,7 +1542,32 @@ svg.crack .ck-l { fill: none; stroke: rgba(236,240,234,.62); stroke-width: .9; }
   background: radial-gradient(circle at 36% 30%, #F3B39A 0, #C2412D 38%, #7A1D12 100%); box-shadow: .12rem .22rem .18rem rgba(0,0,0,.55); }   /* кнопка-гвоздик: краска, не свет */
 .fc-who { display: block; font: 400 .95rem/1 var(--f-hand); color: var(--paper-pencil); margin-bottom: .15rem; }
 .fc-note p { margin: 0; font: 400 1.32rem/1.24 var(--f-hand); color: var(--paper-pen); }   /* шариковой ручкой, как подпись */
-.fc-hint { display: block; margin-top: .4rem; font: 400 .8rem/1 var(--f-text); color: var(--paper-pencil); }
+.fc-hint { display: block; margin-top: .4rem; font: 400 .95rem/1 var(--f-hand); color: var(--paper-pencil); }   /* П7: «сорви, как прочтёшь» — рукой Палыча, первые разы */
+/* записку срывают (П7, ЗАП): наведение — уголок приподнят, хват — лист тянется за рукой на пружине вокруг кнопки,
+   рывок — отрыв: клочок остаётся на кнопке, лист улетает. Клик без рывка — лист дёргается на кнопке и остаётся */
+.fc-note.on .fc-paper { pointer-events: auto; cursor: grab; touch-action: none; }
+.fc-note.held .fc-paper { cursor: grabbing; transition: none; }
+.fc-paper { transform-origin: 50% 0; transition: transform var(--t-hover) ease-out; }
+.fc-note.on:not(.held) .fc-paper:hover { transform: rotate(-1.4deg) translateY(-.1rem); }
+.fc-paper.back { transition: transform .34s cubic-bezier(.3, 1.6, .5, 1); }
+.fc-paper.tug { animation: fcTug .3s ease-out; }
+@keyframes fcTug { 30% { transform: translateY(.28rem) rotate(1.6deg); } 65% { transform: translateY(-.06rem) rotate(-.6deg); } 100% { transform: none; } }
+.fc-fly { position: fixed; z-index: 38; margin: 0; pointer-events: none; transform-origin: 50% 0; color: var(--paper-ink); color-scheme: light; }
+.fc-fly p { margin: 0; font: 400 1.32rem/1.24 var(--f-hand); color: var(--paper-pen); }
+.fc-scrap { position: fixed; z-index: 37; width: 1.3rem; height: 1rem; margin-left: -.65rem; pointer-events: none; transition: opacity .5s linear; }
+.fc-scrap::before { content: ""; position: absolute; left: 0; right: 0; top: .1rem; bottom: 0; background: var(--tex-paper), #EFE4C6;   /* клочок бумаги под кнопкой */
+  clip-path: polygon(0 0, 100% 0, 88% 55%, 66% 100%, 44% 68%, 22% 96%, 6% 50%); }
+.fc-scrap .fc-pin { top: -.12rem; }
+.fc-scrap.fade { opacity: 0; }
+/* отклик неработающего (П7): пластина вздрагивает на винтах на долю пикселя; блик на стекле чуть смещается */
+.cover.shiver { animation: plateShiver .26s ease-out; }
+@keyframes plateShiver { 15% { transform: translate(.6px, .4px); } 35% { transform: translate(-.5px, -.2px); } 60% { transform: translate(.25px, .1px); } 100% { transform: none; } }
+.glint { position: relative; }
+.glint::after { content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 3; animation: glassGlint .45s ease-out both;
+  background: linear-gradient(118deg, rgba(255,255,255,0) 30%, rgba(255,255,255,.09) 38%, rgba(255,255,255,0) 46%); }
+@keyframes glassGlint { from { transform: translateX(-6%); opacity: 1; } to { transform: translateX(6%); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .cover.shiver, .glint::after { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .fc-paper, .fc-paper.back { transition: none; } .fc-paper.tug { animation: none; } }
 
 /* раскрытие: винты выкручиваются по одному, пластина падает, пыль, самопроверка прибора */
 .rv-screw { position: absolute; z-index: 2; width: .52rem; height: .52rem; margin: -.26rem 0 0 -.26rem; border-radius: 50%; pointer-events: none;
@@ -1786,6 +1814,8 @@ body { -webkit-touch-callout: none; }
 .jr-me:not(.signed)::after { content: "× здесь"; position: absolute; left: 6.6rem; bottom: .35rem; font: 400 1.05rem/1 var(--f-hand); color: var(--paper-pencil); }
 .jr-me:focus-visible .sig { outline: 2px solid var(--look-dark); outline-offset: 2px; }
 .jr-sg.draw .sig path { animation-duration: var(--sig-ms, 700ms); }
+.jr-me.draw .sig path { animation-timing-function: linear; }   /* паста идёт ровно за кончиком ручки (penWrite) */
+.pl-pen { position: fixed; left: 0; top: 0; z-index: 50; transform-origin: 0 0; }
 /* строки появляются по порядку; клик по листу — всё сразу */
 .plank .pl-l { transition: opacity 120ms linear; }
 .plank.filling .pl-l:not(.in) { opacity: 0; }
@@ -3371,6 +3401,15 @@ const FEEL = {
     wake: 650,                      // приборы просыпаются: цифры загораются за столько мс
   },
   // фокус-свет (STYLE.md 2.8): зал приглушается, на объект падает пятно, рядом записка Палыча
+  // тело станции (П7, 9.2; STYLE.md 2.11 «машина взяла нагрузку»): дрожь стрелок, px (наибольшая), частоты, Гц; вклад насосов и турбины;
+  // толчок, когда машина взяла нагрузку (травма) и через сколько мс после ключа насоса. Ослабляется настройкой тряски, при reduced-motion — нет
+  body: { on: true, needle: 0.7, hz: [13, 21], pumps: 0.7, turbine: 0.5, jolt: 0.08, joltMs: 380 },
+  // отклик неработающего (П7, раздел 9): мс между стуками по одному предмету, ширина панорамы, громкость (разброс), пылинок с кромки, после скольких стуков Палыч отвечает
+  touch: { gap: 120, pan: 0.8, v: [0.75, 1.05], dust: 5, persist: 5 },
+  // записка Палыча (П7, раздел 7): срывают рывком. rem — доли кегля; скорости — px/с
+  note: { tear: 5.5, give: 6, turn: 0.12, maxTurn: 16, hintN: 3, gravity: 2600, spin: 320, spinK: 0.25, vmax: 2400, autoV: [520, -380], scrapMs: 2500 },
+  // шариковая ручка (П7, раздел 10): толщина пасты в долях высоты строки подписи / 60 — наибольшая, наименьшая и сколько отнимает скорость (на 1 px/мс)
+  pen: { w: 2.6, wMin: 1.0, speed: 0.9 },
   // табло задания (П7, раздел 3)
   goal: {
     scale: 'lamps',        // шкала выполнения: 'lamps' — ряд крупных ламп, 'slot' — световая щель (выбор автора; на пробу — адрес ?goalv=slot)
@@ -3590,6 +3629,9 @@ class Scale {
     if (Math.abs(p - this.x) < 0.02 && Math.abs(this.vx) < 0.2) { this.x = p; this.vx = 0; this.zt = N.zeta; }
     const nx = clamp(this.x, -1.5, 101.5).toFixed(2);   // перелёт — чуть за край поля, как упор стрелки
     if (nx !== this._nx) { this._nx = nx; this.nEl.style.left = nx + '%'; }
+    // тело станции (П7, 9.2): стрелка мелко дрожит от работы насосов и турбины — по их оборотам (UI.tremor), меньше пикселя
+    const tr = UI.tremor ? FEEL.body.needle * UI.tremor * (Math.sin(now * FEEL.body.hz[0] / 159 + (this.ph || (this.ph = Math.random() * 6))) * .6 + Math.sin(now * FEEL.body.hz[1] / 159 + this.ph * 1.7) * .4) : 0;
+    const ts = tr.toFixed(2); if (ts !== this._tr) { this._tr = ts; this.nEl.style.setProperty('--trem', ts + 'px'); }
     if (cls !== this.cls) { this.el.dataset.s = cls || 'neu'; this.cls = cls; }
   }
 }
@@ -3712,7 +3754,7 @@ const SOUND = {
       deny: 8, win: 9.5, rodStop: 8.5, pumpTrip: 16.5, stopValve: 12.5,
       diesel_start: 9, rodStep: 12.5, contactor: 17.5, valve: 14, relay: 22,
       coverClose: 16.5, mentor: 18.5, drop: 8, ui: 34.5, annRelay: 27.5,
-      typer: 22, cardOut: 22, cardIn: 18, punch: 5,   // П7: табельные часы и планшет — уровни как у бумаги и штампа (проверка — polish/tools/cues.py)
+      typer: 22, cardOut: 22, cardIn: 18, punch: 5, noteStretch: 24, noteTear: 20, knock: 7,   // стук неработающего — около глухого упора deny (−29 LUFS), стекло тише железа   // П7: табельные часы и планшет — уровни как у бумаги и штампа (проверка — polish/tools/cues.py)
       doorBell: -5, doorBuzz: 15, bolt: 14, door: 11, paper: 24, folder: 20, pen: 25, stamp: 6, tube: 20, screw: 24, plate: 15, selftest: 18,   // вход в игру: замер polish/tools/cues.py, ориентиры — SOUND.md §6.5
       arc: 15, coastScrape: 16, syncClick: 3.5, blastRumble: 10, blastHit: 5, debris: 12, thunder: 10, rain: 4, doorStrike: -5, street: 8, steamBlow: 12, boilBurst: 14, coreSurge: 8, groan: 14, boom: 6,   // гроза (П6) — за стеной, шина station: в оффлайн-рендере молчит, громкость — на ориентир, ждёт ушей автора   // большие моменты (П4): замер cues.py, ориентиры — SOUND.md §6.8
     },
@@ -3821,6 +3863,18 @@ const NightShiftAudio = (function () {
     // шариковая ручка: короткий скрип, громкость и высота — от скорости росчерка (o.v: 0…1)
     pen:      { bus: 'ui', dur: 0.05, f: (A, t, o, d) => { const v = Math.max(0.15, Math.min(1, o.v || 0.5)); A.burst(t, 2600 + 2600 * v, 2.2, 0.035, 0.05 + 0.13 * v, d); } },
     // резиновый штамп по бумаге на столе: глухой удар с долгим низом
+    // стук по неработающему (П7, раздел 9): материал — o.m; панорама — по месту клика; каждый повтор чуть другой (vary)
+    knock: { bus: 'pult', dur: 0.4, f: (A, t, o, d) => { const p = A.pan(o.pan || 0, d), v = o.v || 1, m = o.m;
+      if (m === 'plate') { A.thump(t, A.vary(96, 0.08), 0.09, 0.6 * v, p); A.burst(t, A.vary(1500, 0.15), 2, 0.02, 0.18 * v, p); A.ring(t + 0.012, A.vary(3100, 0.1), 0.05, 0.05 * v, p); A.ring(t + 0.03, A.vary(4400, 0.1), 0.04, 0.035 * v, p); }   // толстое железо, винты звякают
+      else if (m === 'niche') { A.thump(t, A.vary(150, 0.1), 0.12, 0.45 * v, p); A.burst(t, A.vary(700, 0.15), 1.2, 0.05, 0.12 * v, p); A.hiss(t + 0.03, 0.18, 0.03 * v, p); }   // пустая ниша, шорох жгута
+      else if (m === 'lens' || m === 'glass') { A.burst(t, A.vary(m === 'lens' ? 3600 : 2800, 0.1), 6, 0.012, 0.45 * v, p); A.ring(t, A.vary(m === 'lens' ? 2900 : 2100, 0.08), 0.03, 0.09 * v, p); A.thump(t, 220, 0.03, 0.3 * v, p); }   // стекло
+      else if (m === 'window') { A.burst(t, A.vary(2200, 0.1), 5, 0.015, 0.34 * v, p); A.ring(t, A.vary(1500, 0.06), 0.09, 0.09 * v, p); A.thump(t, 85, 0.07, 0.36 * v, p); }   // оконное стекло в раме
+      else if (m === 'wood') { A.thump(t, A.vary(190, 0.1), 0.06, 0.4 * v, p); A.burst(t, A.vary(900, 0.15), 1.5, 0.02, 0.14 * v, p); }   // столешница
+      else if (m === 'paper') { A.hiss(t, 0.1, 0.06 * v, p); A.burst(t, A.vary(3600, 0.2), 1, 0.03, 0.12 * v, p); }   // лист
+      else { A.thump(t, A.vary(130, 0.1), 0.06, 0.45 * v, p); A.burst(t, A.vary(1100, 0.15), 1.4, 0.015, 0.12 * v, p); } } },   // крашеная эмаль: глухо
+    // записка (П7): бумага натягивается — тихое шуршание; отрыв — рвущаяся бумага, дробь волокон
+    noteStretch: { bus: 'ui', dur: 0.15, f: (A, t, o, d) => { A.hiss(t, 0.1, 0.03 * (o.v || .5), d); A.burst(t, A.vary(2200, 0.2), 1.2, 0.05, 0.05 * (o.v || .5), d); } },
+    noteTear: { bus: 'ui', dur: 0.32, f: (A, t, o, d) => { for (let k = 0; k < 9; k++) A.burst(t + k * A.vary(0.022, 0.4), A.vary(2600 + k * 220, 0.25), 1.3, 0.025, 0.16, d); A.hiss(t, 0.22, 0.05, d); A.burst(t + 0.2, 4200, 3, 0.01, 0.08, d); } },
     // табельные часы и планшет (П7): карточка из кармашка, трение в щели, удар механизма с лёгким отскоком; машинка на бланке
     typer:    { bus: 'ui', dur: 0.08, f: (A, t, o, d) => { A.burst(t, A.vary(2600, 0.12), 3, 0.012, 0.35, d); A.thump(t, A.vary(320, 0.1), 0.025, 0.25, d); } },
     cardOut:  { bus: 'ui', dur: 0.3, f: (A, t, o, d) => { A.hiss(t, 0.16, 0.05 * (o.v || 1), d); A.burst(t + 0.03, A.vary(3400, 0.15), 1.4, 0.04, 0.12 * (o.v || 1), d); } },
@@ -5194,13 +5248,14 @@ const Save = {
     if (!d.moments || typeof d.moments !== 'object') d.moments = {};   // П4: какие большие моменты уже видел (повтор — короче)
     if (typeof d.expert !== 'boolean') d.expert = false;              // П6: рубильник «Я опытный» на пульте «График смен»
     if (!d.keysSeen || typeof d.keysSeen !== 'object') d.keysSeen = {};
-    if (!Array.isArray(d.timecard)) d.timecard = [];                   // П7: табель — строки карточки учёта по сменам
+    if (!Array.isArray(d.timecard)) d.timecard = [];
+    if (typeof d.tears !== 'number') d.tears = 0;                      // П7: сколько записок сорвано (подсказка «сорви, как прочтёшь» — первые разы)                   // П7: табель — строки карточки учёта по сменам
     if (typeof d.punchSeen !== 'boolean') d.punchSeen = false;        // П7: первый раз у табельных часов — записка Палыча
     if (typeof d.plankSeen !== 'boolean') d.plankSeen = false;        // П7: планшет повторно заполняется быстрее
     if (typeof d.comfort.vibrate !== 'boolean') d.comfort.vibrate = true;   // П7: вибрация на сенсорных устройствах   // П7: какие подсказки клавиш уже выучены (стержни, клапан, квитирование)
     d.v = 2;
   },
-  reset() { Object.assign(this.data, { stars: {}, introSeen: false, hallSeen: false, sign: null, moments: {}, expert: false, keysSeen: {}, timecard: [], punchSeen: false, plankSeen: false }); this.save(); },   // звук, громкость и комфорт остаются
+  reset() { Object.assign(this.data, { stars: {}, introSeen: false, hallSeen: false, sign: null, moments: {}, expert: false, keysSeen: {}, timecard: [], punchSeen: false, plankSeen: false, tears: 0 }); this.save(); },   // звук, громкость и комфорт остаются
   stars(i) { return this.data.stars[LEVELS[i].id] || 0; },
   playable(i) {
     const lv = LEVELS[i]; if (i === 0) return true;
@@ -5850,6 +5905,9 @@ function renderDesk(g) {
   else if (s.rho < -3) { const hl = Math.LN2 * CONFIG.kinetics.K / -s.rho; rt = s.P < 1e-4 ? 'не разгоняется' : hl > 600 ? 'медленно падает' : `падает: ½ за ${Math.round(hl)} с`; rc = 'info'; }
   else { rt = 'ровно'; rc = 'ok'; }
   setText($('r-rate'), rt, quiet(rc)); SC.rate.set(clamp(s.rho, -RHO_MAX, RHO_MAX), rc);
+  // тело станции (П7, 9.2): дрожь стрелок — от потока насосов и выдачи турбины; в покое, на паузе и без тряски её нет
+  { const B = FEEL.body, k = B.on && UI.mode === 'play' && !UI.paused && !reducedMotion() ? Shake.k() : 0;
+    UI.tremor = k ? clamp(s.flow * B.pumps + (s.turbineOnline ? s.mwe / 1000 * B.turbine : 0), 0, 1) * k : 0; }
   // стержни
   const inZone = g.rodsInZone(), showZone = g.open.has('boron');
   R.rods.set(s.h.toFixed(1), showZone && !inZone && !s.scram ? 'warn' : 'neu');
@@ -6315,6 +6373,39 @@ function showBrief(idx) {
    Enter, Пробел). Карточка входит с трением, механизм бьёт, в строке смены проступает время ухода, карточка выходит обратно.
    Табель растёт от смены к смене (Save.data.timecard). Обязательный жест — один; всё остальное ускоряет клик */
 const TAB_NO = '0213';
+// отклик того, что ничего не делает (П7, раздел 9, п. 4): каждая вещь отвечает своим материалом — чувствуется, что она настоящая,
+// но сейчас не работает. Звук — по материалу (SOUND.md 6.2), с панорамой по месту клика и разбросом; ограничение частоты — на каждый
+// предмет (FEEL.touch.gap), а не общее. Движение: пластина вздрагивает на винтах, с кромки сыплется пыль; жгут в нише качается.
+// Живые органы отвечают сами (LIVE_SEL). Упорство замечают: Палыч один раз за смену
+const LIVE_SEL = 'button, .btn, .tog, .pkey, .az-wrap, input, a, [role="button"], .fc-note, .tb-btns, .vol-panel, #keys-ov, .kh';
+const Feel = {
+  last: new WeakMap(), taps: new WeakMap(), said: null,
+  mat(t) {
+    const cover = t.closest('.blk.locked > .cover'); if (cover) return { m: cover.dataset.niche ? 'niche' : 'plate', el: cover };
+    const ann = t.closest('.ann, .prot-lens'); if (ann) return { m: 'lens', el: ann };
+    const gl = t.closest('#b-mimic, .chart, canvas.sched, .read, .scale, #rv-box'); if (gl) return { m: 'glass', el: gl };
+    if (t.closest('#window')) return { m: 'window', el: $('window') };
+    const pp = t.closest('.m-text, .mentor'); if (pp) return { m: 'paper', el: pp };
+    if (t.closest('#bottom')) return { m: 'wood', el: $('bottom') };
+    const en = t.closest('.blk, #topbar, #annunciator, #desk'); if (en) return { m: 'enamel', el: en };
+    if (t.closest('#app')) return { m: 'enamel', el: $('app') };   // рама щита
+    return null;
+  },
+  tap(e) {
+    if (e.button > 0 || !e.target.closest || UI.mode !== 'play' || UI.modal || Punch.on || Scenes.cur || e.target.closest(LIVE_SEL)) return;
+    const M = this.mat(e.target); if (!M) return;
+    const F = FEEL.touch, now = performance.now(); if (now - (this.last.get(M.el) || 0) < F.gap) return; this.last.set(M.el, now);
+    Snd.cue('knock', { m: M.m, pan: clamp(e.clientX / innerWidth * 2 - 1, -1, 1) * F.pan, v: F.v[0] + Math.random() * (F.v[1] - F.v[0]) });
+    const calm = reducedMotion() || (Save.data.comfort && Save.data.comfort.shake === 'off');
+    if (M.m === 'plate' || M.m === 'niche') {
+      if (!calm) { M.el.classList.remove('shiver'); void M.el.offsetWidth; M.el.classList.add('shiver');
+        const r = M.el.getBoundingClientRect(); for (let i = 0; i < F.dust; i++) FX.add('dust', r.left + r.width * (.15 + Math.random() * .7), r.top + 4, { vy: 18 + Math.random() * 30, life: 1.2 + Math.random() }); }
+      const n = (this.taps.get(M.el) || 0) + 1; this.taps.set(M.el, n);
+      const g = UI.game, b = M.el.parentElement;
+      if (n >= F.persist && g && this.said !== g && b && b.dataset.g) { this.said = g; g.say(`Не стучи, не откроется. Её снимут к смене ${unlockLevelOf(b.dataset.g)} — тогда и потрогаешь.`, 1); }
+    } else if (M.m === 'glass' && !calm) { M.el.classList.remove('glint'); void M.el.offsetWidth; M.el.classList.add('glint'); }
+  },
+};
 // вибрация — только на сенсорных устройствах и если не выключена в настройках (П7, 9: АЗ, штамп, удар табельных часов, отказ насоса)
 function haptic(ms) { try { if (navigator.vibrate && matchMedia('(pointer: coarse)').matches && Save.data.comfort && Save.data.comfort.vibrate !== false) navigator.vibrate(ms); } catch (e) { /* — */ } }
 // время станции: в сменах с часами — их время, иначе начало FEEL.punch.start и сжатое время смены (FEEL.punch.minPerSec)
@@ -6444,6 +6535,16 @@ const Punch = {
   resize() { if (this.el) this.paint(); },
   abort() { if (this.el) this.el.remove(); this.el = null; this.on = false; this.st = ''; this.done = null; },
 };
+// ручка выписывает сохранённую подпись (П7, раздел 10): кончик идёт по пути подписи с той же скоростью, что паста (анимация штриха — линейная)
+function penWrite(svg, ms) {
+  const path = svg && svg.querySelector('path'); if (!path || reducedMotion()) return;
+  let L = 0; try { L = path.getTotalLength(); } catch (e) { return; } if (!L) return;
+  const box = document.createElement('div'); box.innerHTML = penSVG('pl-pen'); const pe = box.firstChild; document.body.appendChild(pe);
+  const t0 = performance.now(), step = now => { const k = Math.min(1, (now - t0) / ms), M = path.getScreenCTM(); if (!M) { pe.remove(); return; }
+    const p = path.getPointAtLength(L * k).matrixTransform(M); pe.style.transform = `translate(${p.x.toFixed(1)}px, ${p.y.toFixed(1)}px) rotate(-38deg) translateY(-50%)`;
+    if (k < 1) requestAnimationFrame(step); else setTimeout(() => pe.remove(), 160); };
+  requestAnimationFrame(step);
+}
 // «Посёлок» на планшете (П7, 6.4): сколько выдано в сеть и сколько посёлок был без света — из истории смены, на результат не влияет
 function townLine(g) {
   const H = g.hist, k = shiftClock(g).k, thr = FEEL.moments.sync.at; let mwh = 0, dark = 0, any = false;
@@ -6514,6 +6615,7 @@ function showResult(g) {
   m.querySelectorAll('.sig path').forEach(p => { try { p.style.setProperty('--len', Math.ceil(p.getTotalLength() + 4)); } catch (e) { /* — */ } });
   let signed = false;
   const sign = fast => { if (signed) return; signed = true; me.classList.add('signed'); me.classList.remove('draw'); void me.offsetWidth; if (fast) me.style.setProperty('--sig-ms', '400ms'); me.classList.add('draw');
+    penWrite(me.querySelector('svg.sig'), fast ? 400 : 700);   // та же ручка, что на бланке поступления, идёт по подписи
     for (let i = 0; i < (fast ? 2 : 4); i++) setTimeout(() => Snd.cue('pen', { v: .6 }), i * 110); };
   me.addEventListener('pointerdown', e => { e.stopPropagation(); sign(false); });
   me.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); sign(false); } });
@@ -6789,7 +6891,8 @@ function bindControls() {
   for (let i = 0; i < 4; i++) $('pt-' + i).addEventListener('click', () => {
     if (!canAct('pumps')) return;
     if (UI.tripKey && UI.tripKey[i] && UI.game.s.pumps[i].tripped) { UI.tripKey[i] = false; Snd.clack(); return; }   // отключившийся насос: ключ переводят в «ОТКЛ»
-    UI.game.togglePump(i) ? Snd.clack() : Snd.deny();
+    if (!UI.game.togglePump(i)) { Snd.deny(); return; }
+    Snd.clack(); if (UI.game.s.pumps[i].on) setTimeout(() => Shake.add(FEEL.body.jolt), FEEL.body.joltMs);   // П7: машина взяла нагрузку — лёгкий толчок
   });
   // под автоматикой давления «Нагрев» и «Впрыск» не работают: глухой упор, кнопка не идёт вниз, мигает окошко «авто»
   const autoDeny = () => { Snd.deny(); const a = $('pres-auto'); a.classList.remove('flash'); void a.offsetWidth; a.classList.add('flash'); };
@@ -6799,7 +6902,7 @@ function bindControls() {
   $('btn-ack').addEventListener('click', ackAll);
   $('az-cover').addEventListener('click', () => { if (!canAct('scram')) return; openAZ(); });
   $('btn-prot').addEventListener('click', protKey);
-  $('btn-az').addEventListener('click', () => { if (!UI.azOpen || !canAct('scram')) return; UI.game.pressScram(); clearTimeout(UI.azTimer); UI.azTimer = setTimeout(autoCloseAZ, 3000); });
+  $('btn-az').addEventListener('click', () => { if (!UI.azOpen || !canAct('scram')) return; UI.game.pressScram(); haptic(60); clearTimeout(UI.azTimer); UI.azTimer = setTimeout(autoCloseAZ, 3000); });   // haptic — П7: вибрация на сенсорных
   $('btn-what').addEventListener('click', () => { const g = UI.game; if (!g || UI.mode !== 'play') return; g.msg = { text: g.explain(), prio: 2, t: g.t, id: ++g.msgN, expl: true }; Snd.cue('button'); setTimeout(() => Guide.explain(g), 0);
     const mt = $('mentor'); mt.classList.add('asked'); clearTimeout(UI.askT); UI.askT = setTimeout(() => mt.classList.remove('asked'), FEEL.focus.explainMs); });
   $('btn-pause').addEventListener('click', togglePause);
@@ -6809,7 +6912,7 @@ function bindControls() {
   $('btn-restart').addEventListener('click', () => { if (UI.game && UI.mode !== 'menu') { Snd.ui(); startLevel(UI.game.idx, true); } });
   $('btn-menu').addEventListener('click', () => { Snd.ui(); showMenu(); });
   // заглушка неустановленного прибора — не мёртвый клик: глухой упор, деталь не двигается (STYLE.md 2.10)
-  document.addEventListener('pointerdown', e => { if (e.button === 0 && e.target.closest && e.target.closest('.blk.locked > .cover') && UI.mode === 'play') Snd.deny(); });
+  document.addEventListener('pointerdown', e => Feel.tap(e));   // П7: неработающее отвечает своим материалом (вместо одного общего deny у заглушек)
 }
 
 const KEY_ROD = { ArrowUp: 1, KeyW: 1, ArrowDown: -1, KeyS: -1 };
@@ -6824,6 +6927,8 @@ document.addEventListener('keydown', e => {
     if (e.key === 'Enter' && !(e.target && e.target.tagName === 'BUTTON')) { const b = $(UI.modal).querySelector('.btn.primary'); if (b) { e.preventDefault(); b.click(); } }
     return;
   }
+  if (Guide.cur && Guide.nt && Guide.nt.classList.contains('on') && !e.repeat && (e.key === 'Enter' || e.code === 'Escape' || (e.code === 'Space' && UI.guideHold))) {
+    e.preventDefault(); Guide.tearOff(); return; }   // П7: записку срывают и клавишей
   if (e.target && e.target.tagName === 'BUTTON' && (e.key === 'Enter' || e.key === ' ')) return;
   if (e.code === 'Space') { e.preventDefault(); if (!e.repeat) togglePause(); return; }
   if (e.code === 'KeyQ') { e.preventDefault(); if (!e.repeat) { ackAll(); KeyHint.keyUsed('ack'); } return; }
@@ -6950,6 +7055,23 @@ function signSVG(sign, w, h, cls = '') {
   return `<svg class="sig ${cls}" viewBox="0 0 ${w} ${h}" aria-label="Подпись"><path d="${d}" fill="none" stroke="var(--paper-pen)" stroke-width="${(h / 28).toFixed(2)}" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 }
 
+// шариковая ручка (П7, раздел 10): одна на всю игру — бланк поступления, галочки, подпись на планшете. Кончик — в точке (0, 13) рисунка:
+// металлический наконечник с шариком, грани корпуса (свет сверху, тень снизу), прозрачный корпус с видной пастой в стержне,
+// рёбра под пальцами, клип с бликом, торцевой колпачок. Пропорции точные (без растяжения), тень — отдельно, по сцене: вниз-вправо
+function penSVG(cls) {
+  return `<div class="${cls} pen" aria-hidden="true"><svg viewBox="0 0 240 26"><g class="pn-sh"><path d="M3 13 L22 8.5 H232 Q238 8.5 238 13 Q238 17.5 232 17.5 H22 Z" fill="rgba(0,0,0,.55)"/></g>`
+    + `<circle cx="0" cy="13" r="1.4" fill="#1B1C1E"/><path d="M2.6 12 L9 10.6 V15.4 L2.6 14 Z" fill="#9EA2A8"/><path d="M2.6 12 L9 10.6 V12.2 L2.6 12.7 Z" fill="#EEF0F2"/>`   /* шарик и наконечник */
+    + `<path d="M9 10.6 L26 7.2 V18.8 L9 15.4 Z" fill="#B7BBC1"/><path d="M9 10.6 L26 7.2 V9.6 L9 11.7 Z" fill="#E9EBEE"/><path d="M9 15.4 L26 18.8 V17.4 L9 14.6 Z" fill="#6E7278"/>`   /* конус: грани */
+    + `<rect x="26" y="6.6" width="30" height="12.8" rx="1.6" fill="#22296A"/>`   /* держатель под пальцами */
+    + Array.from({ length: 9 }, (_, i) => `<rect x="${28 + i * 3.1}" y="6.6" width="1.4" height="12.8" fill="rgba(255,255,255,.12)"/>`).join('')   /* рёбра */
+    + `<rect x="56" y="6.9" width="150" height="12.2" rx="2.2" fill="rgba(206,214,230,.38)"/>`   /* прозрачный корпус */
+    + `<rect x="58" y="11.6" width="146" height="2.8" rx="1.2" fill="#2F3A8F"/><rect x="58" y="11.6" width="146" height=".9" fill="rgba(255,255,255,.35)"/>`   /* стержень с пастой */
+    + `<path d="M57 7.6 H205" stroke="rgba(255,255,255,.75)" stroke-width="1.6" stroke-linecap="round"/><path d="M57 9.4 H205" stroke="rgba(255,255,255,.18)" stroke-width="1.2"/>`   /* верхняя грань на свету */
+    + `<path d="M57 18.3 H205" stroke="rgba(0,0,0,.4)" stroke-width="1.4" stroke-linecap="round"/>`   /* нижняя грань в тени */
+    + `<rect x="204" y="6.6" width="22" height="12.8" rx="2.6" fill="#22296A"/><rect x="225" y="7.4" width="12" height="11.2" rx="4.4" fill="#1A1F52"/><path d="M206 8 H234" stroke="rgba(255,255,255,.22)" stroke-width="1.2"/>`   /* торцевой колпачок */
+    + `<rect x="170" y="3.2" width="52" height="3.6" rx="1.6" fill="#C5C9CF"/><path d="M172 3.8 H219" stroke="#F7F8FA" stroke-width="1"/><rect x="170" y="5.8" width="5" height="2" fill="#8C9096"/>`   /* клип */
+    + '</svg></div>';
+}
 // холст сцены под размер экрана; рисует в «проектных» координатах сцены через k и сдвиг
 function sceneCanvas(cv, W, H) {
   const d = Math.min(2, window.devicePixelRatio || 1);
@@ -7122,7 +7244,7 @@ const SCENES = {
       Snd.forceMode = 'sign'; this.replay = !!o.replay; this.strokes = []; this.len = 0; this.zlen = 0; this.zone = null; this.done = false;
       const d = new Date(), date = `«${d.getDate()}»&nbsp;${MONTHS_GEN[d.getMonth()]}&nbsp;${d.getFullYear()}&nbsp;г.`;
       root.innerHTML = `<canvas class="sg-desk"></canvas>
-        <div class="sg-pen" aria-hidden="true"><svg viewBox="0 0 168 18" preserveAspectRatio="none"><g class="pn-sh"><path d="M2 9 L16 5 H160 Q166 5 166 9 Q166 13 160 13 H16 Z" fill="rgba(0,0,0,.55)"/></g><path d="M0 9 L5 7.6 L5 10.4 Z" fill="#2A2C2E"/><path d="M5 7.6 L18 4.6 V13.4 L5 10.4 Z" fill="#B9BDC2"/><path d="M5 7.6 L18 4.6 V7.4 L5 8.7 Z" fill="#E6E8EB"/><rect x="18" y="4" width="16" height="10" rx="1.5" fill="#1C2560"/><path d="M19 5.6 H33" stroke="rgba(255,255,255,.18)" stroke-width="1"/><rect x="34" y="4.4" width="122" height="9.2" rx="2.5" fill="#2F3A8F"/><path d="M36 6.4 H154" stroke="rgba(255,255,255,.32)" stroke-width="1.4" stroke-linecap="round"/><path d="M36 12 H154" stroke="rgba(0,0,0,.35)" stroke-width="1.4" stroke-linecap="round"/><rect x="118" y="2.2" width="34" height="2.6" rx="1.2" fill="#C9CCD1"/><path d="M118 2.6 H150" stroke="#F2F3F5" stroke-width=".8"/><rect x="154" y="4.8" width="12" height="8.4" rx="3.6" fill="#1C2560"/></svg></div>
+        ${penSVG('sg-pen')}<canvas class="sg-live" aria-hidden="true"></canvas>
         <div class="sg-papers">
           <div class="sg-doc2" aria-hidden="true"><div class="sg-h">ДОЛЖНОСТНАЯ ИНСТРУКЦИЯ</div><div class="sg-h2">оператора-стажёра блочного щита управления энергоблока № 1</div><div class="sg-greek">${greek(120, 7)}</div></div>
           <div class="sg-doc">
@@ -7147,7 +7269,7 @@ const SCENES = {
         </div>
         <div class="sg-actions"><button class="btn sg-erase inert" aria-disabled="true">Стереть</button><button class="btn primary big sg-ok inert" aria-disabled="true">Сдать</button></div>`;
       this.root = root;
-      const area = root.querySelector('.sg-doc'), cv = area.querySelector('.sg-ink');
+      const area = root.querySelector('.sg-doc'), cv = area.querySelector('.sg-ink'); area.appendChild(root.querySelector('.sg-live')); this.live = area.querySelector('.sg-live');
       this.cv = cv; this.area = area; this.sig = root.querySelector('.sg-sig'); this.pen = root.querySelector('.sg-pen'); this.resize();
       // ручку берут со стола, когда указатель на бланке: дальше её кончик — под указателем (мышь; на касании ручки нет — пишет палец)
       const hold = e => { if (e.pointerType === 'touch' || this.done) return; root.classList.add('pen-up'); this.penAt(e); };
@@ -7165,34 +7287,57 @@ const SCENES = {
     zoneRect() { const c = this.cv.getBoundingClientRect(), s = this.sig.getBoundingClientRect(), rem = UI.remPx || 14;
       return { l: (s.left - 2 * rem - c.left) / c.width, t: (s.top - 2.2 * rem - c.top) / c.height, r: 1, b: 1 }; },
     inZone(q) { const z = this.zone || (this.zone = this.zoneRect()); return q[0] >= z.l && q[0] <= z.r && q[1] >= z.t && q[1] <= z.b; },
-    penAt(e) { const s = this.pen.style; s.setProperty('--px', e.clientX + 'px'); s.setProperty('--py', e.clientY + 'px'); },
+    penAt(e) { const s = this.pen.style; s.setProperty('--px', e.clientX + 'px'); s.setProperty('--py', e.clientY + 'px'); s.setProperty('--tilt', (this.tilt || 0).toFixed(1) + 'deg'); },
     pt(e) { const r = this.cv.getBoundingClientRect(); return [(e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height, performance.now()]; },
     down(e) {
       if (this.done || e.button > 0) return; e.preventDefault(); Snd.init();
       try { this.area.setPointerCapture(e.pointerId); } catch (_) { /* — */ }
       this.drawing = true; this.cur = [this.pt(e)]; this.strokes.push(this.cur); this.root.classList.add('signing', 'pen-down');
-      this.lastSnd = 0; this.dot(this.cur[0]);
+      this.lastSnd = 0; this.vs = 0; this.wPrev = null; this.press = e.pointerType === 'pen' && e.pressure > 0 ? e.pressure : null; this.dot(this.cur[0]);
     },
     move(e) {
       if (!this.drawing) return;
-      const p = this.pt(e), a = this.cur[this.cur.length - 1], r = this.cv.getBoundingClientRect();
-      const dx = (p[0] - a[0]) * r.width, dy = (p[1] - a[1]) * r.height, dist = Math.hypot(dx, dy), dt = Math.max(1, p[2] - a[2]);
-      if (dist < 1.5) return;
-      const v = dist / dt;                                   // px/мс: быстрее — тоньше, скрип выше
-      this.seg(a, p, v); this.cur.push(p); this.len += dist;
-      if (p[2] - this.lastSnd > 38) { this.lastSnd = p[2]; Snd.cue('pen', { v: Math.min(1, v / 1.6) }); }
+      // П7: все промежуточные точки (getCoalescedEvents) — линия плотная и при быстром росчерке
+      const evs = e.getCoalescedEvents && e.getCoalescedEvents().length ? e.getCoalescedEvents() : [e], r = this.cv.getBoundingClientRect();
+      let p = null, v = 0;
+      for (const ev of evs) {
+        const q = this.pt(ev), a = this.cur[this.cur.length - 1], dx = (q[0] - a[0]) * r.width, dy = (q[1] - a[1]) * r.height, dist = Math.hypot(dx, dy), dt = Math.max(1, (ev.timeStamp || q[2]) - (a[3] || a[2]));
+        if (dist < 1) continue;
+        q[3] = ev.timeStamp || q[2];
+        v = dist / dt; this.vs = this.vs * .72 + v * .28;   // px/мс, сглаженная: быстрее — тоньше, скрип выше
+        if (ev.pointerType === 'pen' && ev.pressure > 0) this.press = ev.pressure;
+        q[4] = this.width(); this.cur.push(q); this.len += dist; p = q;
+        this.tilt = (this.tilt || 0) * .85 + clamp(Math.atan2(dy, dx) * 180 / Math.PI * .08, -6, 6) * .15;   // наклон чуть идёт за росчерком, с инерцией
+        if (this.inZone(a) && this.inZone(q)) this.zlen += dist;   // в подпись идёт только написанное у строки подписи
+      }
+      if (!p) return;
+      this.curve(this.cur); this.tail(this.cur);
+      if (p[2] - this.lastSnd > 38) { this.lastSnd = p[2]; Snd.cue('pen', { v: Math.min(1, this.vs / 1.6) }); }
       const ok = this.root.querySelector('.sg-ok'), er = this.root.querySelector('.sg-erase');
-      if (this.inZone(a) && this.inZone(p)) this.zlen += dist;   // в подпись идёт только написанное у строки подписи
       if (this.zlen > this.sigW * .12 && ok.classList.contains('inert')) { ok.classList.remove('inert'); ok.classList.add('lit'); ok.removeAttribute('aria-disabled'); }
       if (er.classList.contains('inert')) { er.classList.remove('inert'); er.removeAttribute('aria-disabled'); }
     },
-    up() { if (!this.drawing) return; this.drawing = false; this.cur = null; this.root.classList.remove('pen-down'); },
-    ctx2() { const x = this.cv.getContext('2d'); x.setTransform(this.k, 0, 0, this.k, 0, 0); x.strokeStyle = '#2F3A8F'; x.fillStyle = '#2F3A8F'; x.lineCap = 'round'; x.lineJoin = 'round'; return x; },
-    dot(p) { const x = this.ctx2(), r = this.cv.getBoundingClientRect(); x.beginPath(); x.arc(p[0] * r.width, p[1] * r.height, 1.1, 0, 7); x.fill(); },
-    seg(a, b, v) {
-      const x = this.ctx2(), r = this.cv.getBoundingClientRect(), w = Math.max(.9, Math.min(2.7, 2.7 - v * 1.1)) * this.u;   // толщина — как на строке подписи (u — её высота / 60)
-      x.globalAlpha = .9; x.lineWidth = w; x.beginPath(); x.moveTo(a[0] * r.width, a[1] * r.height); x.lineTo(b[0] * r.width, b[1] * r.height); x.stroke();
+    up() { if (!this.drawing) return; const st = this.cur; this.drawing = false; this.cur = null; this.root.classList.remove('pen-down');
+      if (st && st.length > 1) { this.tail(st, this.cv); } this.clearLive(); },   // хвост до кончика ложится на бланк
+    // толщина пасты (П7): по сглаженной скорости и давлению пера, если устройство его даёт; u — высота строки подписи / 60
+    width() { const P = FEEL.pen, k = this.press != null ? .6 + .8 * this.press : 1; return clamp(P.w - this.vs * P.speed, P.wMin, P.w) * k * this.u; },
+    ctx2(cv = this.cv) { const x = cv.getContext('2d'); x.setTransform(this.k, 0, 0, this.k, 0, 0); x.fillStyle = x.strokeStyle = '#2F3A8F'; x.lineCap = 'round'; x.lineJoin = 'round'; x.globalAlpha = 1; return x; },
+    // паста непрозрачная (на стыках нет бусин), плотность чуть неровная — оттенок гуляет от участка к участку
+    ink(x, i) { const j = (Math.sin(i * 1.7) + Math.sin(i * .43)) * .5; x.strokeStyle = `rgb(${47 + j * 5 | 0},${58 + j * 5 | 0},${143 + j * 7 | 0})`; },   // ns-ok: оттенок пасты, не число на экране
+    dot(p, cv = this.cv) { const x = this.ctx2(cv), r = this.cv.getBoundingClientRect(); x.beginPath(); x.arc(p[0] * r.width, p[1] * r.height, (FEEL.pen.w * .5) * this.u, 0, 7); x.fill(); },
+    // сглаживание: кривая через середины отрезков; на бланк ложится всё до середины последнего отрезка
+    curve(st) {
+      const n = st.length; if (n < 3) return; const x = this.ctx2(), r = this.cv.getBoundingClientRect(), X = q => q[0] * r.width, Y = q => q[1] * r.height;
+      const a = st[n - 3], b = st[n - 2], c = st[n - 1], m1 = n === 3 ? [X(a), Y(a)] : [(X(a) + X(b)) / 2, (Y(a) + Y(b)) / 2], m2 = [(X(b) + X(c)) / 2, (Y(b) + Y(c)) / 2];
+      this.ink(x, n); x.lineWidth = b[4] || this.width(); x.beginPath(); x.moveTo(m1[0], m1[1]); x.quadraticCurveTo(X(b), Y(b), m2[0], m2[1]); x.stroke();
     },
+    // хвост от середины последнего отрезка до кончика — на «живом» холсте: паста не отстаёт от кончика ручки
+    tail(st, cv = this.live) {
+      const n = st.length; if (n < 2 || !cv) return; if (cv === this.live) this.clearLive();
+      const x = this.ctx2(cv), r = this.cv.getBoundingClientRect(), b = st[n - 2], c = st[n - 1], X = q => q[0] * r.width, Y = q => q[1] * r.height;
+      this.ink(x, n); x.lineWidth = c[4] || this.width(); x.beginPath(); x.moveTo(n === 2 ? X(b) : (X(b) + X(c)) / 2, n === 2 ? Y(b) : (Y(b) + Y(c)) / 2); x.lineTo(X(c), Y(c)); x.stroke();
+    },
+    clearLive() { if (!this.live) return; const x = this.live.getContext('2d'); x.setTransform(1, 0, 0, 1, 0, 0); x.clearRect(0, 0, this.live.width, this.live.height); },
     clear() { this.strokes = []; this.len = 0; this.zlen = 0; const x = this.cv.getContext('2d'); x.setTransform(1, 0, 0, 1, 0, 0); x.clearRect(0, 0, this.cv.width, this.cv.height);
       this.root.classList.remove('signing'); const ok = this.root.querySelector('.sg-ok'); ok.classList.add('inert'); ok.classList.remove('lit'); ok.setAttribute('aria-disabled', 'true');
       const er = this.root.querySelector('.sg-erase'); er.classList.add('inert'); er.setAttribute('aria-disabled', 'true'); },
@@ -7219,7 +7364,8 @@ const SCENES = {
       const W = innerWidth, H = innerHeight, c = sceneCanvas(this.root.querySelector('.sg-desk'), W, H); c.x.scale(c.d, c.d); this.paintDesk(c.x, W, H);
       const r = this.cv.getBoundingClientRect(), d = Math.min(2, window.devicePixelRatio || 1), sr = this.sig.getBoundingClientRect();
       this.k = d; this.cv.width = Math.round(r.width * d); this.cv.height = Math.round(r.height * d); this.u = sr.height / 60; this.sigW = sr.width; this.zone = null;
-      for (const st of this.strokes) { if (st.length === 1) this.dot(st[0]); for (let i = 1; i < st.length; i++) this.seg(st[i - 1], st[i], .6); }
+      if (this.live) { this.live.width = this.cv.width; this.live.height = this.cv.height; }
+      for (const st of this.strokes) { this.dot(st[0]); for (let i = 3; i <= st.length; i++) this.curve(st.slice(0, i)); if (st.length > 1) this.tail(st, this.cv); }
     },
     // стол под настольной лампой: тёмный кабинет, тёплое пятно на бумагах, абажур в углу кадра
     paintDesk(x, W, H) {
@@ -7361,6 +7507,7 @@ const SCENES = {
           <div class="st-row"><span>Тряска</span>${seg('shake', [['full', 'полная'], ['weak', 'слабая'], ['off', 'выключена']])}</div>
           <div class="st-row"><span>Вспышки</span>${seg('flash', [[true, 'вкл'], [false, 'выкл']])}</div>
           <div class="st-row"><span>Мерцание света</span>${seg('flicker', [[true, 'вкл'], [false, 'выкл']])}</div>
+          <div class="st-row"><span>Вибрация</span>${seg('vibrate', [[true, 'вкл'], [false, 'выкл']])}</div>
           <p class="st-note">Новые тревоги мигают всегда: это информация, а не украшение.</p>
           <div class="st-links gl-links"><button data-a="intro">Показать вступление снова</button><button data-a="reset">Сбросить прогресс</button></div>
           <div class="st-foot"><button class="st-back" data-a="back">Готово</button></div>
@@ -7729,6 +7876,57 @@ const GUIDE = {
 // куда смотреть по «Что происходит?» — по первой причине из explain() (Game.explainOn)
 const EXPLAIN_EL = { dg: '#b-dg', pumps: '#b-pumps', temp: '#b-temp', power: '#b-power .read', rate: '#b-power .rate-row', pres: '#b-pres', xenon: '#b-xenon', turb: '#b-turb', boron: '#b-boron' };
 const alarmFresh = g => !!g && LAMPS.some(L => g.lamps[L.id] && g.annNew(L.id));
+// записку Палыча срывают (П7, раздел 7). Пружина вокруг кнопки, отрыв дальше FEEL.note.tear, полёт по инерции — часы реального времени
+const Tear = {
+  scraps: [],
+  bind(nt, onTear) {
+    const paper = nt.querySelector('.fc-paper'); if (!paper) return;
+    paper.addEventListener('pointerdown', e => this.grab(e, nt, paper, onTear));
+  },
+  grab(e, nt, paper, onTear) {
+    if (e.button > 0 || !nt.classList.contains('on')) return; e.preventDefault(); e.stopPropagation();
+    try { paper.setPointerCapture(e.pointerId); } catch (_) { /* — */ }
+    const F = FEEL.note, rem = UI.remPx || 14, x0 = e.clientX, y0 = e.clientY; let last = [x0, y0, performance.now()], prev = last, moved = false, torn = false, stretch = 0;
+    nt.classList.add('held'); paper.classList.remove('back', 'tug');
+    const pos = (dx, dy) => { const d = Math.hypot(dx, dy), k = 1 / (1 + d / (F.give * rem)), ox = dx * k, oy = Math.max(-rem, dy * k), r = clamp(ox * F.turn, -F.maxTurn, F.maxTurn);
+      paper.style.transform = `translate(${ox.toFixed(1)}px, ${oy.toFixed(1)}px) rotate(${r.toFixed(1)}deg)`; return d; };
+    const end = () => { paper.removeEventListener('pointermove', mv); paper.removeEventListener('pointerup', up); paper.removeEventListener('pointercancel', up); nt.classList.remove('held'); };
+    const mv = ev => {
+      const dx = ev.clientX - x0, dy = ev.clientY - y0; if (Math.hypot(dx, dy) > 5) moved = true; prev = last; last = [ev.clientX, ev.clientY, performance.now()];
+      const d = pos(dx, dy), s = Math.floor(d / (F.tear * rem) * 3); if (s > stretch) { stretch = s; Snd.cue('noteStretch', { v: .3 + .2 * s }); }   // бумага натягивается
+      if (d > F.tear * rem && !torn) { torn = true; end(); const dt = Math.max(8, last[2] - prev[2]); this.rip(nt, paper, (last[0] - prev[0]) / dt * 1000, (last[1] - prev[1]) / dt * 1000, onTear); }
+    };
+    const up = () => { if (torn) return; end();
+      if (!moved) { paper.style.transform = ''; this.tug(paper); return; }        // клик без рывка: записка дёргается на кнопке — жест подсказывает жест
+      paper.classList.add('back'); paper.style.transform = ''; Snd.cue('paper'); };   // не дотянул — пружинит обратно с шелестом
+    paper.addEventListener('pointermove', mv); paper.addEventListener('pointerup', up); paper.addEventListener('pointercancel', up);
+  },
+  tug(paper) { paper.classList.remove('tug'); void paper.offsetWidth; paper.classList.add('tug'); Snd.cue('noteStretch', { v: .35 }); },
+  // отрыв: звук, клочок остаётся на кнопке, записка летит в сторону рывка с вращением и уходит вниз из кадра
+  rip(nt, paper, vx, vy, onTear) {
+    const F = FEEL.note; Snd.cue('noteTear'); Save.data.tears = (Save.data.tears || 0) + 1; Save.save();
+    const r0 = paper.getBoundingClientRect(), pin = nt.querySelector('.fc-pin'), pr = pin && pin.getBoundingClientRect();
+    if (pr) { const sc = document.createElement('i'); sc.className = 'fc-scrap'; sc.setAttribute('aria-hidden', 'true'); sc.innerHTML = '<i class="fc-pin"></i>';
+      sc.style.left = Math.round(pr.left + pr.width / 2) + 'px'; sc.style.top = Math.round(pr.top) + 'px'; document.body.appendChild(sc); this.scraps.push(sc);
+      setTimeout(() => { sc.classList.add('fade'); setTimeout(() => sc.remove(), 600); }, F.scrapMs); }   // клочок висит на кнопке, потом его не видно
+    const fly = paper.cloneNode(true); fly.classList.add('fc-fly'); fly.classList.remove('back', 'tug');
+    fly.style.left = Math.round(r0.left) + 'px'; fly.style.top = Math.round(r0.top) + 'px'; fly.style.width = Math.round(r0.width) + 'px'; fly.style.transform = 'rotate(-1.8deg)';
+    nt.classList.remove('on', 'held'); paper.style.transform = '';
+    if (!reducedMotion()) {   // при prefers-reduced-motion — отрыв без полёта
+      document.body.appendChild(fly);
+      let x = 0, y = 0, rot = -1.8, t0 = performance.now(), tl = t0; const w = clamp(vx * F.spinK, -F.spin, F.spin) || F.spin * .4;
+      vx = clamp(vx, -F.vmax, F.vmax); vy = clamp(vy, -F.vmax, F.vmax);
+      const step = now => { const dt = Math.min(.05, (now - tl) / 1000); tl = now; vy += F.gravity * dt; vx *= 1 - .6 * dt; x += vx * dt; y += vy * dt; rot += w * dt;
+        fly.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) rotate(${rot.toFixed(1)}deg)`;
+        if (r0.top + y < innerHeight + 40 && now - t0 < 3000) requestAnimationFrame(step); else fly.remove(); };
+      requestAnimationFrame(step);
+    }
+    if (onTear) onTear();
+  },
+  // сорвать без руки: Enter / Пробел / Esc или игрок уже сделал то, о чём просили
+  auto(nt, onTear) { const paper = nt && nt.querySelector('.fc-paper'); if (!paper || !nt.classList.contains('on')) { if (onTear) onTear(); return; } this.rip(nt, paper, FEEL.note.autoV[0], FEEL.note.autoV[1], onTear); },
+  clearScraps() { this.scraps.forEach(s => { s.classList.add('fade'); setTimeout(() => s.remove(), 600); }); this.scraps = []; },
+};
 
 const Guide = {
   steps: null, i: -1, cur: null, t: 0, acted: null,
@@ -7760,10 +7958,11 @@ const Guide = {
     if (!this.steps) return; this.acted = gp; UI.guideHold = false;
     const ai = this.steps.findIndex((s, i) => i >= this.i && s.act === gp);   // ждали этого действия — дальше показ отклика на него
     if (ai >= 0) this.i = ai;
-    if (this.cur || ai >= 0) this.next();
+    if (this.cur || ai >= 0) this.tearOff();   // П7: сделал, что просили, — записка срывается сама
   },
-  // клик мимо органа: свет возвращается. Отложено на такт — если клик был по органу, сначала сработает act()
-  click() { const st = this.cur; if (st) setTimeout(() => { if (this.cur === st) this.next(); }, 0); },
+  // записку срывают (П7): рукой — Tear.grab, клавишей — сюда; свет возвращается
+  tearOff() { const st = this.cur; if (st && this.nt && this.nt.classList.contains('on')) { clearTimeout(this.t); Tear.auto(this.nt, () => { if (this.cur === st) this.next(); }); } else this.next(); },
+  click() { this.tearOff(); },   // для отладки и инструментов: то же, что сорвать
   stop(silent) {
     clearTimeout(this.t); const had = !!this.steps;
     this.steps = null; this.cur = null; UI.guideHold = false; this.hide();
@@ -7810,8 +8009,10 @@ const Guide = {
   // записка Палыча рядом с объектом: справа, если есть место, иначе слева, снизу или сверху
   note(el, text) {
     const nt = this.nt, r = this.rect, gap = (UI.remPx || 14) * .9, W = innerWidth, H = innerHeight;
-    nt.innerHTML = `<i class="fc-pin" aria-hidden="true"></i><div class="fc-paper"><b class="fc-who">Палыч</b><p>${String(text).replace(/(\d) (%|°C|МПа|МВт|с(?![а-яё]))/g, '$1\u00A0$2')}</p><span class="fc-hint">щёлкни, чтобы продолжить</span></div>`;
-    nt.classList.remove('on'); nt.style.left = '0px'; nt.style.top = '0px';
+    const hint = (Save.data.tears || 0) < FEEL.note.hintN ? '<span class="fc-hint">сорви, как прочтёшь</span>' : '';   // П7: только первые разы
+    nt.innerHTML = `<i class="fc-pin" aria-hidden="true"></i><div class="fc-paper"><b class="fc-who">Палыч</b><p>${String(text).replace(/(\d) (%|°C|МПа|МВт|с(?![а-яё]))/g, '$1\u00A0$2')}</p>${hint}</div>`;
+    const st = this.cur; Tear.bind(nt, () => { if (this.cur === st) { clearTimeout(this.t); this.next(); } });
+    nt.classList.remove('on', 'held'); nt.style.left = '0px'; nt.style.top = '0px';
     const w = nt.offsetWidth, h = nt.offsetHeight;
     let x, y;
     if (r.R + gap + w < W - 8) { x = r.R + gap; y = (r.T + r.B) / 2 - h / 2; }
@@ -7825,8 +8026,7 @@ const Guide = {
 };
 // прокрутили щит во время показа — пятно и записка идут за объектом
 addEventListener('scroll', () => { if (Guide.cur && !Guide.raf) Guide.raf = requestAnimationFrame(() => { Guide.raf = 0; Guide.resize(); }); }, { passive: true });
-// клик по залу во время показа — свет возвращается (сам клик по органу работает как обычно)
-document.addEventListener('pointerdown', e => { if (Guide.cur && e.button === 0 && !(e.target.closest && e.target.closest('#topbar .tb-keys, #overlay'))) Guide.click(); }, true);
+// П7: клик по залу записку больше не убирает — её срывают (Tear); орган под пятном работает как обычно
 
 /* ---------- раскрытие прибора (задание 4, 8.3; STYLE.md 2.13): винты, лязг пластины, пыль, самопроверка ----------
    Первый раз — целиком (3–4 с), повторно — коротко. Клик пропускает. Потом — фокус-свет на новый прибор. */
@@ -8271,7 +8471,7 @@ const Moments = {
   // зелёная лампа гаснет, а тумблер стоит во «ВКЛ» — сюжет отказа виден сразу. Табло и ревун — как у любой тревоги
   pump(i) {
     const M = FEEL.moments.pump, pan = SOUND.primary.pumps.pan[i];
-    this.begin('pump'); UI.tripKey[i] = true;
+    this.begin('pump'); UI.tripKey[i] = true; haptic(45);   // П7: вибрация на сенсорных — отказ насоса
     Snd.cue('arc', { pan }); Snd.cue('coastScrape', { pan });
     Light.pulse('dip', M.dip, 40, 70, 300); Shake.add(M.trauma);
     const at = id => { const e = $(id); if (!e) return null; const r = e.getBoundingClientRect(); return r.width ? { x: r.left + r.width / 2, y: r.top + r.height / 2, w: r.width } : null; };
@@ -8284,7 +8484,7 @@ const Moments = {
   // Палыч выдерживает паузу и только потом говорит
   sync(g) {
     const M = FEEL.moments.sync, first = !this.seen('sync');
-    this.begin('sync'); Snd.cue('syncClick'); Win.wave(first ? M.wave : M.waveRepeat);
+    this.begin('sync'); Snd.cue('syncClick'); Win.wave(first ? M.wave : M.waveRepeat); Shake.add(FEEL.body.jolt);   // П7: турбина взяла нагрузку — толчок
     const r = $('mm-rotor') && $('mm-rotor').getBoundingClientRect(); if (r && r.width) { FX.add('flare', r.left + r.width / 2, r.top + r.height / 2); FX.burst('spark', r.left + r.width / 2, r.top + r.height / 2, 8); }
     if (!first) return;
     this.mark('sync');
