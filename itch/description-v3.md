@@ -14,7 +14,7 @@ The town runs on the plant. The people who started it up are past sixty and abou
 
 Nine shifts, ending with a full night from 20:00 to 08:00. After that, one more with the automation switched off.
 
-Under a lead seal on the protection panel there is a protection bypass key. Turn it, and nothing will shut the reactor down. "I didn't see the seal," says Palych. The key is there from the first shift, and how the reactor goes depends on what you got wrong.
+Under a lead seal on the protection panel there is a protection bypass key. Turn it, and nothing will shut the reactor down. "I didn't see the seal," says Palych. The key is there from the first shift. How it ends depends on what you got wrong.
 
 Alarms ring until you acknowledge them, pumps hum, relays click. Best with headphones.
 
