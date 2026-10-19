@@ -128,7 +128,7 @@ def skeleton(s):   # теги без переводимых атрибутов �
 
 
 def main():
-    raw = GAME.read_text(encoding='utf-8')
+    raw = GAME.read_bytes().decode('utf-8')   # как есть, с CRLF: read_text превратил бы их в LF
     src = raw.replace('\r\n', '\n')
     a = src.index('<script>') + 8; b = src.rindex('</script>')
     jk, loose = scan_js(src, a, b)

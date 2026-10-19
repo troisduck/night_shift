@@ -2330,9 +2330,9 @@ const L = (() => {
     const q = new URLSearchParams(location.search).get('lang');
     const sv = JSON.parse(localStorage.getItem('night-shift-npp-v1') || 'null');
     if (q === 'en' || q === 'ru') lang = q;
-    else if (sv && (sv.lang === 'en' || sv.lang === 'ru')) lang = sv.lang;
-    else if (!/^(ru|be|uk|kk)\b/i.test(navigator.language || 'ru')) lang = 'en';   // первый запуск: по языку браузера
-  } catch (e) { /* в Node и без хранилища — русский */ }
+    else if (sv && sv.langSet && (sv.lang === 'en' || sv.lang === 'ru')) lang = sv.lang;   // выбран руками — в настройках или у двери
+    else lang = 'en';                                                                     // по умолчанию — английский (решение автора)
+  } catch (e) { lang = typeof window === 'undefined' ? 'ru' : 'en'; }   // Node (эталон физики) — русский; браузер без хранилища — английский
   const en = lang === 'en', miss = new Set();
   const look = k => { const v = EN[k]; if (v == null) { if (!miss.has(k)) { miss.add(k); if (typeof console !== 'undefined') console.warn('[i18n] нет перевода:', k); } return null; } return v; };
   function ru(s, ...v) {
@@ -3462,7 +3462,9 @@ const FEEL = {
     splashRepeat: 1400,    // то же при повторном запуске
     splashFade: 480,       // проявление и уход заставки
     bellMin: 90,           // короче этого нажатие не считается звонком (случайный тап)
-    rings: 2,              // открывают со второго звонка (плейтест П6)
+    rings: 1,              // открывают с первого звонка (автор после П7; в П6 было со второго)
+    answer: [2000, 4000],  // от отпускания звонка до зуммера замка, мс: на звонок идут — за дверью приближаются шаги
+    stepFirst: 550, stepGap: 520, stepLast: 380,   // первый шаг не раньше; шаг человека; последний шаг — за столько до замка
     boltAt: 430, doorAt: 560, zoomAt: 1500, zoomDur: 900,   // после отпускания: ригель, дверь подалась, шаг в проём
     zoom: 5.2,             // во сколько раз приближается проём при входе
   },
@@ -3832,7 +3834,7 @@ const SOUND = {
       diesel_start: 9, rodStep: 12.5, contactor: 17.5, valve: 14, relay: 22,
       coverClose: 16.5, mentor: 18.5, drop: 8, ui: 34.5, annRelay: 27.5,
       typer: 22, cardOut: 22, cardIn: 18, punch: 5, noteStretch: 24, noteTear: 20, knock: 7,   // стук неработающего — около глухого упора deny (−29 LUFS), стекло тише железа   // П7: табельные часы и планшет — уровни как у бумаги и штампа (проверка — polish/tools/cues.py)
-      doorBell: -5, doorBuzz: 15, bolt: 14, door: 11, paper: 24, folder: 20, pen: 25, stamp: 6, tube: 20, screw: 24, plate: 15, selftest: 18,   // вход в игру: замер polish/tools/cues.py, ориентиры — SOUND.md §6.5
+      doorBell: -5, doorBuzz: 15, step: 12, bolt: 14, door: 11, paper: 24, folder: 20, pen: 25, stamp: 6, tube: 20, screw: 24, plate: 15, selftest: 18,   // вход в игру: замер polish/tools/cues.py, ориентиры — SOUND.md §6.5
       arc: 15, coastScrape: 16, syncClick: 3.5, blastRumble: 10, blastHit: 5, debris: 12, thunder: 10, rain: 4, doorStrike: -5, street: 8, steamBlow: 12, boilBurst: 14, coreSurge: 8, groan: 14, boom: 6,   // гроза (П6) — за стеной, шина station: в оффлайн-рендере молчит, громкость — на ориентир, ждёт ушей автора   // большие моменты (П4): замер cues.py, ориентиры — SOUND.md §6.8
     },
     layers: { // слои при типичной или полной силе: поправка, дБ
@@ -3930,6 +3932,9 @@ const NightShiftAudio = (function () {
     } },
     // зуммер электромагнитного замка: жёсткое жужжание сетевой частоты
     doorBuzz: { bus: 'pult', dur: 0.6, f: (A, t, o, d) => { A.buzz(t, 100, 0.5, 0.32, d); A.buzz(t, 200, 0.5, 0.16, d); A.buzz(t, 300, 0.5, 0.06, d); } },
+    // шаги за стальной дверью: каблук по бетону — глухой низ и приглушённый шорох подошвы; o.v — ближе/громче, o.foot — левая/правая
+    step:     { bus: 'pult', dur: 0.25, f: (A, t, o, d) => { const v = o.v || 1, m = A.lp(A.vary(650, 0.12), d);
+      A.thump(t, A.vary(o.foot ? 82 : 92, 0.08), 0.07, 0.5 * v, m); A.burst(t + 0.006, A.vary(900, 0.2), 1.4, 0.03, 0.22 * v, m); A.burst(t + A.vary(0.07, 0.2), A.vary(1200, 0.2), 1.2, 0.05, 0.06 * v, m); } },
     // ригель замка уходит: тугой щелчок и отскок
     bolt:     { bus: 'pult', dur: 0.2, f: (A, t, o, d) => { A.thump(t, 150, 0.05, 0.42, d); A.burst(t, 2300, 2.4, 0.012, 0.34, d); A.burst(t + A.vary(0.055, 0.15), 3100, 3, 0.008, 0.16, d); } },
     // тяжёлая стальная дверь: рывок, скрип петли, воздух из проёма
@@ -5329,7 +5334,7 @@ const Save = {
     if (typeof d.tears !== 'number') d.tears = 0;                      // П7: сколько записок сорвано (подсказка «сорви, как прочтёшь» — первые разы)                   // П7: табель — строки карточки учёта по сменам
     if (typeof d.punchSeen !== 'boolean') d.punchSeen = false;        // П7: первый раз у табельных часов — записка Палыча
     if (typeof d.plankSeen !== 'boolean') d.plankSeen = false;        // П7: планшет повторно заполняется быстрее
-    if (d.lang !== 'ru' && d.lang !== 'en') d.lang = L.lang;          // язык интерфейса: русский или английский (L)
+    if (!d.langSet || (d.lang !== 'ru' && d.lang !== 'en')) d.lang = L.lang;   // язык: пока не выбран руками (langSet) — по умолчанию, английский
     if (typeof d.comfort.vibrate !== 'boolean') d.comfort.vibrate = true;   // П7: вибрация на сенсорных устройствах   // П7: какие подсказки клавиш уже выучены (стержни, клапан, квитирование)
     d.v = 2;
   },
@@ -5344,7 +5349,7 @@ const Save = {
 
 // смена языка: тексты переводятся при загрузке (LEVELS, TIPS), поэтому — перезагрузка; ?lang= в адресе убираем, иначе он победит выбор
 function setLang(l) {
-  if (l === L.lang) return; Save.data.lang = l; Save.save();
+  if (l === L.lang) return; Save.data.lang = l; Save.data.langSet = true; Save.save();
   try { const u = new URL(location.href); u.searchParams.delete('lang'); location.replace(u.href); } catch (e) { location.reload(); }
 }
 
@@ -7752,12 +7757,13 @@ const SCENES = {
           Save.reset(); b.textContent = ru('Прогресс сброшен'); delete b.dataset.armed;
         }
       });
-      root.addEventListener('pointerdown', e => { if (this.state === 'open' && !e.target.closest('.gl-links')) this.skip(); });
+      root.addEventListener('pointerdown', e => { if (this.state === 'wait' && !e.target.closest('.gl-links, .door-bell')) this.open(); else if (this.state === 'open' && !e.target.closest('.gl-links')) this.skip(); });   // ждать шагов не обязательно
       setTimeout(() => { try { bell.focus({ preventScroll: true }); } catch (_) { /* — */ } }, 60);
       this.rings = 0; if (Snd.ready()) this.streetGo();   // вернулись к двери из игры — улица слышна сразу
     },
     key(e) {
       if (this.state === 'open') { e.preventDefault(); this.skip(); return; }
+      if (this.state === 'wait') { e.preventDefault(); if (!e.repeat) this.open(); return; }
       if ((e.code === 'Enter' || e.code === 'Space') && !e.repeat && document.activeElement !== this.root.querySelector('.door-bell')) { e.preventDefault(); this.press(); }
     },
     keyUp(e) { if ((e.code === 'Enter' || e.code === 'Space') && this.state === 'ring') { e.preventDefault(); this.release(); } },
@@ -7775,10 +7781,18 @@ const SCENES = {
       if (this.state !== 'ring') return;
       clearInterval(this.bellT); Snd.stopHold(this.hold); this.root.querySelector('.door-bell').classList.remove('pressed');
       if (performance.now() - this.t0 < FEEL.entry.bellMin) { this.state = 'idle'; return; }
-      // открывают со второго звонка (плейтест П6): первый — за дверью тихо, звонишь ещё раз
       this.rings = (this.rings || 0) + 1;
       if (this.rings < FEEL.entry.rings) { this.state = 'idle'; return; }
-      this.open();
+      this.answer();
+    },
+    // на звонок идут: за дверью шаги приближаются (громче с каждым), через 2–4 с — зуммер замка и дверь
+    answer() {
+      const E = FEEL.entry; this.state = 'wait'; const id = this.waitId = (this.waitId || 0) + 1;
+      const T = E.answer[0] + Math.random() * (E.answer[1] - E.answer[0]);
+      const n = Math.max(2, Math.floor((T - E.stepLast - E.stepFirst) / E.stepGap) + 1);
+      for (let i = 0; i < n; i++) { const at = T - E.stepLast - (n - 1 - i) * E.stepGap * (0.94 + Math.random() * 0.12);
+        Scenes.later(() => { if (this.waitId === id && this.state === 'wait') Snd.cue('step', { v: 0.35 + 0.65 * (i + 1) / n, foot: i % 2 }); }, Math.max(E.stepFirst * 0.6, at)); }
+      Scenes.later(() => { if (this.waitId === id && this.state === 'wait') this.open(); }, T);
     },
     open() {
       const E = FEEL.entry; this.state = 'open';
